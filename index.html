@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             color: #333;
-            overflow: hidden;
+            overflow: hidden; /* To prevent scrollbars from canvas behavior */
             padding-bottom: 70px; /* Add padding to prevent overlap with fixed quick links */
         }
 
@@ -21,27 +21,28 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -1; /* Place canvas behind other content */
+            /* background-color will be set by JavaScript */
         }
 
-        .content-wrapper {
+        .content-wrapper { /* Wrapper to center content and manage space for quick links */
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 70px); /* Adjust min-height for the quick links bar */
+            min-height: calc(100vh - 70px); /* Adjust min-height for the quick links bar height */
             padding: 20px;
             box-sizing: border-box;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
             padding: 30px 40px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             max-width: 650px;
             width: 90%;
             text-align: center;
-            position: relative;
+            position: relative; /* Ensure it's above the canvas */
             z-index: 1;
         }
 
@@ -68,32 +69,36 @@
         .quick-links {
             position: fixed;
             bottom: 0;
-            left: 0; /* Changed from 50% */
-            width: 100%; /* Full width for background */
-            background-color: rgba(240, 240, 240, 0.85); /* Light background for the bar */
-            backdrop-filter: blur(5px); /* Optional: frosted glass effect */
-            padding: 10px 0;
+            left: 0;
+            width: 100%; /* Full width for the bar */
+            background-color: rgba(245, 245, 245, 0.85); /* Light background for the bar */
+            backdrop-filter: blur(5px); /* Optional: frosted glass effect for modern browsers */
+            -webkit-backdrop-filter: blur(5px); /* Safari support */
+            padding: 10px 0; /* Padding top/bottom within the bar */
             display: flex;
-            justify-content: center; /* Center items within the bar */
+            justify-content: center; /* Center items horizontally */
             align-items: center;
-            gap: 20px; /* Space between logos */
+            gap: 22px; /* Space between logos */
             z-index: 100; /* Ensure it's above other content */
-            border-top: 1px solid rgba(0,0,0,0.1);
+            border-top: 1px solid rgba(0,0,0,0.08); /* Subtle top border */
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05); /* Subtle shadow for lift */
         }
 
         .quick-links a {
-            display: inline-block; /* Helps with potential spacing issues */
-            transition: transform 0.2s ease-in-out;
+            display: inline-block;
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+            opacity: 0.9;
         }
 
         .quick-links a:hover {
             transform: translateY(-3px); /* Slight lift on hover */
+            opacity: 1;
         }
 
         .quick-links img {
-            height: 32px; /* Consistent logo height */
+            height: 30px; /* Consistent logo height, slightly smaller */
             width: auto;   /* Maintain aspect ratio */
-            vertical-align: middle; /* Align logos nicely if text were next to them */
+            vertical-align: middle;
         }
 
     </style>
@@ -116,16 +121,16 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail Logo">
         </a>
         <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" title="Google Calendar">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar Logo">
         </a>
         <a href="https://mail.google.com/tasks/canvas" target="_blank" rel="noopener noreferrer" title="Google Tasks">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo">
         </a>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" title="Google Gemini">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Google_Gemini_logo.svg" alt="Google Gemini Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo">
         </a>
         <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" title="Google Maps">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Maps_icon_%282020%29.svg" alt="Google Maps Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Google Maps Logo">
         </a>
         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube">
             <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo">
@@ -221,13 +226,14 @@
             const ctx = canvas.getContext('2d');
             let shapes = [];
 
-            const numShapes = Math.floor(Math.random() * 75) + 50;
-            const baseSpeed = (Math.random() * 0.4) + 0.1;
-            const baseHue = Math.random() * 360;
-            const minSize = Math.floor(Math.random() * 5) + 2;
-            const maxSize = Math.floor(Math.random() * 15) + minSize + 5;
-            const connectionDistance = Math.floor(Math.random() * 80) + 70;
-            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`;
+            // Random parameters for the background
+            const numShapes = Math.floor(Math.random() * 75) + 50; // 50-125 shapes
+            const baseSpeed = (Math.random() * 0.4) + 0.1; // 0.1-0.5
+            const baseHue = Math.random() * 360; // Random base color
+            const minSize = Math.floor(Math.random() * 5) + 2; // 2-7
+            const maxSize = Math.floor(Math.random() * 15) + minSize + 5; // minSize+5 to minSize+20
+            const connectionDistance = Math.floor(Math.random() * 80) + 70; // 70-150
+            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`; // Dark, slightly colored background
 
             canvas.style.backgroundColor = canvasBackgroundColor;
 
@@ -269,15 +275,16 @@
 
             function initBackground() {
                 shapes = [];
-                resizeCanvas();
+                resizeCanvas(); // Set initial size
                 for (let i = 0; i < numShapes; i++) {
                     const radius = Math.random() * (maxSize - minSize) + minSize;
                     const x = Math.random() * (canvas.width - radius * 2) + radius;
                     const y = Math.random() * (canvas.height - radius * 2) + radius;
-                    const dx = (Math.random() - 0.5) * baseSpeed * 2;
+                    const dx = (Math.random() - 0.5) * baseSpeed * 2; // -baseSpeed to +baseSpeed
                     const dy = (Math.random() - 0.5) * baseSpeed * 2;
-                    const saturation = Math.floor(Math.random() * 30) + 70;
-                    const lightness = Math.floor(Math.random() * 20) + 50;
+                    // Vary saturation and lightness for a more dynamic palette
+                    const saturation = Math.floor(Math.random() * 30) + 70; // 70-100%
+                    const lightness = Math.floor(Math.random() * 20) + 50; // 50-70%
                     const color = `hsl(${baseHue + (Math.random() * 60 - 30)}, ${saturation}%, ${lightness}%)`;
                     shapes.push(new Shape(x, y, radius, dx, dy, color));
                 }
@@ -286,14 +293,14 @@
             function connectPoints() {
                 let opacityValue = 1;
                 for (let a = 0; a < shapes.length; a++) {
-                    for (let b = a + 1; b < shapes.length; b++) {
+                    for (let b = a + 1; b < shapes.length; b++) { // Start b from a+1 to avoid re-checks and self-checks
                         let distance = Math.sqrt(
                             Math.pow(shapes[a].x - shapes[b].x, 2) + Math.pow(shapes[a].y - shapes[b].y, 2)
                         );
 
                         if (distance < connectionDistance) {
                             opacityValue = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`;
+                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`; // Softer lines
                             ctx.lineWidth = 1;
                             ctx.beginPath();
                             ctx.moveTo(shapes[a].x, shapes[a].y);
@@ -311,20 +318,19 @@
                 for (let i = 0; i < shapes.length; i++) {
                     shapes[i].update();
                 }
-                connectPoints();
+                connectPoints(); // Draw lines between nearby points
             }
 
             initBackground();
             animateBackground();
 
+            // Re-initialize on window resize for responsiveness
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
                     resizeCanvas();
-                     // Optional: Re-initialize shapes if you want density to change on resize
-                    // initBackground();
-                }, 250);
+                }, 250); // Debounce resize event
             });
         });
     </script>
