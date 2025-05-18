@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Daily Dose of Wisdom</title>
+    <title>A Daily Dose of Wisdom - My Homepage</title>
 
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333; /* Default text color, will be overridden by container */
-            overflow: hidden; /* Hide scrollbars that might appear due to canvas */
+            color: #333;
+            overflow: hidden;
+            padding-bottom: 70px; /* Add padding to prevent overlap with fixed quick links */
         }
 
         #geometric-background {
@@ -20,28 +21,27 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Place canvas behind other content */
-            /* background-color will be set by JavaScript */
+            z-index: -1;
         }
 
-        .content-wrapper { /* New wrapper to center content on top of canvas */
+        .content-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px; /* Add some padding around the container */
-            box-sizing: border-box; /* Ensure padding doesn't make it overflow */
+            min-height: calc(100vh - 70px); /* Adjust min-height for the quick links bar */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 30px 40px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             max-width: 650px;
             width: 90%;
             text-align: center;
-            position: relative; /* Ensure it's above the canvas pseudo-elements if any */
+            position: relative;
             z-index: 1;
         }
 
@@ -63,6 +63,39 @@
             color: #444;
             margin-top: 0;
         }
+
+        /* Quick Links Bar Styling */
+        .quick-links {
+            position: fixed;
+            bottom: 0;
+            left: 0; /* Changed from 50% */
+            width: 100%; /* Full width for background */
+            background-color: rgba(240, 240, 240, 0.85); /* Light background for the bar */
+            backdrop-filter: blur(5px); /* Optional: frosted glass effect */
+            padding: 10px 0;
+            display: flex;
+            justify-content: center; /* Center items within the bar */
+            align-items: center;
+            gap: 20px; /* Space between logos */
+            z-index: 100; /* Ensure it's above other content */
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .quick-links a {
+            display: inline-block; /* Helps with potential spacing issues */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .quick-links a:hover {
+            transform: translateY(-3px); /* Slight lift on hover */
+        }
+
+        .quick-links img {
+            height: 32px; /* Consistent logo height */
+            width: auto;   /* Maintain aspect ratio */
+            vertical-align: middle; /* Align logos nicely if text were next to them */
+        }
+
     </style>
 </head>
 <body>
@@ -76,6 +109,27 @@
                 <p id="lesson-text"></p>
             </div>
         </div>
+    </div>
+
+    <div class="quick-links">
+        <a href="https://mail.google.com/" target="_blank" rel="noopener noreferrer" title="Gmail">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail Logo">
+        </a>
+        <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" title="Google Calendar">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar Logo">
+        </a>
+        <a href="https://mail.google.com/tasks/canvas" target="_blank" rel="noopener noreferrer" title="Google Tasks">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo">
+        </a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" title="Google Gemini">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Google_Gemini_logo.svg" alt="Google Gemini Logo">
+        </a>
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" title="Google Maps">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Maps_icon_%282020%29.svg" alt="Google Maps Logo">
+        </a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo">
+        </a>
     </div>
 
     <script>
@@ -108,8 +162,7 @@
                 { title: "Become a Master of Adaptation", text: "The world is constantly changing. Cultivate the ability to adapt to new situations and learn new things quickly. This flexibility will serve you well in an ever-evolving world." },
                 { title: "Practice Unplugging", text: "Constant connectivity can lead to information overload and decreased well-being. Schedule regular digital detoxes to disconnect from technology and reconnect with yourself and the world around you." },
                 { title: "Find Joy in the Journey", text: "Don't get so fixated on the destination that you miss out on the journey itself. Savor the process of learning, growing, and experiencing new things. Life is a beautiful adventure, embrace it!" },
-
-                // Newly Added Lessons
+                // Newly Added Lessons from previous step
                 { title: "Life's Fragility & Present Action", text: "Your entire life can change in an instant. So instead of passively taking what you have for granted, be grateful for it and do whatever good you can with it. Life is fragile and unpredictable. Appreciate what you have now and strive to make a positive impact while you can, as circumstances can shift without warning." },
                 { title: "It's Okay to Feel Lost", text: "Feeling lost is a normal part of life's journey of self-discovery. You owe nothing to your younger self, but you owe everything to your present self. You are not bound by the expectations of your past self; your primary responsibility is to nurture and guide the person you are today." },
                 { title: "Action Breeds Clarity", text: "You can’t think your way into a new life, you have to act your way into one. Understanding your true desires and path often comes through doing, not just thinking. Experiment, try new things, and learn from the experience, as action provides the clarity that contemplation alone cannot." },
@@ -168,14 +221,13 @@
             const ctx = canvas.getContext('2d');
             let shapes = [];
 
-            // Random parameters for the background
-            const numShapes = Math.floor(Math.random() * 75) + 50; // 50-125 shapes
-            const baseSpeed = (Math.random() * 0.4) + 0.1; // 0.1-0.5
-            const baseHue = Math.random() * 360; // Random base color
-            const minSize = Math.floor(Math.random() * 5) + 2; // 2-7
-            const maxSize = Math.floor(Math.random() * 15) + minSize + 5; // minSize+5 to minSize+20
-            const connectionDistance = Math.floor(Math.random() * 80) + 70; // 70-150
-            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`; // Dark, slightly colored background
+            const numShapes = Math.floor(Math.random() * 75) + 50;
+            const baseSpeed = (Math.random() * 0.4) + 0.1;
+            const baseHue = Math.random() * 360;
+            const minSize = Math.floor(Math.random() * 5) + 2;
+            const maxSize = Math.floor(Math.random() * 15) + minSize + 5;
+            const connectionDistance = Math.floor(Math.random() * 80) + 70;
+            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`;
 
             canvas.style.backgroundColor = canvasBackgroundColor;
 
@@ -217,16 +269,15 @@
 
             function initBackground() {
                 shapes = [];
-                resizeCanvas(); // Set initial size
+                resizeCanvas();
                 for (let i = 0; i < numShapes; i++) {
                     const radius = Math.random() * (maxSize - minSize) + minSize;
                     const x = Math.random() * (canvas.width - radius * 2) + radius;
                     const y = Math.random() * (canvas.height - radius * 2) + radius;
-                    const dx = (Math.random() - 0.5) * baseSpeed * 2; // -baseSpeed to +baseSpeed
+                    const dx = (Math.random() - 0.5) * baseSpeed * 2;
                     const dy = (Math.random() - 0.5) * baseSpeed * 2;
-                    // Vary saturation and lightness for a more dynamic palette
-                    const saturation = Math.floor(Math.random() * 30) + 70; // 70-100%
-                    const lightness = Math.floor(Math.random() * 20) + 50; // 50-70%
+                    const saturation = Math.floor(Math.random() * 30) + 70;
+                    const lightness = Math.floor(Math.random() * 20) + 50;
                     const color = `hsl(${baseHue + (Math.random() * 60 - 30)}, ${saturation}%, ${lightness}%)`;
                     shapes.push(new Shape(x, y, radius, dx, dy, color));
                 }
@@ -235,14 +286,14 @@
             function connectPoints() {
                 let opacityValue = 1;
                 for (let a = 0; a < shapes.length; a++) {
-                    for (let b = a + 1; b < shapes.length; b++) { // Start b from a+1 to avoid re-checks and self-checks
+                    for (let b = a + 1; b < shapes.length; b++) {
                         let distance = Math.sqrt(
                             Math.pow(shapes[a].x - shapes[b].x, 2) + Math.pow(shapes[a].y - shapes[b].y, 2)
                         );
 
                         if (distance < connectionDistance) {
                             opacityValue = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`; // Softer lines
+                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`;
                             ctx.lineWidth = 1;
                             ctx.beginPath();
                             ctx.moveTo(shapes[a].x, shapes[a].y);
@@ -260,19 +311,20 @@
                 for (let i = 0; i < shapes.length; i++) {
                     shapes[i].update();
                 }
-                connectPoints(); // Draw lines between nearby points
+                connectPoints();
             }
 
             initBackground();
             animateBackground();
 
-            // Re-initialize on window resize for responsiveness
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
                     resizeCanvas();
-                }, 250); // Debounce resize event
+                     // Optional: Re-initialize shapes if you want density to change on resize
+                    // initBackground();
+                }, 250);
             });
         });
     </script>
