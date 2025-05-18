@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Dynamic Homepage Template</title>
 
     <style>
@@ -75,7 +78,7 @@
             #potd-description-container { 
                 max-height: 60px;
             }
-            #tao-te-ching-text{max-height:260px} /* Consider if this needs adjustment for potentially longer chapters */
+            #tao-te-ching-text{max-height:260px;}
             .quick-links{gap:15px; padding: 8px 0;} 
             .quick-links img{height:24px;} 
         }
@@ -89,6 +92,7 @@
     <canvas id="geometric-background"></canvas>
     <div class="content-wrapper">
         <div class="container">
+            <h1>Your Homepage Title</h1> 
             <div class="lesson-and-tao-wrapper">
                 <div id="lesson-display">
                     <div id="nasa-apod-media-container">
@@ -126,7 +130,7 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
         </a>
         <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" title="Google Maps"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Google_Maps_Logo_2020.svg" alt="Google Maps Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Maps_icon_%282020%29.svg" alt="Google Maps Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
         </a>
         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube"> 
             <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
@@ -306,27 +310,21 @@
 
             async function fetchNasaApod() {
                 const nasaApiKey = 'NyyGoLiGKX7pg76t9ehi4L8n0MHQuHw8xV6QHLNm'; 
-                
                 const apodApiUrl = `https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&thumbs=true`;
                 console.log(`Workspaceing NASA APOD (current date target) using URL: ${apodApiUrl}`);
-
                 const apodUnavailablePlaceholder = 'https://placehold.co/600x400/555555/FFFFFF?text=NASA+APOD+Not+Available';
                 const apodVideoPlaceholder = 'https://placehold.co/600x400/444444/FFFFFF?text=NASA+Video+Thumbnail';
 
-                if (!nasaApodMediaContainer || !nasaApodExplanationElement) {
-                    console.error("APOD display elements not found.");
-                    return;
-                }
+                if (!nasaApodMediaContainer || !nasaApodExplanationElement) { console.error("APOD display elements not found."); return; }
                 
                 nasaApodMediaContainer.innerHTML = `<img src="https://placehold.co/600x400/333333/FFFFFF?text=Loading+NASA+APOD..." alt="Loading APOD" style="display:block;max-width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px;margin:0 auto;">`;
                 nasaApodExplanationElement.innerHTML = '<p>Loading title...</p>';
-
 
                 let existingErrorMsg = lessonDisplayContainer.querySelector('.apod-error-message');
                 if (existingErrorMsg) existingErrorMsg.remove();
 
                 try {
-                    const response = await fetch(apodApiUrl);
+                    const response = await fetch(apodApiUrl, { cache: 'reload' }); // Added cache: 'reload'
                     if (!response.ok) {
                         let errorMsgText = `Failed to fetch NASA APOD: HTTP status ${response.status} (${response.statusText}).`;
                         let responseBodyError = "";
@@ -518,7 +516,7 @@
                 if (existingErrorMsg) existingErrorMsg.remove();
 
                 try {
-                    const response = await fetch(apiUrl);
+                    const response = await fetch(apiUrl, { cache: 'reload' }); // Added cache: 'reload'
                     if (!response.ok) {
                         throw new Error(`HTTP error ${response.status} (${response.statusText})`);
                     }
