@@ -6,37 +6,81 @@
     <title>Dynamic Homepage Template</title>
 
     <style>
-        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0;color:#333;overflow:hidden;padding-bottom:70px}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0;color:#333;overflow:hidden;padding-bottom:70px} 
         #geometric-background{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
         .content-wrapper{display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 70px);padding:20px;box-sizing:border-box;overflow-y:auto}
         .container{background-color:rgba(255,255,255,0.9);padding:20px 30px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.15);max-width:900px;width:90%;text-align:center;position:relative;z-index:1}
         .lesson-and-tao-wrapper{display:flex;gap:30px;justify-content:space-between;margin-top:20px}
         #lesson-display, #tao-te-ching-display{flex:1;padding:15px;border-radius:8px;background-color:rgba(245,245,245,0.8);text-align:left;min-height:150px;display:flex;flex-direction:column}
-        #lesson-display{cursor:pointer;align-items:center}
+        #lesson-display{cursor:pointer;align-items:center} 
         #tao-te-ching-display{cursor:pointer}
         #lesson-title{font-size:1.3em;color:#16a085;margin-bottom:10px;margin-top:0;width:100%}
-        #lesson-text{font-size:1em;line-height:1.6;color:#444;margin-top:0;flex-grow:1;width:100%}
+        #lesson-text{font-size:1em;line-height:1.6;color:#444;margin-top:0;flex-grow:1;width:100%; white-space: pre-line;}
         
         #nasa-apod-media-container{width:100%;max-width:560px;margin:0 auto 10px auto;background-color:#000;border-radius:8px;overflow:hidden;min-height:300px; display:flex; align-items:center; justify-content:center;}
         #nasa-apod-media-container img{display:block;width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px}
         .apod-video-wrapper{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;width:100%;background:#000;border-radius:8px}
         .apod-video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
         
-        #nasa-apod-explanation{font-size:.9em;color:#555;margin-top:0;padding:0 5px;text-align:center;display:block;max-height:80px;overflow-y:auto;margin-bottom:10px}
-        #nasa-apod-explanation a{color:#16a085;text-decoration:none}
-        #nasa-apod-explanation a:hover{text-decoration:underline}
-        .apod-error-message { font-size: 0.9em; color: red; margin-top: 5px; }
+        .media-caption {
+            font-size: 1em;   
+            color: #555;       
+            margin-top: 5px;
+            padding: 0 5px;
+            text-align: center;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .media-caption a {
+            color: #16a085;     
+            text-decoration: none;
+            font-weight: bold;   
+        }
+
+        .media-caption a:hover {
+            text-decoration: underline;
+        }
+
+        #nasa-apod-explanation {
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        #potd-description-container {
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .apod-error-message { font-size: 0.9em; color: red; margin-top: 5px; text-align: center; width: 100%;}
         .apod-error-message a{color:#0056b3;text-decoration:underline}
 
         #tao-image{display:block;max-width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px;margin:0 auto 10px auto}
-        #potd-description-container{font-size:.9em;color:#555;margin-top:5px;padding:0 5px;text-align:center;display:block;max-height:80px;overflow-y:auto;margin-bottom:10px}
-        #potd-description-container a{color:#2980b9;text-decoration:none}
-        #potd-description-container a:hover{text-decoration:underline}
+        .potd-error-message { font-size: 0.9em; color: red; margin-top: 5px; text-align: center; width: 100%; }
+
+
         #tao-te-ching-title{font-size:1.3em;color:#2980b9;margin-bottom:10px;margin-top:0;display:none}
         #tao-te-ching-text{font-size:1em;line-height:1.6;color:#444;margin-top:0;white-space:pre-line;display:none;flex-grow:1;overflow-y:auto;max-height:380px}
-        @media (max-width:768px){.lesson-and-tao-wrapper{flex-direction:column;gap:20px}#lesson-display,#tao-te-ching-display{max-width:100%}#lesson-display > #lesson-title,#lesson-display > #lesson-text{text-align:left}#tao-te-ching-display{align-items:center}#tao-te-ching-display > #tao-te-ching-title,#tao-te-ching-display > #tao-te-ching-text{text-align:left;width:100%}.container{padding:20px 15px}#nasa-apod-media-container img,#tao-image{max-height:200px}#nasa-apod-explanation,#potd-description-container{max-height:60px}#tao-te-ching-text{max-height:260px}}
-        .quick-links{position:fixed;bottom:0;left:0;width:100%;background-color:rgba(245,245,245,0.85);backdrop-filter:blur(5px);padding:10px 0;display:flex;justify-content:center;align-items:center;gap:22px;z-index:100;border-top:1px solid rgba(0,0,0,0.08);box-shadow:0 -2px 5px rgba(0,0,0,0.05)}
-        .quick-links a{display:inline-block;transition:transform .2s ease-in-out,opacity .2s ease-in-out;opacity:.9}
+        
+        @media (max-width:768px){
+            body { padding-bottom: 60px; } 
+            .lesson-and-tao-wrapper{flex-direction:column;gap:20px}
+            #lesson-display,#tao-te-ching-display{max-width:100%}
+            #lesson-display > #lesson-title,#lesson-display > #lesson-text{text-align:left}
+            #tao-te-ching-display{align-items:center}
+            #tao-te-ching-display > #tao-te-ching-title,#tao-te-ching-display > #tao-te-ching-text{text-align:left;width:100%}
+            .container{padding:20px 15px}
+            #nasa-apod-media-container img,#tao-image{max-height:200px}
+            
+            #potd-description-container { 
+                max-height: 60px;
+            }
+            #tao-te-ching-text{max-height:260px} /* Consider if this needs adjustment for potentially longer chapters */
+            .quick-links{gap:15px; padding: 8px 0;} 
+            .quick-links img{height:24px;} 
+        }
+        .quick-links{position:fixed;bottom:0;left:0;width:100%;background-color:rgba(245,245,245,0.85);backdrop-filter:blur(5px);padding:10px 0;display:flex;justify-content:center;align-items:center;gap:22px;z-index:100;border-top:1px solid rgba(0,0,0,0.08);box-shadow:0 -2px 5px rgba(0,0,0,0.05); min-height: 50px;}
+        .quick-links a{display:inline-block;transition:transform .2s ease-in-out,opacity .2s ease-in-out;opacity:.9; line-height: 0;}
         .quick-links a:hover{transform:translateY(-3px);opacity:1}
         .quick-links img{height:30px;width:auto;vertical-align:middle}
     </style>
@@ -49,17 +93,17 @@
             <div class="lesson-and-tao-wrapper">
                 <div id="lesson-display">
                     <div id="nasa-apod-media-container">
-                         <img src="https://placehold.co/600x400/333333/FFFFFF?text=Loading+NASA+APOD..." alt="Loading NASA APOD">
+                        <img src="https://placehold.co/600x400/333333/FFFFFF?text=Loading+NASA+APOD..." alt="Loading NASA APOD">
                     </div>
-                    <div id="nasa-apod-explanation" style="display: block;">
-                        </div>
+                    <div id="nasa-apod-explanation" class="media-caption" style="display: block;">
+                    </div>
                     <h2 id="lesson-title" style="display: none;"></h2>
                     <p id="lesson-text" style="display: none;"></p>
                 </div>
                 <div id="tao-te-ching-display">
-                    <img id="tao-image" src="https://placehold.co/600x400/eeeeee/999999?text=Loading+POTD..." alt="Picture of the Day">
-                    <div id="potd-description-container">
-                        </div>
+                    <img id="tao-image" src="https://placehold.co/600x400/eeeeee/999999?text=Loading+Wikimedia+POTD..." alt="Loading Picture of the Day">
+                    <div id="potd-description-container" class="media-caption">
+                    </div>
                     <h3 id="tao-te-ching-title"></h3>
                     <p id="tao-te-ching-text"></p>
                 </div>
@@ -67,7 +111,27 @@
         </div>
     </div>
     <div class="quick-links">
-        <p style="color: #555; font-size: 0.9em;">Quick links will appear here.</p>
+        <a href="https://mail.google.com/" target="_blank" rel="noopener noreferrer" title="Gmail">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" title="Google Calendar">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://tasks.google.com/" target="_blank" rel="noopener noreferrer" title="Google Tasks">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://keep.google.com/" target="_blank" rel="noopener noreferrer" title="Google Keep">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Google_Keep_2020_Logo.svg" alt="Google Keep Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" title="Google Gemini">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" title="Google Maps"> 
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Maps_icon_%282020%29.svg" alt="Google Maps Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube"> 
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
     </div>
 
     <script>
@@ -91,30 +155,173 @@
             let lessonContentState = 'image'; 
             let taoContentState = 'image'; 
             let shapes = [];
-            let numShapes, baseSpeed, baseHue, minSize, maxSize, connectionDistance, canvasBackgroundColor;
+            let numShapes, baseSpeed, baseHue, minSize, maxSize, connectionDistance; 
             let animationFrameId;
 
-            const lessons = [ /* { title: "Placeholder Lesson", text: "Content..." } */ ];
-            const taoTeChingChapters = [ /* { title: "Chapter Placeholder", text: "Content..." } */ ];
+            const lessons = [
+                { title: "Know Yourself", text: "This might sound cliche, but self-awareness is the foundation for a fulfilling life. Explore your values, strengths, and weaknesses. What truly matters to you? What lights you up?" },
+                { title: "Embrace Lifelong Learning", text: "The world is constantly changing, and so should you. Never stop learning, exploring, and challenging yourself." },
+                { title: "Build Strong Relationships", text: "Humans are social creatures. Nurture your connections with family, friends, and loved ones. Invest in quality relationships that bring you joy and support." },
+                { title: "Embrace Failure", text: "Failure is inevitable, but it's not the end. See it as a learning opportunity and a chance to grow. Don't be afraid to take risks and step outside your comfort zone." },
+                { title: "Find Your Purpose", text: "What gives your life meaning? Contributing to something bigger than yourself can bring immense satisfaction. Volunteer, pursue a passion project, or simply make a positive impact on those around you." },
+                { title: "Take Care of Yourself", text: "You can't pour from an empty cup. Prioritize your physical and mental health. Eat well, exercise regularly, and get enough sleep. Don't neglect your emotional well-being either." },
+                { title: "Live in the Present", text: "The past can't be changed, and the future is uncertain. Savor the present moment. Find joy in the little things, and appreciate the beauty around you." },
+                { title: "Practice Gratitude", text: "Taking time to appreciate what you have, big or small, can shift your perspective and increase happiness." },
+                { title: "Forgive Yourself and Others", text: "Holding onto grudges hurts you more than anyone else. Learn to forgive yourself for mistakes and others for their shortcomings." },
+                { title: "Be Kind", text: "Kindness is a superpower. A simple act of kindness can brighten someone's day and make the world a better place." },
+                { title: "Embrace Discomfort", text: "Growth often lies just outside your comfort zone. Don't shy away from new experiences, even if they feel scary at first. Stepping outside your comfort zone can lead to incredible discoveries about yourself and the world." },
+                { title: "Celebrate Small Wins", text: "It's easy to get caught up in the pursuit of big goals. Take time to acknowledge and celebrate your smaller achievements. This keeps you motivated and reminds you of how far you've come." },
+                { title: "Declutter Your Life", text: "Physical clutter can weigh you down, while mental clutter can cloud your judgment. Regularly declutter your living space and your mind. This can involve getting rid of unnecessary possessions, practicing mindfulness, or letting go of negative thoughts." },
+                { title: "Learn to Say No", text: "It's okay to set boundaries and prioritize your time and energy. Saying no empowers you to focus on what truly matters." },
+                { title: "Master the Art of Conversation", text: "Communication is key in all aspects of life. Develop your listening skills and learn to have engaging conversations. This will strengthen your relationships and open doors to new opportunities." },
+                { title: "Find Your Tribe", text: "Surround yourself with people who inspire you, uplift you, and challenge you to be your best self. Invest in relationships with those who share your values and support your dreams." },
+                { title: "Embrace the Power of Silence", text: "In our fast-paced world, silence has become a rare commodity. Make time for quiet reflection and introspection. This allows you to connect with yourself and gain clarity on your thoughts and feelings." },
+                { title: "Challenge Your Assumptions", text: "Don't be afraid to question your own beliefs and biases. Seek out diverse perspectives and be open to changing your mind based on new information." },
+                { title: "Cultivate Curiosity", text: "Maintain a childlike curiosity about the world around you. Never stop asking questions and seeking to learn new things. Curiosity fuels creativity and keeps life interesting." },
+                { title: "Leave a Legacy", text: "Consider how you want to be remembered. This doesn't have to be a grand gesture. It could be as simple as being known for your kindness, humor, or positive attitude." },
+                { title: "Develop Unshakeable Resilience", text: "Life throws curveballs. Learn to bounce back from setbacks and disappointments. Develop the mental fortitude to navigate challenges and emerge stronger on the other side." },
+                { title: "Embrace the Power of \"Yet\"", text: "When faced with a challenge, replace \"I can't\" with \"I can't yet.\" This small shift in perspective acknowledges the current reality while maintaining hope and motivation for future growth." },
+                { title: "Become a Master of Adaptation", text: "The world is constantly changing. Cultivate the ability to adapt to new situations and learn new things quickly. This flexibility will serve you well in an ever-evolving world." },
+                { title: "Practice Unplugging", text: "Constant connectivity can lead to information overload and decreased well-being. Schedule regular digital detoxes to disconnect from technology and reconnect with yourself and the world around you." },
+                { title: "Find Joy in the Journey", text: "Don't get so fixated on the destination that you miss out on the journey itself. Savor the process of learning, growing, and experiencing new things. Life is a beautiful adventure, embrace it!" },
+                { title: "Life's Fragility & Present Action", text: "Your entire life can change in an instant. So instead of passively taking what you have for granted, be grateful for it and do whatever good you can with it. Life is fragile and unpredictable. Appreciate what you have now and strive to make a positive impact while you can, as circumstances can shift without warning." },
+                { title: "It's Okay to Feel Lost", text: "Feeling lost is a normal part of life's journey of self-discovery. You owe nothing to your younger self, but you owe everything to your present self. You are not bound by the expectations of your past self; your primary responsibility is to nurture and guide the person you are today." },
+                { title: "Action Breeds Clarity", text: "You can’t think your way into a new life, you have to act your way into one. Understanding your true desires and path often comes through doing, not just thinking. Experiment, try new things, and learn from the experience, as action provides the clarity that contemplation alone cannot." },
+                { title: "Happiness is the Way, Not the Destination", text: "Chasing happiness will lead you to misery until you realize that happiness is the way. Happiness is not a destination to be reached in the future, but a state of being cultivated in the present moment. Focus on presence, acceptance, and contentment with what you have right now." },
+                { title: "Commitment, Consistency, Persistence", text: "To change your life's trajectory: Commitment gets you started, consistency gets you somewhere, and persistence keeps you going. Meaningful change requires a three-pronged approach: first, make a firm decision; second, maintain regular effort; and third, persevere through challenges." },
+                { title: "Your Habits Define You", text: "We break down and build ourselves up little by little, day by day. Your habits define you—what you do today is a reflection of who you will become tomorrow. Your daily habits, both good and bad, have a cumulative effect on your well-being and future self. Consciously cultivate positive routines and self-care practices." },
+                { title: "Share Progress, Not Goals", text: "Publicly announcing goals can sometimes diminish motivation. Instead, focus on tracking and sharing your actual progress, which provides tangible evidence of your efforts and encourages continued momentum. This way, you’ll always be motivated." },
+                { title: "Stop Comparing, Define Your Success", text: "Every second you spend comparing your life to someone else’s is a second spent wasting yours. Comparing yourself to others is detrimental to your well-being. Define success on your own terms and focus on your personal journey and growth instead." },
+                { title: "Doing What You Love Requires Discipline", text: "Designing a meaningful life you love is possible. Doing what you love won’t make life any easier—it will just make you more disciplined and it more joyful. Creating a life aligned with your passions is achievable and brings joy, but it also requires significant discipline, hard work, and perseverance through challenges." },
+                { title: "Beliefs Drive Actions, True Self-Care is Deep Work", text: "Everything you do, right or wrong, is born out of a set of beliefs. This implies that self-care isn't just roses and chocolates; it's going deep within to surface subconscious behavioral and thought patterns sabotaging your growth. True self-care involves introspection to identify and address these patterns and limiting beliefs." },
+                { title: "Slow Down in an Age of Speed", text: "In an age of speed, aim to slow down. Living slow makes you more mindful and intentional. You begin to take care of your body, mind, and soul, so they can care for you. Consciously choose to slow down, be present, and prioritize well-being. This fosters mindfulness and deeper self-care." },
+                { title: "The Power of Journaling", text: "Journaling is a timeless and priceless form of therapy. It helps you think clearly, understand yourself better, and make better sense of life. Regularly writing down your thoughts and reflections is a powerful tool for mental clarity, self-awareness, and processing your experiences." },
+                { title: "Seek Experiences, Not Material Things", text: "You grow rich when you seek new experiences, not material things. Experiences provide lasting memories, foster personal growth, and enrich your life in ways material possessions often cannot. Prioritize seeking new adventures and learning opportunities." },
+                { title: "Focused Attention Through Meditation", text: "In today’s digital-first world, the greatest skill is focused attention. Build it through daily meditation. In an age of constant distraction, focus is a valuable asset. Daily meditation can train your mind and enhance concentration." },
+                { title: "Equation for Financial Wealth", text: "The equation for financial wealth: Learn to manage your money, master a valuable skillset, and create more than you consume. Building financial wealth involves managing finances effectively, developing valuable skills for income, and consistently producing more value than you spend." },
+                { title: "Be a Lifelong Student of Life", text: "You’re a student of life, for life. Your sole objective is to keep learning, evolving, and expanding your mind. Embrace a lifelong learner mentality. Continuously seek knowledge, develop new skills, and broaden your understanding of the world." },
+                { title: "Befriend Your Fear", text: "Fear isn't there to stop you; it shows you're interested and care. Befriend fear, don’t fight it. Once you do something scary, it becomes smaller the second time. Recognize fear as an indicator of value. Approach it with curiosity, as overcoming fears leads to growth." },
+                { title: "Believe in Yourself First", text: "You have to believe in yourself before anyone else does. That’s the cornerstone of real confidence. Self-belief is fundamental to taking action and achieving goals. Cultivate your inner conviction and let your actions speak for themselves." },
+                { title: "The Best Things in Life are Imperfect & Free", text: "Nature, laughter, kindness, love, and self-compassion—the best things in life are imperfect and free. The most meaningful aspects are often simple, readily available, and don't require money. Appreciate and cultivate these free sources of joy and connection." },
+                { title: "Failure and Adversity: The Greatest Teachers", text: "Failure and adversity are the greatest teachers—we see starlight in the darkest times. Challenges and setbacks offer valuable lessons and growth opportunities. Embrace them as catalysts for strength and resilience." },
+                { title: "Stay Curious, Question, Ask", text: "Stay curious, question everything, and if you want something, ask for it. With this attitude, when one door closes, another opens. Maintain curiosity and seek what you desire. A proactive, inquisitive mindset reveals new possibilities." },
+                { title: "Play the Long Game: Impatient Action, Patient Results", text: "Play the quick short-game, win small; play the sequential long-game, allow time to grow, win big. Be impatient with actions, patient with results. Significant achievements need a long-term view and consistent effort. Act now, allow time for results." },
+                { title: "Mental Strength: Focus on Controllables", text: "True mental strength is a game-changer. Build it by consciously focusing on what you control (inputs, outputs) and ignoring what you can’t (outcomes). Develop mental resilience by directing energy to efforts and actions, detaching from uncontrollable outcomes." },
+                { title: "Purpose: Serve Where You Are, Passionately", text: "Your purpose is to be where you are, serve people, and contribute positively. Your objective isn't just to do what you're passionate about; it's to pursue your purpose passionately. Find purpose by serving and contributing; passion can grow from this." },
+                { title: "You Live Multiple Lives in One", text: "You don’t only live once; you live multiple lives within one. Life is a series of transitions and evolving identities. Embrace change and allow yourself to 'die' to old ways of being so you can be 'reborn' into new phases." },
+                { title: "Value People and Positive Connections", text: "Make time for people you love and surround yourself with optimistic people who uplift you. The people you share life with make living worthwhile. Nurture relationships with loved ones and seek positive influences. Meaningful connections are essential." },
+                { title: "Live Like an Artist-Scientist Hybrid", text: "Keep an open mind. Act like an artist but think, fail, and learn like a scientist. Recognize your life is an experiment, and you will live without fear or regret. Approach life with creativity, willingness to experiment, analyze experiences, and learn from mistakes." },
+                { title: "Drop the Ego, Be Kind", text: "If you can drop anything, drop the ego. If you can be anything, be kind. The ego can be a source of negativity. Cultivate mindfulness and kindness towards yourself and others to foster empathy and connection." },
+                { title: "Be Yourself, Nobody is Watching That Closely", text: "Honestly, nobody cares what you do—everyone’s got their own problems. Stop belittling yourself and start being yourself. Free yourself from fear of judgment. Most are preoccupied with their own lives; embrace your authenticity and pursue happiness." },
+                { title: "Time is Your Most Precious Resource", text: "Money comes and goes, but time only moves in one direction. You only have power over what you do with your time today. Time is precious and finite. Focus on making the most of the present and avoid wasting time on unproductive activities." },
+                { title: "Seek Advice Wisely", text: "Be smart enough to ask for advice, but wise enough to know who to seek it from. Seek guidance when needed, but be discerning. Look for individuals with relevant experience who have achieved what you aspire to." },
+                { title: "Self-Love Through Solitude, Acceptance, Awareness", text: "Self-love is born from self-acceptance and self-awareness. The way to all three is through solitude—how else can you create space to look inside? Cultivating self-love requires accepting who you are and understanding yourself deeply. Solitude provides space for introspection." },
+                { title: "Listen to What the World Tells You About Yourself", text: "Sometimes the world tries to tell you who you are, but if you don’t stop to reflect and listen, you’ll never hear. Pay attention to recurring themes, interests, and feedback. Reflect on these signs to better understand your true self and path." },
+                { title: "Gratitude Reveals Beauty and Happiness", text: "The more grateful you are, the more beauty you'll see, the more generous life will seem, and the happier you'll become. Practicing gratitude shifts your perspective, allowing you to appreciate positive aspects and fostering abundance and happiness." },
+                { title: "Life is What You Make It (Through Your Thoughts)", text: "Life is what you make it; the reality you experience directly reflects the quality of your thoughts. Your mindset significantly shapes your experience. Cultivate positive and intentional thinking to create a more fulfilling life." }
+            ];
+
+            const taoTeChingChapters = [
+                { title: "Chapter 1", text: "The Tao that can be spoken is not the eternal Tao\nThe name that can be named is not the eternal name\nThe nameless is the origin of Heaven and Earth\nThe named is the mother of myriad things\nThus, constantly without desire, one observes its essence\nConstantly with desire, one observes its manifestations\nThese two emerge together but differ in name\nThe unity is said to be the mystery\nMystery of mysteries, the door to all wonders" },
+                { title: "Chapter 2", text: "When the world knows beauty as beauty, ugliness arises\nWhen it knows good as good, evil arises\nThus being and non-being produce each other\nDifficult and easy bring about each other\nLong and short reveal each other\nHigh and low support each other\nMusic and voice harmonize each other\nFront and back follow each other\nTherefore the sages:\nManage the work of detached actions\nConduct the teaching of no words\nThey work with myriad things but do not control\nThey create but do not possess\nThey act but do not presume\nThey succeed but do not dwell on success\nIt is because they do not dwell on success\nThat it never goes away" },
+                { title: "Chapter 3", text: "Do not glorify the achievers\nSo the people will not squabble\nDo not treasure goods that are hard to obtain\nSo the people will not become thieves\nDo not show the desired things\nSo their hearts will not be confused\nThus the governance of the sage:\nEmpties their hearts\nFills their bellies\nWeakens their ambitions\nStrengthens their bones\nLet the people have no cunning and no greed\nSo those who scheme will not dare to meddle\nAct without contrivance\nAnd nothing will be beyond control" },
+                { title: "Chapter 4", text: "The Tao is empty; when utilized, it is not filled up\nSo deep! It seems to be the source of all things\nIt blunts the sharpness\nUnravels the knots\nDims the glare\nMixes the dusts\nSo indistinct! It seems to exist\nI do not know whose offspring it is\nIts image is the predecessor of the Emperor" },
+                { title: "Chapter 5", text: "Heaven and Earth are impartial\nThey regard myriad things as straw dogs\nThe sages are impartial\nThey regard people as straw dogs\nThe space between Heaven and Earth\nIs it not like a bellows?\nEmpty, and yet never exhausted\nIt moves, and produces more\nToo many words hasten failure\nCannot compare to keeping to the void" },
+                { title: "Chapter 6", text: "The valley spirit, undying\nIs called the Mystic Female\nThe gate of the Mystic Female\nIs called the root of Heaven and Earth\nIt flows continuously, barely perceptible\nUtilize it; it is never exhausted" },
+                { title: "Chapter 7", text: "Heaven and Earth are everlasting\nThe reason Heaven and Earth can last forever\nIs that they do not exist for themselves\nThus they can last forever\nTherefore the sages:\nPlace themselves last but end up in front\nAre outside of themselves and yet survive\nIs it not due to their selflessness?\nThat is how they can achieve their own goals" },
+                { title: "Chapter 8", text: "The highest goodness resembles water\nWater greatly benefits myriad things without contention\nIt stays in places that people dislike\nTherefore it is similar to the Tao\nDwelling with the right location\nFeeling with great depth\nGiving with great kindness\nSpeaking with great integrity\nGoverning with great administration\nHandling with great capability\nMoving with great timing\nBecause it does not contend\nIt is therefore beyond reproach" },
+                { title: "Chapter 9", text: "Holding a cup and overfilling it\nCannot be as good as stopping short\nPounding a blade and sharpening it\nCannot be kept for long\nGold and jade fill up the room\nNo one is able to protect them\nWealth and position bring arrogance\nAnd leave disasters upon oneself\nWhen achievement is completed, fame is attained\nWithdraw oneself\nThis is the Tao of Heaven" },
+                { title: "Chapter 10", text: "In holding the soul and embracing oneness\nCan one be steadfast, without straying?\nIn concentrating the energy and reaching relaxation\nCan one be like an infant?\nIn cleaning away the worldly view\nCan one be without imperfections?\nIn loving the people and ruling the nation\nCan one be without manipulation?\nIn the heavenly gate's opening and closing\nCan one hold to the feminine principle?\nIn understanding clearly all directions\nCan one be without intellectuality?\nBearing it, rearing it\nBearing without possession\nAchieving without arrogance\nRaising without domination\nThis is called the Mystic Virtue" },
+                { title: "Chapter 11", text: "Thirty spokes join in one hub\nIn its emptiness, there is the function of a vehicle\nMix clay to create a container\nIn its emptiness, there is the function of a container\nCut open doors and windows to create a room\nIn its emptiness, there is the function of a room\nTherefore, that which exists is used to create benefit\nThat which is empty is used to create functionality" },
+                { title: "Chapter 12", text: "The five colors make one blind in the eyes\nThe five sounds make one deaf in the ears\nThe five flavors make one tasteless in the mouth\nRacing and hunting make one wild in the heart\nGoods that are difficult to acquire make one cause damage\nTherefore the sages care for the stomach and not the eyes\nThat is why they discard the other and take this" },
+                { title: "Chapter 13", text: "Favor and disgrace make one fearful\nThe greatest misfortune is the self\nWhat does \"favor and disgrace make one fearful\" mean?\nFavor is high; disgrace is low\nHaving it makes one fearful\nLosing it makes one fearful\nThis is \"favor and disgrace make one fearful\"\nWhat does \"the greatest misfortune is the self\" mean?\nThe reason I have great misfortune\nIs that I have the self\nIf I have no self\nWhat misfortune do I have?\nSo one who values the self as the world\nCan be given the world\nOne who loves the self as the world\nCan be entrusted with the world" },
+                { title: "Chapter 14", text: "Look at it, it cannot be seen\nIt is called colorless\nListen to it, it cannot be heard\nIt is called noiseless\nReach for it, it cannot be held\nIt is called formless\nThese three cannot be completely unraveled\nSo they are combined into one\nAbove it, not bright\nBelow it, not dark\nContinuing endlessly, cannot be named\nIt returns back into nothingness\nThus it is called the form of the formless\nThe image of the imageless\nThis is called enigmatic\nConfront it, its front cannot be seen\nFollow it, its back cannot be seen\nWield the Tao of the ancients\nTo manage the existence of today\nOne can know the ancient beginning\nIt is called the Tao Axiom" },
+                { title: "Chapter 15", text: "The Tao masters of antiquity\nSubtle wonders through mystery\nDepths that cannot be discerned\nBecause one cannot discern them\nTherefore one is forced to describe the appearance\nHesitant, like crossing a wintry river\nCautious, like fearing four neighbors\nSolemn, like a guest\nLoose, like ice about to melt\nGenuine, like plain wood\nOpen, like a valley\nOpaque, like muddy water\nWho can be muddled yet desist\nIn stillness gradually become clear?\nWho can be serene yet persist\nIn motion gradually come alive?\nOne who holds this Tao does not wish to be overfilled\nBecause one is not overfilled\nTherefore one can preserve and not create anew" },
+                { title: "Chapter 16", text: "Attain the ultimate emptiness\nHold on to the truest tranquility\nThe myriad things are all active\nI therefore watch their return\nEverything flourishes; each returns to its root\nReturning to the root is called tranquility\nTranquility is called returning to one's nature\nReturning to one's nature is called constancy\nKnowing constancy is called clarity\nNot knowing constancy, one recklessly causes trouble\nKnowing constancy is acceptance\nAcceptance is impartiality\nImpartiality is sovereign\nSovereign is Heaven\nHeaven is Tao\nTao is eternal\nThe self is no more, without danger" },
+                { title: "Chapter 17", text: "The highest rulers, people do not know they have them\nThe next level, people love them and praise them\nThe next level, people fear them\nThe next level, people despise them\nIf the rulers' trust is insufficient\nHave no trust in them\nProceeding calmly, valuing their words\nTask accomplished, matter settled\nThe people all say, \"We did it naturally\"" },
+                { title: "Chapter 18", text: "The great Tao fades away\nThere is benevolence and justice\nIntelligence comes forth\nThere is great deception\nThe six relations are not harmonious\nThere is filial piety and kind affection\nThe country is in confused chaos\nThere are loyal ministers" },
+                { title: "Chapter 19", text: "End sagacity; abandon knowledge\nThe people benefit a hundred times\nEnd benevolence; abandon righteousness\nThe people return to piety and kind affection\nEnd cunning; discard profit\nBandits and thieves no longer exist\nThese three things are superficial and insufficient\nThus this teaching has its place:\nShow plainness; hold simplicity\nReduce selfishness; decrease desires" },
+                { title: "Chapter 20", text: "Cease learning, no more worries\nRespectful response and scornful response\nHow much is the difference?\nGoodness and evil\nHow much do they differ?\nWhat the people fear, I cannot be unafraid\nSo desolate! How limitless it is!\nThe people are excited\nAs if enjoying a great feast\nAs if climbing up to the terrace in spring\nI alone am quiet and uninvolved\nLike an infant not yet smiling\nSo weary, like having no place to return\nThe people all have surplus\nWhile I alone seem lacking\nI have the heart of a fool indeed\nOrdinary people are bright\nI alone am muddled\nOrdinary people are scrutinizing\nI alone am obtuse\nSuch tranquility, like the ocean\nso ignorant!\nSuch high wind, as if without limits\nThe people all have goals\nAnd I alone am stubborn and lowly\nI alone am different from them\nAnd value the nourishing mother" },
+                { title: "Chapter 21", text: "The appearance of great virtue\nFollows only the Tao\nThe Tao, as a thing\nSeems indistinct, seems unclear\nSo unclear, so indistinct\nWithin it there is image\nSo indistinct, so unclear\nWithin it there is substance\nSo deep, so profound\nWithin it there is essence\nIts essence is supremely real\nWithin it there is faith\nFrom ancient times to the present\nIts name never departs\nTo observe the source of all things\nHow do I know the nature of the source?\nWith this" },
+                { title: "Chapter 22", text: "Yield and remain whole\nBend and remain straight\nBe low and become filled\nBe worn out and become renewed\nHave little and receive\nHave much and be confused\nTherefore the sages hold to the one\nas an example for the world\nWithout flaunting themselves - and so are seen clearly\nWithout presuming themselves - and so are distinguished\nWithout praising themselves - and so have merit\nWithout boasting about themselves - and so are lasting\nBecause they do not contend\nthe world cannot contend with them\nWhat the ancients called \"the one who yields and remains whole\"\nWere they speaking empty words?\nSincerity becoming whole, and returning to oneself" },
+                { title: "Chapter 23", text: "Sparse speech is natural\nThus strong wind does not last all morning\nSudden rain does not last all day\nWhat makes this so? Heaven and Earth\nEven Heaven and Earth cannot make it last\nHow can humans?\nThus for those who follow the Tao:\nThose of the Tao are with the Tao\nThose of virtue are with virtue\nThose of loss are with loss\nThose who are with the Tao\nthe Tao is also pleased to have them\nThose who are with virtue\nvirtue is also pleased to have them\nThose who are with loss\nloss is also please to have them\nThose who do not trust sufficiently, others have no trust in them" },
+                { title: "Chapter 24", text: "Those who are on tiptoes cannot stand\nThose who straddle cannot walk\nThose who flaunt themselves are not clear\nThose who presume themselves are not distinguished\nThose who praise themselves have no merit\nThose who boast about themselves do not last\nThose with the Tao call such things leftover food or tumors\nThey despise them\nThus, those who possesses the Tao do not engage in them" },
+                { title: "Chapter 25", text: "There is something formlessly created\nBorn before Heaven and Earth\nSo silent! So ethereal!\nIndependent and changeless\nCirculating and ceaseless\nIt can be regarded as the mother of the world\nI do not know its name\nTo identify it, I call it \"Tao\"\nForced to describe it, I call it great\nGreat means passing\nPassing means receding\nReceding means returning\nTherefore the Tao is great\nHeaven is great\nEarth is great\nThe sovereign is also great\nThere are four greats in the universe\nAnd the sovereign occupies one of them\nHumans follow the laws of Earth\nEarth follows the laws of Heaven\nHeaven follows the laws of Tao\nTao follows the laws of nature" },
+                { title: "Chapter 26", text: "Heaviness is the root of lightness\nQuietness is the master of restlessness\nTherefore the sages travel an entire day\nWithout leaving the heavy supplies\nEven though there are luxurious sights\nThey are composed and transcend beyond\nHow can the lords of ten thousand chariots\nApply themselves lightly to the world?\nTo be light is to lose one's root\nTo be restless is to lose one's mastery" },
+                { title: "Chapter 27", text: "Good traveling does not leave tracks\nGood speech does not seek faults\nGood reckoning does not use counters\nGood closure needs no bar and yet cannot be opened\nGood knot needs no rope and yet cannot be untied\nTherefore sages:\nOften save others\nand so do not abandon anyone\nThey often save things\nand so do not abandon anything\nThis is called following enlightenment\nTherefore the good person is the teacher of the bad person\nThe bad person is the resource of the good person\nThose who do not value their teachers\nAnd do not love their resources\nAlthough intelligent, they are greatly confused\nThis is called the essential wonder" },
+                { title: "Chapter 28", text: "Know the masculine, hold to the feminine\nBe the watercourse of the world\nBeing the watercourse of the world\nThe eternal virtue does not depart\nReturn to the state of the infant\nKnow the white, hold to the black\nBe the standard of the world\nBeing the standard of the world\nThe eternal virtue does not deviate\nReturn to the state of the boundless\nKnow the honor, hold to the humility\nBe the valley of the world\nBeing the valley of the world\nThe eternal virtue shall be sufficient\nReturn to the state of plain wood\nPlain wood splits, then becomes tools\nThe sages utilize them\nAnd then become leaders\nThus the greater whole is undivided" },
+                { title: "Chapter 29", text: "Those who wish to take the world and control it\nI see that they cannot succeed\nThe world is a sacred instrument\nOne cannot control it\nThe one who controls it will fail\nThe one who grasps it will lose\nThus all things:\nEither lead or follow\nEither blow hot or cold\nEither have strength or weakness\nEither have ownership or take by force\nTherefore the sage:\nEliminates extremes\nEliminates excess\nEliminates arrogance" },
+                { title: "Chapter 30", text: "The one who uses the Tao to advise the ruler\nDoes not dominate the world with soldiers\nSuch methods tend to be returned\nThe place where the troops camp\nThistles and thorns grow\nFollowing the great army\nThere must be an inauspicious year\nA good commander achieves result, then stops\nAnd does not dare to reach for domination\nAchieves result but does not brag\nAchieves result but does not flaunt\nAchieves result but is not arrogant\nAchieves result but only out of necessity\nAchieves result but does not dominate\nThings become strong and then get old\nThis is called contrary to the Tao\nThat which is contrary to the Tao soon ends" },
+                { title: "Chapter 31", text: "A strong military, a tool of misfortune\nAll things detest it\nTherefore, those who possess the Tao avoid it\nHonorable gentlemen, while at home, value the left\nWhen deploying the military, value the right\nThe military is a tool of misfortune\nNot the tool of honorable gentlemen\nWhen using it out of necessity\nCalm detachment should be above all\nVictorious but without glory\nThose who glorify\nAre delighting in the killing\nThose who delight in killing\nCannot achieve their ambitions upon the world\nAuspicious events favor the left\nInauspicious events favor the right\nThe lieutenant general is positioned to the left\nThe major general is positioned to the right\nWe say that they are treated as if in a funeral\nThose who have been killed\nShould be mourned with sadness\nVictory in war should be treated as a funeral" },
+                { title: "Chapter 32", text: "The Tao, eternally nameless\nIts simplicity, although imperceptible\nCannot be treated by the world as subservient\nIf the sovereign can hold on to it\nAll will follow by themselves\nHeaven and Earth, together in harmony\nWill rain sweet dew\nPeople will not need to force it; it will adjust by itself\nIn the beginning, there were names\nNames came to exist everywhere\nOne should know when to stop\nKnowing when to stop, thus avoiding danger\nThe existence of the Tao in the world\nIs like streams in the valley into rivers and the ocean" },
+                { title: "Chapter 33", text: "Those who understand others are intelligent\nThose who understand themselves are enlightened\nThose who overcome others have strength\nThose who overcome themselves are powerful\nThose who know contentment are wealthy\nThose who proceed vigorously have willpower\nThose who do not lose their base endure\nThose who die but do not perish have longevity" },
+                { title: "Chapter 34", text: "The great Tao is like a flood\nIt can flow to the left or to the right\nThe myriad things depend on it for life, but it never stops\nIt achieves its work, but does not take credit\nIt clothes and feeds myriad things, but does not rule over them\nEver desiring nothing\nIt can be named insignificant\nMyriad things return to it but it does not rule over them\nIt can be named great\nEven in the end, it does not regard itself as great\nThat is how it can achieve its greatness" },
+                { title: "Chapter 35", text: "Hold the great image\nAll under heaven will come\nThey come without harm, in harmonious peace\nMusic and food, passing travelers stop\nThe Tao that is spoken out of the mouth\nIs bland and without flavor\nLook at it, it cannot be seen\nListen to it, it cannot be heard\nUse it, it cannot be exhausted" },
+                { title: "Chapter 36", text: "If one wishes to shrink it\nOne must first expand it\nIf one wishes to weaken it\nOne must first strengthen it\nIf one wishes to discard it\nOne must first promote it\nIf one wishes to seize it\nOne must first give it\nThis is called subtle clarity\nThe soft and weak overcomes the tough and strong\nFish cannot leave the depths\nThe sharp instruments of the state\nCannot be shown to the people" },
+                { title: "Chapter 37", text: "The Tao is constant in non-action\nYet there is nothing it does not do\nIf the sovereign can hold on to this\nAll things shall transform themselves\nTransformed, yet wishing to achieve\nI shall restrain them with the simplicity of the nameless\nThe simplicity of the nameless\nThey shall be without desire\nWithout desire, using stillness\nThe world shall steady itself" },
+                { title: "Chapter 38", text: "High virtue is not virtuous\nTherefore it has virtue\nLow virtue never loses virtue\nTherefore it has no virtue\nHigh virtue takes no contrived action\nAnd acts without agenda\nLow virtue takes contrived action\nAnd acts with agenda\nHigh benevolence takes contrived action\nAnd acts without agenda\nHigh righteousness takes contrived action\nAnd acts with agenda\nHigh etiquette takes contrived action\nAnd upon encountering no response\nUses arms to pull others\nTherefore, the Tao is lost, and then virtue\nVirtue is lost, and then benevolence\nBenevolence is lost, and then righteousness\nRighteousness is lost, and then etiquette\nThose who have etiquette\nare a thin shell of loyalty and sincerity\nAnd the beginning of chaos\nThose with foreknowledge\nAre the flowers of the Tao\nAnd the beginning of ignorance\nTherefore the great person:\nAbides in substance, and does not dwell on the thin shell\nAbides in the real, and does not dwell on the flower\nThus they discard that and take this" },
+                { title: "Chapter 39", text: "Those that attained oneness since ancient times:\nThe sky attained oneness and thus clarity\nThe earth attained oneness and thus tranquility\nThe gods attained oneness and thus divinity\nThe valley attained oneness and thus abundance\nThe myriad things attained oneness and thus life\nThe rulers attained oneness and became the world's standard\nThese all emerged from oneness\nThe sky, lacking clarity, would break apart\nThe earth, lacking tranquility, would erupt\nThe gods, lacking divinity, would vanish\nThe valley, lacking abundance, would wither\nMyriad things, lacking life, would be extinct\nThe rulers, lacking lofty standards, would be toppled\nTherefore, the honored uses the lowly as basis\nThe higher uses the lower as foundation\nThus the rulers call themselves alone, bereft, and unworthy\nIs this not using the lowly as basis? Is it not so?\nTherefore, the ultimate honor is no honor\nDo not wish to be shiny like jade\nBe dull like rocks" },
+                { title: "Chapter 40", text: "The returning is the movement of the Tao\nThe weak is the utilization of the Tao\nThe myriad things of the world are born of being\nBeing is born of non-being" },
+                { title: "Chapter 41", text: "Higher people hear of the Tao\nThey diligently practice it\nAverage people hear of the Tao\nThey sometimes keep it and sometimes lose it\nLower people hear of the Tao\nThey laugh loudly at it\nIf they do not laugh, it would not be the Tao\nTherefore a proverb has the following:\nThe clear Tao appears unclear\nThe advancing Tao appears to retreat\nThe smooth Tao appears uneven\nHigh virtue appears like a valley\nGreat integrity appears like disgrace\nEncompassing virtue appears insufficient\nBuilding virtue appears inactive\nTrue substance appears inconstant\nThe great square has no corners\nThe great vessel is late in completion\nThe great music is imperceptible in sound\nThe great image has no form\nThe Tao is hidden and nameless\nYet it is only the Tao\nThat excels in giving and completing everything" },
+                { title: "Chapter 42", text: "Tao produces one\nOne produces two\nTwo produce three\nThree produce myriad things\nMyriad things, backed by yin and embracing yang\nAchieve harmony by integrating their energy\nWhat the people dislike\nAre alone, bereft, and unworthy\nBut the rulers call themselves with these terms\nSo with all things\nAppear to take loss but benefit\nOr receive benefit but lose\nWhat the ancients taught\nI will also teach\nThe violent one cannot have a natural death\nI will use this as the principal of all teachings" },
+                { title: "Chapter 43", text: "The softest things of the world\nOverride the hardest things of the world\nThat which has no substance\nEnters into that which has no openings\nFrom this I know the benefits of unattached actions\nThe teaching without words\nThe benefits of actions without attachment\nAre rarely matched in the world" },
+                { title: "Chapter 44", text: "Fame or the self, which is dearer?\nThe self or wealth, which is greater?\nGain or loss, which is more painful?\nThus excessive love must lead to great spending\nExcessive hoarding must lead to heavy loss\nKnowing contentment avoids disgrace\nKnowing when to stop avoids danger\nThus one can endure indefinitely" },
+                { title: "Chapter 45", text: "Great perfection seems flawed\nIts function is without failure\nGreat fullness seems empty\nIts function is without exhaustion\nGreat straightness seems bent\nGreat skill seems unrefined\nGreat eloquence seems inarticulate\nMovement overcomes cold\nStillness overcomes heat\nClear quietness is the standard of the world" },
+                { title: "Chapter 46", text: "When the world has the Tao\nFast horses are retired to till the soil\nWhen the world lacks the Tao\nWarhorses give birth on the battlefield\nThere is no crime greater than greed\nNo disaster greater than discontentment\nNo fault greater than avarice\nThus the satisfaction of contentment\nis the lasting satisfaction" },
+                { title: "Chapter 47", text: "Without going out the door, know the world\nWithout peering out the window, see the Heavenly Tao\nThe further one goes\nThe less one knows\nTherefore the sage\nKnows without going\nNames without seeing\nAchieves without striving" },
+                { title: "Chapter 48", text: "Pursue knowledge, daily gain\nPursue Tao, daily loss\nLoss and more loss\nUntil one reaches unattached action\nWith unattached action, there is nothing one cannot do\nTake the world by constantly applying non-interference\nThe one who interferes\nis not qualified to take the world" },
+                { title: "Chapter 49", text: "The sages have no constant mind\nThey take the mind of the people as their mind\nThose who are good, I am good to them\nThose who are not good, I am also good to them\nThus the virtue of goodness\nThose who believe, I believe them\nThose who do not believe, I also believe them\nThus the virtue of belief\nThe sages live in the world\nThey cautiously merge their mind for the world\nThe people all pay attention with their ears and eyes\nThe sages care for them as children" },
+                { title: "Chapter 50", text: "Coming into life, entering death\nThe followers of life, three in ten\nThe followers of death, three in ten\nThose whose lives are moved toward death\nAlso three in ten\nWhy? Because they live lives of excess\nI've heard of those who are good at cultivating life\nTraveling on the road, they do not encounter rhinos or tigers\nEntering into an army, they are not harmed by weapons\nRhinos have nowhere to thrust their horns\nTigers have nowhere to clasp their claws\nSoldiers have nowhere to lodge their blades\nWhy? Because they have no place for death" },
+                { title: "Chapter 51", text: "Tao produces them\nVirtue raises them\nThings shape them\nForces perfect them\nTherefore the myriad things\nall respect the Tao and value virtue\nThe respect for Tao, the value of virtue\nNot due to command\nbut to constant nature\nThus Tao produces them\nVirtue raises them\nGrows them, educates them\nPerfects them, matures them\nNurtures them, protects them\nProduces but does not possess\nActs but does not flaunt\nNurtures but does not dominate\nThis is called Mystic Virtue" },
+                { title: "Chapter 52", text: "The world has a beginning\nWe regard it as the mother of the world\nHaving its mother\nWe can know her children\nKnowing her children\nStill holding on to the mother\nLive without danger all through life\nClose the mouth\nShut the doors\nLive without toil all through life\nOpen the mouth\nMeddle in the affairs\nLive without salvation all through life\nSeeing details is called clarity\nHolding on to the soft is called strength\nUtilize the light\nReturn to the clarity\nLeaving no disasters for the self\nThis is called practicing constancy" },
+                { title: "Chapter 53", text: "If I have a little knowledge\nWalking on the great Tao\nI fear only to deviate from it\nThe great Tao is broad and plain\nBut people like the side paths\nThe courts are corrupt\nThe fields are barren\nThe warehouses are empty\nOfficials wear fineries\nCarry sharp swords\nFill up on drinks and food\nAcquire excessive wealth\nThis is called robbery\nIt is not the Tao!" },
+                { title: "Chapter 54", text: "That which is well established cannot be uprooted\nThat which is strongly held cannot be taken\nThe descendants will commemorate it forever\nCultivate it in yourself; its virtue shall be true\nCultivate it in the family; its virtue shall be abundant\nCultivate it in the community; its virtue shall be lasting\nCultivate it in the country; its virtue shall be prosperous\nCultivate it in the world; its virtue shall be widespread\nTherefore:\nObserve others with yourself\nObserve other families with your family\nObserve other communities with your community\nObserve other countries with your country\nObserve the world with the world\nWith what do I know the world?\nWith this" },
+                { title: "Chapter 55", text: "Those who hold an abundance of virtue\nAre similar to newborn infants\nPoisonous insects do not sting them\nWild beasts do not claw them\nBirds of prey do not attack them\nTheir bones are weak, tendons are soft\nBut their grasp is firm\nThey do not know of sexual union but can manifest arousal\nDue to the optimum of essence\nThey can cry the whole day and yet not be hoarse\nDue to the optimum of harmony\nKnowing harmony is said to be constancy\nKnowing constancy is said to be clarity\nExcessive vitality is said to be inauspicious\nMind overusing energy is said to be aggressive\nThings become strong and then grow old\nThis is called contrary to the Tao\nThat which is contrary to the Tao will soon perish" },
+                { title: "Chapter 56", text: "Those who know do not talk\nThose who talk do not know\nClose the mouth\nShut the doors\nBlunt the sharpness\nUnravel the knots\nDim the glare\nMix the dust\nThis is called Mystic Oneness\nThey cannot obtain this and be closer\nThey cannot obtain this and be distant\nThey cannot obtain this and be benefited\nThey cannot obtain this and be harmed\nThey cannot obtain this and be valued\nThey cannot obtain this and be degraded\nTherefore, they become honored by the world" },
+                { title: "Chapter 57", text: "Govern a country with upright integrity\nDeploy the military with surprise tactics\nTake the world with non-interference\nHow do I know this is so?\nWith the following:\nWhen there are many restrictions in the world\nThe people become more impoverished\nWhen people have many sharp weapons\nThe country becomes more chaotic\nWhen people have many clever tricks\nMore strange things occur\nThe more laws are posted\nThe more robbers and thieves there are\nTherefore the sage says:\nI take unattached action, and the people transform themselves\nI prefer quiet, and the people right themselves\nI do not interfere, and the people enrich themselves\nI have no desires, and the people simplify themselves" },
+                { title: "Chapter 58", text: "When governing is lackluster\nThe people are simple and honest\nWhen governing is scrutinizing\nThe people are shrewd and crafty\nMisfortune is what fortune depends upon\nFortune is where misfortune hides beneath\nWho knows their ultimate end\nOr if they have no determined outcome?\nRightness reverts to become strange\nGoodness reverts to become wicked\nThe confusion of people\nhas lasted many long days\nTherefore the sages are:\nRighteous without being scathing\nIncorruptible without being piercing\nStraightforward without being ruthless\nIlluminated without being flashy" },
+                { title: "Chapter 59", text: "In governing people and serving Heaven\nThere is nothing like conservation\nOnly with conservation is it called submitting early\nSubmitting early is called emphasis on accumulating virtues\nAccumulating virtues means there is nothing one cannot overcome\nWhen there is nothing that one cannot overcome\nOne's limits are unknown\nThe limitations being unknown, one can possess sovereignty\nWith this mother principle of power, one can be everlasting\nThis is called deep roots and firm foundation\nThe Tao of longevity and lasting vision" },
+                { title: "Chapter 60", text: "Ruling a large country is like cooking a small fish\nUsing the Tao to manage the world\nIts demons have no power\nNot only do its demons have no power\nIts gods do not harm people\nNot only do its gods not harm people\nThe sages also do not harm people\nThey both do no harm to one another\nSo virtue merges and returns" },
+                { title: "Chapter 61", text: "The large country is like the lowest river\nThe converging point of the world\nThe receptive female of the world\nThe female always overcomes the male with serenity\nUsing serenity as the lower position\nThus if the large country is lower than the small country\nThen it can take the small country\nIf the small country is lower than the large country\nThen it can be taken by the large country\nThus one uses the lower position to take\nThe other uses the lower position to be taken\nThe large country only wishes to gather and protect people\nThe small country only wishes to join and serve people\nSo that both obtain what they wish\nThe larger one should assume the lower position" },
+                { title: "Chapter 62", text: "The Tao is the wonder of all things\nThe treasure of the kind person\nThe protection of the unkind person\nAdmirable words can win the public's respect\nAdmirable actions can improve people\nThose who are unkind\nHow can they be abandoned?\nTherefore, when crowning the Emperor\nAnd installing the three ministers\nAlthough there is the offering of jade before four horses\nNone of it can compare to being seated in this Tao\nWhy did the ancients value this Tao so much?\nIs it not said that those who seek will find,\nAnd those with guilt will not be faulted?\nTherefore, it is the greatest value in the world" },
+                { title: "Chapter 63", text: "Act without action\nManage without meddling\nTaste without tasting\nGreat, small, many, few\nRespond to hatred with virtue\nPlan difficult tasks through the simplest tasks\nAchieve large tasks through the smallest tasks\nThe difficult tasks of the world\nMust be handled through the simple tasks\nThe large tasks of the world\nMust be handled through the small tasks\nTherefore, sages never attempt great deeds all through life\nThus they can achieve greatness\nOne who makes promises lightly must deserve little trust\nOne who sees many easy tasks must encounter much difficulty\nTherefore, sages regard things as difficult\nSo they never encounter difficulties all through life" },
+                { title: "Chapter 64", text: "When it is peaceful, it is easy to maintain\nWhen it shows no signs, it is easy to plan\nWhen it is fragile, it is easy to break\nWhen it is small, it is easy to scatter\nAct on it when it has not yet begun\nTreat it when it is not yet chaotic\nA tree thick enough to embrace\nGrows from the tiny sapling\nA tower of nine levels\nStarts from the dirt heap\nA journey of a thousand miles\nBegins beneath the feet\nThe one who meddles will fail\nThe one who grasps will lose\nTherefore, sages:\nDo not meddle and thus do not fail\nDo not grasp and thus do not lose\nPeople, in handling affairs\nOften come close to completion and fail\nIf they are as careful in the end as the beginning\nThen they would have no failure\nTherefore, sages desire not to desire\nand do not value goods that are hard to acquire\nThey learn to unlearn\nand redeem the fault of the people\nTo assist the nature of all things\nWithout daring to meddle" },
+                { title: "Chapter 65", text: "Those of ancient times who were adept at the Tao\nUsed it not to make people brighter\nBut to keep them simple\nThe difficulty in governing people\nIs due their excessive cleverness\nTherefore, using cleverness to govern the state\nIs being a thief of the state\nNot using cleverness to govern the state\nIs being a blessing of the state\nKnow that these two are both standards\nAlways knowing these standards\nIs called Mystic Virtue\nMystic Virtue: Profound! Far-reaching!\nIt goes opposite to material things\nThen it reaches great congruence" },
+                { title: "Chapter 66", text: "Rivers and oceans can be the kings of a hundred valleys\nBecause of their goodness in staying low\nSo they can be the kings of a hundred valleys\nThus if sages wish to be over people\nThey must speak humbly to them\nIf they wish to be in front of people\nThey must place themselves behind them\nThus the sages are positioned above\nBut the people do not feel burdened\nThey are positioned in front\nBut the people do not feel harmed\nThus the world is glad to push them forward without resentment\nBecause they do not contend\nSo the world cannot contend with them" },
+                { title: "Chapter 67", text: "Everyone in the world calls my Tao great\nAs if it is beyond compare\nIt is only because of its greatness\nThat it seems beyond compare\nIf it can be compared\nIt would already be insignificant long ago!\nI have three treasures\nI hold on to them and protect them\nThe first is called compassion\nThe second is called conservation\nThe third is called not daring to be ahead in the world\nCompassionate, thus able to have courage\nConserving, thus able to reach widely\nNot daring to be ahead in the world\nThus able to assume leadership\nNow if one has courage but discards compassion\nReaches widely but discards conservation\nGoes ahead but discards being behind\nThen death!\nIf one fights with compassion, then victory\nWith defense, then security\nHeaven shall save them\nAnd with compassion guard them" },
+                { title: "Chapter 68", text: "The great generals are not warlike\nThe great warriors do not get angry\nThose who are good at defeating enemies do not engage them\nThose who are good at managing people lower themselves\nIt is called the virtue of non-contention\nIt is called the power of managing people\nIt is called being harmonious with Heaven\nThe ultimate principle of the ancients" },
+                { title: "Chapter 69", text: "In using the military, there is a saying:\nI dare not be the host, but prefer to be the guest\nI dare not advance an inch, but prefer to withdraw a foot\nThis is called:\nMarching in formation without formation\nRaising arms without arms\nGrappling enemies without enemies\nHolding weapons without weapons\nThere is no greater disaster than to underestimate the enemy\nUnderestimating the enemy almost made me lose my treasures\nSo when evenly matched armies meet\nThe side that is compassionate shall win" },
+                { title: "Chapter 70", text: "My words are easy to understand, easy to practice\nThe world cannot understand, cannot practice\nMy words have basis\nMy actions have principle\nPeople do not understand this\nTherefore they do not understand me\nThose who understand me are few\nThus I am highly valued\nTherefore the sage wears plain clothes but holds jade" },
+                { title: "Chapter 71", text: "To know that you do not know is highest\nTo not know but think you know is flawed\nOnly when one recognizes the fault as a fault\ncan one be without fault\nThe sages are without fault\nBecause they recognize the fault as a fault\nThat is why they are without fault" },
+                { title: "Chapter 72", text: "When people no longer fear force\nThey bring about greater force\nDo not limit their place\nDo not reject their livelihood\nBecause the ruler does not reject them\nTherefore they do not reject the ruler\nTherefore the sages:\nKnow themselves but do not glorify themselves\nRespect themselves but do not praise themselves\nThus they discard that and take this" },
+                { title: "Chapter 73", text: "The bold in daring will be killed\nThe bold in not daring will survive\nOf these two, one may benefit, the other may harm\nThe one hated by Heaven - who knows the reason?\nEven the sages still find this difficult\nThe Tao of Heaven:\nDoes not contend and yet excels in winning\nDoes not speak and yet excels in responding\nIs not summoned and yet comes on its own\nIs unhurried and yet excels in planning\nThe heavenly net is vast\nLoose, and yet does not let anything slip through" },
+                { title: "Chapter 74", text: "People do not fear death\nHow can they be threatened with death?\nIf people are made to constantly fear death\nThen those who act unlawfully\nI can capture and kill them\nWho would dare?\nThere exists a master executioner that kills\nIf we substitute for the master executioner to kill\nIt is like substituting for the great carpenter to cut\nThose who substitute for the great carpenter to cut\nIt is rare that they do not hurt their own hands" },
+                { title: "Chapter 75", text: "The people's hunger\nIs due to the excess of their ruler's taxation\nSo they starve\nThe people's difficulty in being governed\nIs due to the meddling of their ruler\nSo they are difficult to govern\nThe people's disregard for death\nIs due to the glut in their ruler's pursuit of life\nSo they disregard death\nTherefore those who do not strive for living\nAre better than those who value living" },
+                { title: "Chapter 76", text: "While alive, the body is soft and pliant\nWhen dead, it is hard and rigid\nAll living things, grass and trees,\nWhile alive, are soft and supple\nWhen dead, become dry and brittle\nThus that which is hard and stiff\nis the follower of death\nThat which is soft and yielding\nis the follower of life\nTherefore, an inflexible army will not win\nA strong tree will be cut down\nThe big and forceful occupy a lowly position\nWhile the soft and pliant occupy a higher place" },
+                { title: "Chapter 77", text: "The Tao of Heaven\nIs like drawing a bow\nLower that which is high\nRaise that which is low\nReduce that which has excess\nAdd to that which is lacking\nThe Tao of heaven\nReduces the excessive\nAnd adds to the lacking\nThe Tao of people is not so\nIt reduces the lacking\nIn order to offer to the excessive\nWho can offer their excess to the world?\nOnly those who have the Tao\nTherefore sages act without conceit\nAchieve without claiming credit\nThey do not wish to display their virtue!" },
+                { title: "Chapter 78", text: "Nothing in the world is softer or weaker than water\nYet nothing is better at overcoming the hard and strong\nThis is because nothing can replace it\nThat the weak overcomes the strong\nAnd the soft overcomes the hard\nEverybody in the world knows\nBut cannot put into practice\nTherefore sages say:\nThe one who accepts the humiliation of the state\nIs called its master\nThe one who accepts the misfortune of the state\nBecomes king of the world\nThe truth seems like the opposite" },
+                { title: "Chapter 79", text: "After settling a great dispute\nThere must be remaining resentments\nHow can this be considered good?\nTherefore the sage holds the left part of the contract\nBut does not demand payment from the other person\nThose who have virtue hold the contract\nThose without virtue hold the collections\nThe Heavenly Tao has no favorites\nIt constantly gives to the kind people" },
+                { title: "Chapter 80", text: "Small country, few people\nLet them have many weapons\nBut not use them\nLet the people regard death seriously\nAnd not migrate far away\nAlthough they have boats and chariots\nThey have no need to take them\nAlthough they have armors and weapons\nThey have no need to display them\nLet the people return to tying knots and using them\nSavor their food, admire their clothes\nContent in their homes, happy in their customs\nNeighboring countries see one another\nHear the sounds of roosters and dogs from one another\nThe people, until they grow old and die\nDo not go back and forth with one another" },
+                { title: "Chapter 81", text: "True words are not beautiful\nBeautiful words are not true\nThose who are good do not debate\nThose who debate are not good\nThose who know are not broad of knowledge\nThose who are broad of knowledge do not know\nSages do not accumulate\nThe more they assist others, the more they possess\nThe more they give to others, the more they gain\nThe Tao of heaven\nBenefits and does not harm\nThe Tao of sages\nAssists and does not contend" }
+            ];
 
             async function fetchNasaApod() {
                 const nasaApiKey = 'NyyGoLiGKX7pg76t9ehi4L8n0MHQuHw8xV6QHLNm'; 
                 
-                // Fetching for the current date by default (NASA APOD API defaults to "today" in US ET)
                 const apodApiUrl = `https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&thumbs=true`;
-                // For testing with a specific past date (if "today's" APOD has issues or isn't published yet):
-                // const specificDate = '2024-07-20'; 
-                // const apodApiUrl = `https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}&date=${specificDate}&thumbs=true`;
                 console.log(`Workspaceing NASA APOD (current date target) using URL: ${apodApiUrl}`);
-
 
                 const apodUnavailablePlaceholder = 'https://placehold.co/600x400/555555/FFFFFF?text=NASA+APOD+Not+Available';
                 const apodVideoPlaceholder = 'https://placehold.co/600x400/444444/FFFFFF?text=NASA+Video+Thumbnail';
 
-                if (!nasaApodMediaContainer || !nasaApodExplanationElement) return;
+                if (!nasaApodMediaContainer || !nasaApodExplanationElement) {
+                    console.error("APOD display elements not found.");
+                    return;
+                }
                 
                 nasaApodMediaContainer.innerHTML = `<img src="https://placehold.co/600x400/333333/FFFFFF?text=Loading+NASA+APOD..." alt="Loading APOD" style="display:block;max-width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px;margin:0 auto;">`;
-                nasaApodExplanationElement.innerHTML = '<p>Loading APOD explanation...</p>';
+                nasaApodExplanationElement.innerHTML = '<p>Loading title...</p>';
+
 
                 let existingErrorMsg = lessonDisplayContainer.querySelector('.apod-error-message');
                 if (existingErrorMsg) existingErrorMsg.remove();
@@ -136,20 +343,20 @@
                         console.warn(errorMsgText);
                         
                         nasaApodMediaContainer.innerHTML = `<img src="${apodUnavailablePlaceholder}" alt="NASA APOD not available." style="display:block;max-width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px;margin:0 auto;">`;
-                        nasaApodExplanationElement.innerHTML = '<p>APOD explanation not available.</p>';
+                        nasaApodExplanationElement.innerHTML = '<p>APOD title not available.</p>';
                         
                         const errorP = document.createElement('p'); errorP.className = 'apod-error-message';
                         let userFacingError = "Could not load NASA Picture of the Day. ";
-                        if (String(window.location.protocol).startsWith("file")) { // Check if served from file system
+                        if (String(window.location.protocol).startsWith("file")) {
                             userFacingError += "This page might be running from a local file (file:///...). Browsers often block API requests due to CORS security if the page isn't served from a web server (http:// or https://). Try using a local web server.";
                         } else if (response.status === 403) { 
                             userFacingError += "There might be an issue with the API Key. Please ensure it's correct and active.";
                         } else if (response.status === 429) { 
-                             userFacingError += "Rate limit possibly exceeded. Please try again later.";
-                        } else if (response.status === 404 && apodApiUrl.includes('&date=')) { // Check if specificDate was in use
+                            userFacingError += "Rate limit possibly exceeded. Please try again later.";
+                        } else if (response.status === 404 && apodApiUrl.includes('&date=')) {
                             userFacingError += `No APOD found for the date specified in the API URL.`;
                         } else if (response.status === 404) {
-                             userFacingError += "Today's APOD might not be published yet by NASA, or the resource was not found.";
+                            userFacingError += "Today's APOD might not be published yet by NASA, or the resource was not found.";
                         }else {
                             userFacingError += "Please try again later. Check the browser console (F12) for more details.";
                         }
@@ -171,7 +378,7 @@
                     if (existingErrorMsg) existingErrorMsg.remove();
 
                     const data = await response.json();
-                    console.log("NASA APOD API Response (Date: " + data.date + "):", data); 
+                    console.log("NASA APOD API Response (Date: " + (data.date || "N/A") + "):", data); 
                     nasaApodMediaContainer.innerHTML = ''; 
 
                     if (data.media_type === "image") {
@@ -179,68 +386,66 @@
                         img.src = data.url;
                         img.alt = data.title || "NASA Astronomy Picture of the Day";
                         img.onerror = function() { 
-                            if (!this.src.startsWith('https://placehold.co')) {
+                            if (!this.src.startsWith('https://placehold.co')) { 
+                                console.warn("APOD image failed to load from:", data.url);
                                 this.src = 'https://placehold.co/600x400/cc0000/ffffff?text=APOD+Image+Error';
                                 this.alt = 'NASA APOD image display error';
                             }
-                            if(nasaApodExplanationElement) nasaApodExplanationElement.innerHTML = '<p>APOD image could not be displayed.</p>';
+                            if(nasaApodExplanationElement) nasaApodExplanationElement.innerHTML = '<p>APOD title not available due to image error.</p>';
                         };
                         nasaApodMediaContainer.appendChild(img);
                     } else if (data.media_type === "video" && data.url) {
-                        // Simplified: Show thumbnail and link, no iframe embedding for now for max reliability
-                        const img = document.createElement('img');
+                        const img = document.createElement('img'); 
                         img.src = data.thumbnail_url || apodVideoPlaceholder;
                         img.alt = `Video Thumbnail: ${data.title || "NASA Video"}`;
-                        img.onerror = function() { this.src = apodVideoPlaceholder; this.alt = 'Error loading video thumbnail.';};
+                        img.onerror = function() { 
+                            this.src = apodVideoPlaceholder; this.alt = 'Error loading video thumbnail.';
+                             if(nasaApodExplanationElement) nasaApodExplanationElement.innerHTML = '<p>APOD title not available due to video thumbnail error.</p>';
+                        };
                         nasaApodMediaContainer.appendChild(img);
                         console.log("APOD is a video. Showing thumbnail. Video URL: " + data.url);
-                    } else {
+                    } else { 
+                        console.warn("Unsupported APOD media type or missing URL:", data);
                         const img = document.createElement('img');
                         img.src = apodUnavailablePlaceholder;
                         img.alt = `Unsupported: ${data.media_type || 'Unknown'}. ${data.title || 'NASA Content'}`;
                         nasaApodMediaContainer.appendChild(img);
+                         if(nasaApodExplanationElement) nasaApodExplanationElement.innerHTML = '<p>APOD title not available for unsupported media.</p>';
                     }
 
                     nasaApodExplanationElement.innerHTML = ''; 
-                    if (data.explanation && data.date) {
-                        const explanationText = data.explanation;
+                    if (data.title && data.date) {
+                        const apodTitle = data.title;
                         const apodDate = data.date; 
-                        const formattedDate = apodDate.substring(2,4) + apodDate.substring(5,7) + apodDate.substring(8,10); 
-                        const apodPageUrl = `https://apod.nasa.gov/apod/ap${formattedDate}.html`;
+                        const dateParts = apodDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                        if (dateParts) {
+                            const formattedDate = dateParts[1].substring(2,4) + dateParts[2] + dateParts[3]; 
+                            const apodPageUrl = `https://apod.nasa.gov/apod/ap${formattedDate}.html`;
 
-                        // If it was a video, add a prominent link to watch it first
-                        if (data.media_type === "video" && data.url) {
-                             const videoDirectLinkP = document.createElement('p');
-                             videoDirectLinkP.style.marginTop = "0px"; // No top margin if it's the first thing
-                             videoDirectLinkP.style.marginBottom = "5px";
-                             const videoDirectLinkA = document.createElement('a');
-                             videoDirectLinkA.href = data.url;
-                             videoDirectLinkA.textContent = `Watch Video: "${data.title || 'Video Content'}"`;
-                             videoDirectLinkA.target = "_blank"; videoDirectLinkA.rel = "noopener noreferrer";
-                             videoDirectLinkA.style.fontWeight = "bold";
-                             videoDirectLinkP.appendChild(videoDirectLinkA);
-                             nasaApodExplanationElement.appendChild(videoDirectLinkP); 
+                            const linkElement = document.createElement('a');
+                            linkElement.href = apodPageUrl;
+                            linkElement.textContent = apodTitle;
+                            linkElement.title = "View APOD page for: " + apodTitle; 
+                            linkElement.target = '_blank'; 
+                            linkElement.rel = 'noopener noreferrer';
+                            nasaApodExplanationElement.appendChild(linkElement);
+                        } else {
+                            console.warn("APOD date format unexpected:", apodDate);
+                            nasaApodExplanationElement.innerHTML = '<p>Could not create link for APOD title (invalid date format).</p>';
                         }
-
-                        const linkElement = document.createElement('a');
-                        linkElement.href = apodPageUrl;
-                        let displayExplanation = explanationText;
-                        if (data.media_type === "video" && explanationText.length > 150) { // Shorter snippet if video link is already there
-                            displayExplanation = explanationText.substring(0, 147) + "...";
-                        } else if (explanationText.length > 200) {
-                            displayExplanation = explanationText.substring(0, 197) + "...";
-                        }
-                        linkElement.textContent = displayExplanation;
-                        linkElement.title = "View full APOD page for: " + (data.title || apodDate); 
-                        linkElement.target = '_blank'; linkElement.rel = 'noopener noreferrer';
-                        nasaApodExplanationElement.appendChild(linkElement);
                     } else {
-                        nasaApodExplanationElement.innerHTML = '<p>APOD explanation not available.</p>';
+                        let message = '<p>APOD title not available';
+                        if (!data.title) message += ' (missing title)';
+                        if (!data.date) message += ' (missing date)';
+                        message += '.</p>';
+                        nasaApodExplanationElement.innerHTML = message;
+                        console.warn("APOD title or date missing from API response.", data);
                     }
-                } catch (error) { // This catch is for network errors or if fetch itself fails
+
+                } catch (error) { 
                     console.error("General error fetching NASA APOD (e.g., network, CORS if from file://):", error);
                     nasaApodMediaContainer.innerHTML = `<img src="https://placehold.co/600x400/ff0000/ffffff?text=Error+Loading+APOD" alt="Error Loading APOD" style="display:block;max-width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:8px;margin:0 auto;">`;
-                    nasaApodExplanationElement.innerHTML = '<p>Error loading APOD explanation.</p>';
+                    nasaApodExplanationElement.innerHTML = '<p>Error loading APOD title.</p>'; 
                     const errorP = document.createElement('p'); errorP.className = 'apod-error-message';
                     if (String(window.location.protocol).startsWith("file")) {
                         errorP.innerHTML = "Could not load NASA Picture of the Day. This page appears to be running from a local file (file:///...). Browsers often block API requests due to CORS security if the page isn't served from a web server (http:// or https://). Please try using a local web server.";
@@ -248,7 +453,7 @@
                         errorP.textContent = 'A network error occurred while fetching the NASA picture. Please check your internet connection and console (F12) for details.';
                     }
                     existingErrorMsg = lessonDisplayContainer.querySelector('.apod-error-message'); 
-                    if (existingErrorMsg) existingErrorMsg.innerHTML = errorP.innerHTML; // Use innerHTML for link
+                    if (existingErrorMsg) existingErrorMsg.innerHTML = errorP.innerHTML;
                     else {
                         if (nasaApodExplanationElement.nextSibling) lessonDisplayContainer.insertBefore(errorP, nasaApodExplanationElement.nextSibling);
                         else lessonDisplayContainer.appendChild(errorP);
@@ -257,55 +462,181 @@
             }
             
             function displayRandomLesson() { 
-                if (lessons.length > 0) { const R=Math.floor(Math.random()*lessons.length); lessonTitleElement.textContent=lessons[R].title; lessonTextElement.textContent=lessons[R].text;}
-                else { lessonTitleElement.textContent="Daily Wisdom"; lessonTextElement.textContent="The journey of a thousand miles begins with a single step.";}
+                if (!lessonTitleElement || !lessonTextElement) {
+                    console.warn("Lesson display elements not found.");
+                    return;
+                }
+                if (lessons.length > 0) { 
+                    const randomIndex = Math.floor(Math.random() * lessons.length); 
+                    lessonTitleElement.textContent = lessons[randomIndex].title; 
+                    lessonTextElement.textContent = lessons[randomIndex].text;
+                } else { 
+                    lessonTitleElement.textContent = "Daily Wisdom"; 
+                    lessonTextElement.textContent = "The journey of a thousand miles begins with a single step. (Lesson content is currently empty)";
+                }
             }
 
             function toggleLessonDisplay() { 
                 if (!nasaApodMediaContainer || !lessonTitleElement || !lessonTextElement || !nasaApodExplanationElement) return;
-                let err = lessonDisplayContainer.querySelector('.apod-error-message');
+                let errMessage = lessonDisplayContainer.querySelector('.apod-error-message');
                 if (lessonContentState === 'image') {
-                    nasaApodMediaContainer.style.display = 'none'; nasaApodExplanationElement.style.display = 'none';
-                    if(err) err.style.display = 'none'; 
-                    lessonTitleElement.style.display = 'block'; lessonTextElement.style.display = 'block';
+                    nasaApodMediaContainer.style.display = 'none'; 
+                    nasaApodExplanationElement.style.display = 'none';
+                    if(errMessage) errMessage.style.display = 'none'; 
+                    lessonTitleElement.style.display = 'block'; 
+                    lessonTextElement.style.display = 'block';
                     lessonContentState = 'text';
                 } else {
-                    nasaApodMediaContainer.style.display = 'block'; nasaApodExplanationElement.style.display = 'block';
-                    if(err) err.style.display = 'block'; 
-                    lessonTitleElement.style.display = 'none'; lessonTextElement.style.display = 'none';
+                    nasaApodMediaContainer.style.display = 'flex'; 
+                    nasaApodExplanationElement.style.display = 'block';
+                    if(errMessage) errMessage.style.display = 'block'; 
+                    lessonTitleElement.style.display = 'none'; 
+                    lessonTextElement.style.display = 'none';
                     lessonContentState = 'image';
                 }
             }
             if (lessonDisplayContainer) lessonDisplayContainer.addEventListener('click', toggleLessonDisplay);
 
-            async function fetchPictureOfTheDay() { 
-                const today = new Date(); const y = today.getFullYear(), m = String(today.getMonth()+1).padStart(2,'0'), d = String(today.getDate()).padStart(2,'0');
-                const apiUrl = `https://api.wikimedia.org/feed/v1/wikipedia/en/featured/${y}/${m}/${d}`;
-                if(potdDescriptionContainer) potdDescriptionContainer.innerHTML='<p>Loading...</p>';
-                try{const R=await fetch(apiUrl); if(!R.ok)throw new Error(`HTTP ${R.status}`); const D=await R.json();
-                    if(D.image?.image?.source){taoImageElement.src=D.image.image.source; let alt=D.image.description?.text||"Wikimedia POTD"; taoImageElement.alt=alt.length>200?alt.substring(0,197)+"...":alt;}
-                    else{ console.warn("Wikimedia POTD image data field not found for today.", D); throw new Error("No Wikimedia image data today");}
-                    if(potdDescriptionContainer){potdDescriptionContainer.innerHTML=''; if(D.image?.description?.text){const dT=D.image.description.text; let lU=null,lT="";
-                        if(D.image.content_urls?.desktop?.page)lU=D.image.content_urls.desktop.page,lT="View Wikipedia article";
-                        else if(D.image.file_page)lU=D.image.file_page,lT="View Commons details";
-                        if(lU){const a=document.createElement('a');a.href=lU;a.textContent=dT;a.target='_blank';a.rel='noopener noreferrer';a.title=lT;potdDescriptionContainer.appendChild(a);}
-                        else potdDescriptionContainer.textContent=dT+" (No link)";}
-                        else potdDescriptionContainer.innerHTML='<p>No description.</p>';}}
-                catch(e){console.warn(`Wikimedia POTD Error: ${e.message}`);taoImageElement.src='https://placehold.co/600x400/ccc/fff?text=Wiki+POTD+Error';taoImageElement.alt="Error loading Wiki POTD";if(potdDescriptionContainer)potdDescriptionContainer.innerHTML='<p>Wiki POTD Error.</p>';}
+            async function fetchPictureOfTheDay() {
+                if (!taoImageElement || !potdDescriptionContainer) {
+                    console.error("Wikimedia POTD display elements not found.");
+                    return;
+                }
+
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const apiUrl = `https://api.wikimedia.org/feed/v1/wikipedia/en/featured/${year}/${month}/${day}`;
+                const potdUnavailablePlaceholder = 'https://placehold.co/600x400/ccc/fff?text=Wiki+POTD+Error';
+
+                console.log(`Workspaceing Wikimedia POTD using URL: ${apiUrl}`);
+                taoImageElement.src = 'https://placehold.co/600x400/eeeeee/999999?text=Loading+Wikimedia+POTD...';
+                taoImageElement.alt = "Loading Wikimedia Picture of the Day";
+                if(potdDescriptionContainer) potdDescriptionContainer.innerHTML = '<p>Loading description...</p>';
+
+                let existingErrorMsg = taoDisplayContainer.querySelector('.potd-error-message');
+                if (existingErrorMsg) existingErrorMsg.remove();
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error ${response.status} (${response.statusText})`);
+                    }
+                    const data = await response.json();
+                    console.log("Wikimedia POTD API Response:", data);
+
+                    if (data.image?.image?.source) {
+                        taoImageElement.src = data.image.image.source;
+                        let altText = data.image.description?.text || "Wikimedia Picture of the Day";
+                        taoImageElement.alt = altText.length > 200 ? altText.substring(0, 197) + "..." : altText;
+                    } else {
+                        console.warn("Wikimedia POTD image source not found in API response for today.", data);
+                        throw new Error("No valid image data in today's Wikimedia POTD response.");
+                    }
+
+                    if(potdDescriptionContainer) potdDescriptionContainer.innerHTML = ''; 
+                    if (data.image?.description?.text) {
+                        const descriptionText = data.image.description.text;
+                        let linkUrl = null;
+                        let linkTitle = "";
+
+                        if (data.image.content_urls?.desktop?.page) {
+                            linkUrl = data.image.content_urls.desktop.page;
+                            linkTitle = "View Wikipedia article";
+                        } else if (data.image.file_page) { 
+                            linkUrl = data.image.file_page;
+                            linkTitle = "View Wikimedia Commons file details";
+                        }
+
+                        if (linkUrl && potdDescriptionContainer) {
+                            const linkElement = document.createElement('a');
+                            linkElement.href = linkUrl;
+                            const maxDescLength = 150; 
+                            linkElement.textContent = descriptionText.length > maxDescLength ? descriptionText.substring(0, maxDescLength - 3) + "..." : descriptionText;
+                            linkElement.title = linkTitle + ": " + descriptionText; 
+                            linkElement.target = '_blank';
+                            linkElement.rel = 'noopener noreferrer';
+                            potdDescriptionContainer.appendChild(linkElement);
+                        } else if (potdDescriptionContainer) {
+                            potdDescriptionContainer.textContent = descriptionText;
+                        }
+                    } else if (potdDescriptionContainer) {
+                        potdDescriptionContainer.innerHTML = '<p>No description available for this picture.</p>';
+                    }
+                } catch (error) {
+                    console.warn(`Error fetching or processing Wikimedia POTD: ${error.message}`);
+                    taoImageElement.src = potdUnavailablePlaceholder;
+                    taoImageElement.alt = "Error loading Wikimedia Picture of the Day";
+                    if(potdDescriptionContainer) potdDescriptionContainer.innerHTML = ''; 
+
+                    const errorP = document.createElement('p');
+                    errorP.className = 'potd-error-message';
+                    if (String(window.location.protocol).startsWith("file")) {
+                         errorP.textContent = "Could not load Wikimedia POTD. API requests might be blocked when running from local files (file:///...).";
+                    } else if (error.message.includes("HTTP error 404")) {
+                         errorP.textContent = "Wikimedia POTD not found for today, or the API endpoint changed.";
+                    } else {
+                        errorP.textContent = "Could not load Wikimedia POTD. Please check connection or try later.";
+                    }
+                    
+                    if (potdDescriptionContainer && potdDescriptionContainer.nextSibling) {
+                        taoDisplayContainer.insertBefore(errorP, potdDescriptionContainer.nextSibling);
+                    } else if (taoDisplayContainer) { 
+                        taoDisplayContainer.appendChild(errorP);
+                    }
+                }
             }
-            if (taoImageElement) taoImageElement.onerror = function() { 
-                 if(!this.src.startsWith('https://placehold.co')){this.src='https://placehold.co/600x400/ddd/888?text=WikiImgErr'; this.alt='Wiki Img Error';}
-                 if(potdDescriptionContainer) potdDescriptionContainer.innerHTML = '<p>Wiki Desc Error.</p>'; this.onerror=null;
-            };
+            
+            if (taoImageElement) {
+                taoImageElement.onerror = function() { 
+                    if(!this.src.startsWith('https://placehold.co')){ 
+                        console.warn("Direct Wiki image load failed for:", this.src);
+                        this.src='https://placehold.co/600x400/ddd/888?text=Wiki+Img+LoadErr'; 
+                        this.alt='Wikimedia Image Load Error';
+                    }
+                    if(potdDescriptionContainer) potdDescriptionContainer.innerHTML = '<p>Description unavailable due to image load error.</p>'; 
+                };
+            }
             
             function displayRandomTaoTeChingChapter() { 
-                 if(taoTeChingChapters.length>0){const R=Math.floor(Math.random()*taoTeChingChapters.length);taoTitleElement.textContent=taoTeChingChapters[R].title;taoTextElement.textContent=taoTeChingChapters[R].text;}
-                 else{taoTitleElement.textContent="Ancient Wisdom";taoTextElement.textContent="The Tao that can be told is not eternal.";}
+                 if (!taoTitleElement || !taoTextElement) {
+                    console.warn("Tao Te Ching display elements not found.");
+                    return;
+                }
+                if(taoTeChingChapters.length > 0){
+                    const randomIndex = Math.floor(Math.random() * taoTeChingChapters.length);
+                    taoTitleElement.textContent = taoTeChingChapters[randomIndex].title;
+                    taoTextElement.textContent = taoTeChingChapters[randomIndex].text;
+                } else {
+                    taoTitleElement.textContent = "Ancient Wisdom";
+                    taoTextElement.textContent = "The Tao that can be told is not eternal. (Tao Te Ching content is currently empty)";
+                }
             }
 
             function toggleTaoDisplay() { 
-                if(taoContentState==='image'){if(taoTeChingChapters.length>0){taoImageElement.style.display='none';if(potdDescriptionContainer)potdDescriptionContainer.style.display='none';taoTitleElement.style.display='block';taoTextElement.style.display='block';taoContentState='text';}else console.log("No Tao chapters.");}
-                else{taoImageElement.style.display='block';if(potdDescriptionContainer)potdDescriptionContainer.style.display='block';taoTitleElement.style.display='none';taoTextElement.style.display='none';taoContentState='image';}
+                if (!taoImageElement || !potdDescriptionContainer || !taoTitleElement || !taoTextElement || !taoDisplayContainer) return;
+                 let errMessage = taoDisplayContainer.querySelector('.potd-error-message');
+
+                if (taoContentState === 'image') {
+                    if (taoTeChingChapters.length > 0) { 
+                        taoImageElement.style.display = 'none';
+                        potdDescriptionContainer.style.display = 'none';
+                        if (errMessage) errMessage.style.display = 'none';
+                        taoTitleElement.style.display = 'block';
+                        taoTextElement.style.display = 'block';
+                        taoContentState = 'text';
+                    } else {
+                        console.log("No Tao Te Ching chapters available to display text.");
+                    }
+                } else { 
+                    taoImageElement.style.display = 'block';
+                    potdDescriptionContainer.style.display = 'block';
+                     if (errMessage) errMessage.style.display = 'block';
+                    taoTitleElement.style.display = 'none';
+                    taoTextElement.style.display = 'none';
+                    taoContentState = 'image';
+                }
             }
             if (taoDisplayContainer) taoDisplayContainer.addEventListener('click', toggleTaoDisplay);
 
@@ -316,9 +647,24 @@
             function connectPoints(){for(let a=0;a<shapes.length;a++)for(let b=a+1;b<shapes.length;b++){let D=Math.sqrt(Math.pow(shapes[a].x-shapes[b].x,2)+Math.pow(shapes[a].y-shapes[b].y,2));if(D<connectionDistance){const O=1-(D/connectionDistance);ctx.strokeStyle=`hsla(${baseHue},70%,60%,${O*0.35})`;ctx.lineWidth=Math.max(0.5,1-O);ctx.beginPath();ctx.moveTo(shapes[a].x,shapes[a].y);ctx.lineTo(shapes[b].x,shapes[b].y);ctx.stroke();}}}
             function animateBackground(){animationFrameId=requestAnimationFrame(animateBackground);ctx.clearRect(0,0,canvas.width,canvas.height);shapes.forEach(s=>s.update());connectPoints();}
             
-            displayRandomLesson(); fetchNasaApod(); fetchPictureOfTheDay(); displayRandomTaoTeChingChapter(); 
-            setupBackgroundParameters(); initBackground(); animateBackground(); 
-            let resizeTimer; window.addEventListener('resize',()=>{clearTimeout(resizeTimer);if(animationFrameId)cancelAnimationFrame(animationFrameId);resizeTimer=setTimeout(()=>{initBackground();animateBackground();},250);});
+            displayRandomLesson(); 
+            fetchNasaApod(); 
+            fetchPictureOfTheDay(); 
+            displayRandomTaoTeChingChapter(); 
+            
+            setupBackgroundParameters(); 
+            initBackground(); 
+            animateBackground(); 
+            
+            let resizeTimer; 
+            window.addEventListener('resize',()=>{
+                clearTimeout(resizeTimer);
+                if(animationFrameId) cancelAnimationFrame(animationFrameId); 
+                resizeTimer=setTimeout(()=>{
+                    initBackground(); 
+                    animateBackground(); 
+                },250);
+            });
         });
     </script>
 
