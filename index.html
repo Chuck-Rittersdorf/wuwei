@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Daily Dose of Wisdom</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333; /* Default text color, will be overridden by container */
+            overflow: hidden; /* Hide scrollbars that might appear due to canvas */
+        }
+
+        #geometric-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place canvas behind other content */
+            /* background-color will be set by JavaScript */
+        }
+
+        .content-wrapper { /* New wrapper to center content on top of canvas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px; /* Add some padding around the container */
+            box-sizing: border-box; /* Ensure padding doesn't make it overflow */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 650px;
+            width: 90%;
+            text-align: center;
+            position: relative; /* Ensure it's above the canvas pseudo-elements if any */
+            z-index: 1;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        #lesson-title {
+            font-size: 1.4em;
+            color: #16a085;
+            margin-bottom: 8px;
+        }
+
+        #lesson-text {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="geometric-background"></canvas>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>Life Lesson for Today</h1>
+            <div id="lesson-display">
+                <h2 id="lesson-title"></h2>
+                <p id="lesson-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Life Lesson Logic ---
+            const lessons = [
+                // Original Lessons
+                { title: "Know Yourself", text: "This might sound cliche, but self-awareness is the foundation for a fulfilling life. Explore your values, strengths, and weaknesses. What truly matters to you? What lights you up?" },
+                { title: "Embrace Lifelong Learning", text: "The world is constantly changing, and so should you. Never stop learning, exploring, and challenging yourself." },
+                { title: "Build Strong Relationships", text: "Humans are social creatures. Nurture your connections with family, friends, and loved ones. Invest in quality relationships that bring you joy and support." },
+                { title: "Embrace Failure", text: "Failure is inevitable, but it's not the end. See it as a learning opportunity and a chance to grow. Don't be afraid to take risks and step outside your comfort zone." },
+                { title: "Find Your Purpose", text: "What gives your life meaning? Contributing to something bigger than yourself can bring immense satisfaction. Volunteer, pursue a passion project, or simply make a positive impact on those around you." },
+                { title: "Take Care of Yourself", text: "You can't pour from an empty cup. Prioritize your physical and mental health. Eat well, exercise regularly, and get enough sleep. Don't neglect your emotional well-being either." },
+                { title: "Live in the Present", text: "The past can't be changed, and the future is uncertain. Savor the present moment. Find joy in the little things, and appreciate the beauty around you." },
+                { title: "Practice Gratitude", text: "Taking time to appreciate what you have, big or small, can shift your perspective and increase happiness." },
+                { title: "Forgive Yourself and Others", text: "Holding onto grudges hurts you more than anyone else. Learn to forgive yourself for mistakes and others for their shortcomings." },
+                { title: "Be Kind", text: "Kindness is a superpower. A simple act of kindness can brighten someone's day and make the world a better place." },
+                { title: "Embrace Discomfort", text: "Growth often lies just outside your comfort zone. Don't shy away from new experiences, even if they feel scary at first. Stepping outside your comfort zone can lead to incredible discoveries about yourself and the world." },
+                { title: "Celebrate Small Wins", text: "It's easy to get caught up in the pursuit of big goals. Take time to acknowledge and celebrate your smaller achievements. This keeps you motivated and reminds you of how far you've come." },
+                { title: "Declutter Your Life", text: "Physical clutter can weigh you down, while mental clutter can cloud your judgment. Regularly declutter your living space and your mind. This can involve getting rid of unnecessary possessions, practicing mindfulness, or letting go of negative thoughts." },
+                { title: "Learn to Say No", text: "It's okay to set boundaries and prioritize your time and energy. Saying no empowers you to focus on what truly matters." },
+                { title: "Master the Art of Conversation", text: "Communication is key in all aspects of life. Develop your listening skills and learn to have engaging conversations. This will strengthen your relationships and open doors to new opportunities." },
+                { title: "Find Your Tribe", text: "Surround yourself with people who inspire you, uplift you, and challenge you to be your best self. Invest in relationships with those who share your values and support your dreams." },
+                { title: "Embrace the Power of Silence", text: "In our fast-paced world, silence has become a rare commodity. Make time for quiet reflection and introspection. This allows you to connect with yourself and gain clarity on your thoughts and feelings." },
+                { title: "Challenge Your Assumptions", text: "Don't be afraid to question your own beliefs and biases. Seek out diverse perspectives and be open to changing your mind based on new information." },
+                { title: "Cultivate Curiosity", text: "Maintain a childlike curiosity about the world around you. Never stop asking questions and seeking to learn new things. Curiosity fuels creativity and keeps life interesting." },
+                { title: "Leave a Legacy", text: "Consider how you want to be remembered. This doesn't have to be a grand gesture. It could be as simple as being known for your kindness, humor, or positive attitude." },
+                { title: "Develop Unshakeable Resilience", text: "Life throws curveballs. Learn to bounce back from setbacks and disappointments. Develop the mental fortitude to navigate challenges and emerge stronger on the other side." },
+                { title: "Embrace the Power of \"Yet\"", text: "When faced with a challenge, replace \"I can't\" with \"I can't yet.\" This small shift in perspective acknowledges the current reality while maintaining hope and motivation for future growth." },
+                { title: "Become a Master of Adaptation", text: "The world is constantly changing. Cultivate the ability to adapt to new situations and learn new things quickly. This flexibility will serve you well in an ever-evolving world." },
+                { title: "Practice Unplugging", text: "Constant connectivity can lead to information overload and decreased well-being. Schedule regular digital detoxes to disconnect from technology and reconnect with yourself and the world around you." },
+                { title: "Find Joy in the Journey", text: "Don't get so fixated on the destination that you miss out on the journey itself. Savor the process of learning, growing, and experiencing new things. Life is a beautiful adventure, embrace it!" },
+
+                // Newly Added Lessons
+                { title: "Life's Fragility & Present Action", text: "Your entire life can change in an instant. So instead of passively taking what you have for granted, be grateful for it and do whatever good you can with it. Life is fragile and unpredictable. Appreciate what you have now and strive to make a positive impact while you can, as circumstances can shift without warning." },
+                { title: "It's Okay to Feel Lost", text: "Feeling lost is a normal part of life's journey of self-discovery. You owe nothing to your younger self, but you owe everything to your present self. You are not bound by the expectations of your past self; your primary responsibility is to nurture and guide the person you are today." },
+                { title: "Action Breeds Clarity", text: "You can’t think your way into a new life, you have to act your way into one. Understanding your true desires and path often comes through doing, not just thinking. Experiment, try new things, and learn from the experience, as action provides the clarity that contemplation alone cannot." },
+                { title: "Happiness is the Way, Not the Destination", text: "Chasing happiness will lead you to misery until you realize that happiness is the way. Happiness is not a destination to be reached in the future, but a state of being cultivated in the present moment. Focus on presence, acceptance, and contentment with what you have right now." },
+                { title: "Commitment, Consistency, Persistence", text: "To change your life's trajectory: Commitment gets you started, consistency gets you somewhere, and persistence keeps you going. Meaningful change requires a three-pronged approach: first, make a firm decision; second, maintain regular effort; and third, persevere through challenges." },
+                { title: "Your Habits Define You", text: "We break down and build ourselves up little by little, day by day. Your habits define you—what you do today is a reflection of who you will become tomorrow. Your daily habits, both good and bad, have a cumulative effect on your well-being and future self. Consciously cultivate positive routines and self-care practices." },
+                { title: "Share Progress, Not Goals", text: "Publicly announcing goals can sometimes diminish motivation. Instead, focus on tracking and sharing your actual progress, which provides tangible evidence of your efforts and encourages continued momentum. This way, you’ll always be motivated." },
+                { title: "Stop Comparing, Define Your Success", text: "Every second you spend comparing your life to someone else’s is a second spent wasting yours. Comparing yourself to others is detrimental to your well-being. Define success on your own terms and focus on your personal journey and growth instead." },
+                { title: "Doing What You Love Requires Discipline", text: "Designing a meaningful life you love is possible. Doing what you love won’t make life any easier—it will just make you more disciplined and it more joyful. Creating a life aligned with your passions is achievable and brings joy, but it also requires significant discipline, hard work, and perseverance through challenges." },
+                { title: "Beliefs Drive Actions, True Self-Care is Deep Work", text: "Everything you do, right or wrong, is born out of a set of beliefs. This implies that self-care isn't just roses and chocolates; it's going deep within to surface subconscious behavioral and thought patterns sabotaging your growth. True self-care involves introspection to identify and address these patterns and limiting beliefs." },
+                { title: "Slow Down in an Age of Speed", text: "In an age of speed, aim to slow down. Living slow makes you more mindful and intentional. You begin to take care of your body, mind, and soul, so they can care for you. Consciously choose to slow down, be present, and prioritize well-being. This fosters mindfulness and deeper self-care." },
+                { title: "The Power of Journaling", text: "Journaling is a timeless and priceless form of therapy. It helps you think clearly, understand yourself better, and make better sense of life. Regularly writing down your thoughts and reflections is a powerful tool for mental clarity, self-awareness, and processing your experiences." },
+                { title: "Seek Experiences, Not Material Things", text: "You grow rich when you seek new experiences, not material things. Experiences provide lasting memories, foster personal growth, and enrich your life in ways material possessions often cannot. Prioritize seeking new adventures and learning opportunities." },
+                { title: "Focused Attention Through Meditation", text: "In today’s digital-first world, the greatest skill is focused attention. Build it through daily meditation. In an age of constant distraction, focus is a valuable asset. Daily meditation can train your mind and enhance concentration." },
+                { title: "Equation for Financial Wealth", text: "The equation for financial wealth: Learn to manage your money, master a valuable skillset, and create more than you consume. Building financial wealth involves managing finances effectively, developing valuable skills for income, and consistently producing more value than you spend." },
+                { title: "Be a Lifelong Student of Life", text: "You’re a student of life, for life. Your sole objective is to keep learning, evolving, and expanding your mind. Embrace a lifelong learner mentality. Continuously seek knowledge, develop new skills, and broaden your understanding of the world." },
+                { title: "Befriend Your Fear", text: "Fear isn't there to stop you; it shows you're interested and care. Befriend fear, don’t fight it. Once you do something scary, it becomes smaller the second time. Recognize fear as an indicator of value. Approach it with curiosity, as overcoming fears leads to growth." },
+                { title: "Believe in Yourself First", text: "You have to believe in yourself before anyone else does. That’s the cornerstone of real confidence. Self-belief is fundamental to taking action and achieving goals. Cultivate your inner conviction and let your actions speak for themselves." },
+                { title: "The Best Things in Life are Imperfect & Free", text: "Nature, laughter, kindness, love, and self-compassion—the best things in life are imperfect and free. The most meaningful aspects are often simple, readily available, and don't require money. Appreciate and cultivate these free sources of joy and connection." },
+                { title: "Failure and Adversity: The Greatest Teachers", text: "Failure and adversity are the greatest teachers—we see starlight in the darkest times. Challenges and setbacks offer valuable lessons and growth opportunities. Embrace them as catalysts for strength and resilience." },
+                { title: "Stay Curious, Question, Ask", text: "Stay curious, question everything, and if you want something, ask for it. With this attitude, when one door closes, another opens. Maintain curiosity and seek what you desire. A proactive, inquisitive mindset reveals new possibilities." },
+                { title: "Play the Long Game: Impatient Action, Patient Results", text: "Play the quick short-game, win small; play the sequential long-game, allow time to grow, win big. Be impatient with actions, patient with results. Significant achievements need a long-term view and consistent effort. Act now, allow time for results." },
+                { title: "Mental Strength: Focus on Controllables", text: "True mental strength is a game-changer. Build it by consciously focusing on what you control (inputs, outputs) and ignoring what you can’t (outcomes). Develop mental resilience by directing energy to efforts and actions, detaching from uncontrollable outcomes." },
+                { title: "Purpose: Serve Where You Are, Passionately", text: "Your purpose is to be where you are, serve people, and contribute positively. Your objective isn't just to do what you're passionate about; it's to pursue your purpose passionately. Find purpose by serving and contributing; passion can grow from this." },
+                { title: "You Live Multiple Lives in One", text: "You don’t only live once; you live multiple lives within one. Life is a series of transitions and evolving identities. Embrace change and allow yourself to 'die' to old ways of being so you can be 'reborn' into new phases." },
+                { title: "Value People and Positive Connections", text: "Make time for people you love and surround yourself with optimistic people who uplift you. The people you share life with make living worthwhile. Nurture relationships with loved ones and seek positive influences. Meaningful connections are essential." },
+                { title: "Live Like an Artist-Scientist Hybrid", text: "Keep an open mind. Act like an artist but think, fail, and learn like a scientist. Recognize your life is an experiment, and you will live without fear or regret. Approach life with creativity, willingness to experiment, analyze experiences, and learn from mistakes." },
+                { title: "Drop the Ego, Be Kind", text: "If you can drop anything, drop the ego. If you can be anything, be kind. The ego can be a source of negativity. Cultivate mindfulness and kindness towards yourself and others to foster empathy and connection." },
+                { title: "Be Yourself, Nobody is Watching That Closely", text: "Honestly, nobody cares what you do—everyone’s got their own problems. Stop belittling yourself and start being yourself. Free yourself from fear of judgment. Most are preoccupied with their own lives; embrace your authenticity and pursue happiness." },
+                { title: "Time is Your Most Precious Resource", text: "Money comes and goes, but time only moves in one direction. You only have power over what you do with your time today. Time is precious and finite. Focus on making the most of the present and avoid wasting time on unproductive activities." },
+                { title: "Seek Advice Wisely", text: "Be smart enough to ask for advice, but wise enough to know who to seek it from. Seek guidance when needed, but be discerning. Look for individuals with relevant experience who have achieved what you aspire to." },
+                { title: "Self-Love Through Solitude, Acceptance, Awareness", text: "Self-love is born from self-acceptance and self-awareness. The way to all three is through solitude—how else can you create space to look inside? Cultivating self-love requires accepting who you are and understanding yourself deeply. Solitude provides space for introspection." },
+                { title: "Listen to What the World Tells You About Yourself", text: "Sometimes the world tries to tell you who you are, but if you don’t stop to reflect and listen, you’ll never hear. Pay attention to recurring themes, interests, and feedback. Reflect on these signs to better understand your true self and path." },
+                { title: "Gratitude Reveals Beauty and Happiness", text: "The more grateful you are, the more beauty you'll see, the more generous life will seem, and the happier you'll become. Practicing gratitude shifts your perspective, allowing you to appreciate positive aspects and fostering abundance and happiness." },
+                { title: "Life is What You Make It (Through Your Thoughts)", text: "Life is what you make it; the reality you experience directly reflects the quality of your thoughts. Your mindset significantly shapes your experience. Cultivate positive and intentional thinking to create a more fulfilling life." }
+            ];
+
+            const lessonTitleElement = document.getElementById('lesson-title');
+            const lessonTextElement = document.getElementById('lesson-text');
+
+            function displayRandomLesson() {
+                if (lessons.length > 0 && lessonTitleElement && lessonTextElement) {
+                    const randomIndex = Math.floor(Math.random() * lessons.length);
+                    const selectedLesson = lessons[randomIndex];
+                    lessonTitleElement.textContent = selectedLesson.title;
+                    lessonTextElement.textContent = selectedLesson.text;
+                } else {
+                    if (lessonTitleElement) lessonTitleElement.textContent = "Oops!";
+                    if (lessonTextElement) lessonTextElement.textContent = "Could not load a lesson at this time.";
+                }
+            }
+            displayRandomLesson();
+
+            // --- Geometric Background Logic ---
+            const canvas = document.getElementById('geometric-background');
+            const ctx = canvas.getContext('2d');
+            let shapes = [];
+
+            // Random parameters for the background
+            const numShapes = Math.floor(Math.random() * 75) + 50; // 50-125 shapes
+            const baseSpeed = (Math.random() * 0.4) + 0.1; // 0.1-0.5
+            const baseHue = Math.random() * 360; // Random base color
+            const minSize = Math.floor(Math.random() * 5) + 2; // 2-7
+            const maxSize = Math.floor(Math.random() * 15) + minSize + 5; // minSize+5 to minSize+20
+            const connectionDistance = Math.floor(Math.random() * 80) + 70; // 70-150
+            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`; // Dark, slightly colored background
+
+            canvas.style.backgroundColor = canvasBackgroundColor;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            class Shape {
+                constructor(x, y, radius, dx, dy, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = radius;
+                    this.dx = dx;
+                    this.dy = dy;
+                    this.color = color;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+                update() {
+                    if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                        this.dx = -this.dx;
+                    }
+                    if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                        this.dy = -this.dy;
+                    }
+                    this.x += this.dx;
+                    this.y += this.dy;
+                    this.draw();
+                }
+            }
+
+            function initBackground() {
+                shapes = [];
+                resizeCanvas(); // Set initial size
+                for (let i = 0; i < numShapes; i++) {
+                    const radius = Math.random() * (maxSize - minSize) + minSize;
+                    const x = Math.random() * (canvas.width - radius * 2) + radius;
+                    const y = Math.random() * (canvas.height - radius * 2) + radius;
+                    const dx = (Math.random() - 0.5) * baseSpeed * 2; // -baseSpeed to +baseSpeed
+                    const dy = (Math.random() - 0.5) * baseSpeed * 2;
+                    // Vary saturation and lightness for a more dynamic palette
+                    const saturation = Math.floor(Math.random() * 30) + 70; // 70-100%
+                    const lightness = Math.floor(Math.random() * 20) + 50; // 50-70%
+                    const color = `hsl(${baseHue + (Math.random() * 60 - 30)}, ${saturation}%, ${lightness}%)`;
+                    shapes.push(new Shape(x, y, radius, dx, dy, color));
+                }
+            }
+
+            function connectPoints() {
+                let opacityValue = 1;
+                for (let a = 0; a < shapes.length; a++) {
+                    for (let b = a + 1; b < shapes.length; b++) { // Start b from a+1 to avoid re-checks and self-checks
+                        let distance = Math.sqrt(
+                            Math.pow(shapes[a].x - shapes[b].x, 2) + Math.pow(shapes[a].y - shapes[b].y, 2)
+                        );
+
+                        if (distance < connectionDistance) {
+                            opacityValue = 1 - (distance / connectionDistance);
+                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`; // Softer lines
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(shapes[a].x, shapes[a].y);
+                            ctx.lineTo(shapes[b].x, shapes[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animateBackground() {
+                requestAnimationFrame(animateBackground);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < shapes.length; i++) {
+                    shapes[i].update();
+                }
+                connectPoints(); // Draw lines between nearby points
+            }
+
+            initBackground();
+            animateBackground();
+
+            // Re-initialize on window resize for responsiveness
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    resizeCanvas();
+                }, 250); // Debounce resize event
+            });
+        });
+    </script>
+
+</body>
+</html>
