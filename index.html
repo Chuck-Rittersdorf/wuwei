@@ -22,50 +22,105 @@
             width: 100%;
             height: 100%;
             z-index: -1; /* Place canvas behind other content */
-            /* background-color will be set by JavaScript */
         }
 
-        .content-wrapper { /* Wrapper to center content and manage space for quick links */
+        .content-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 70px); /* Adjust min-height for the quick links bar height */
+            min-height: calc(100vh - 70px);
             padding: 20px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
-            padding: 30px 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px 30px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            max-width: 650px;
+            max-width: 900px;
             width: 90%;
             text-align: center;
-            position: relative; /* Ensure it's above the canvas */
+            position: relative;
             z-index: 1;
         }
 
-        /* h1 was removed, so its styles are no longer needed unless other h1 elements are added later */
-        /* h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        } */
+        .lesson-and-tao-wrapper {
+            display: flex;
+            gap: 30px;
+            justify-content: space-between;
+        }
+
+        #lesson-display, #tao-te-ching-display {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.5);
+            text-align: left;
+        }
+
+        #tao-te-ching-display {
+            cursor: pointer; /* Indicate the whole area is clickable */
+        }
 
         #lesson-title {
-            font-size: 1.4em;
+            font-size: 1.3em;
             color: #16a085;
-            margin-bottom: 8px;
-            /* Adjust top margin if needed due to h1 removal */
-            margin-top: 0; /* Or a specific value if more space is desired at the top */
+            margin-bottom: 10px;
+            margin-top: 0;
         }
 
         #lesson-text {
-            font-size: 1.05em;
+            font-size: 1em;
             line-height: 1.6;
             color: #444;
             margin-top: 0;
+        }
+
+        #tao-image {
+            display: block; /* Initially visible */
+            max-width: 100%;
+            height: auto;
+            max-height: 300px; /* Added max-height to prevent overly large images */
+            object-fit: contain; /* Ensures the image aspect ratio is maintained within max-height */
+            border-radius: 8px;
+            margin: 0 auto 10px auto; /* Center block image and add some margin below */
+        }
+
+        #tao-te-ching-title {
+            font-size: 1.3em;
+            color: #2980b9;
+            margin-bottom: 10px;
+            margin-top: 0;
+            display: none; /* Initially hidden */
+        }
+
+        #tao-te-ching-text {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0;
+            white-space: pre-line;
+            display: none; /* Initially hidden */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .lesson-and-tao-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+            #lesson-display, #tao-te-ching-display {
+                text-align: center;
+                max-width: 100%;
+            }
+            .container {
+                padding: 20px 15px;
+            }
+            #tao-image {
+                max-height: 200px; /* Adjust max-height for smaller screens */
+            }
         }
 
         /* Quick Links Bar Styling */
@@ -73,18 +128,18 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%; /* Full width for the bar */
-            background-color: rgba(245, 245, 245, 0.85); /* Light background for the bar */
-            backdrop-filter: blur(5px); /* Optional: frosted glass effect for modern browsers */
-            -webkit-backdrop-filter: blur(5px); /* Safari support */
-            padding: 10px 0; /* Padding top/bottom within the bar */
+            width: 100%;
+            background-color: rgba(245, 245, 245, 0.85);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 10px 0;
             display: flex;
-            justify-content: center; /* Center items horizontally */
+            justify-content: center;
             align-items: center;
-            gap: 22px; /* Space between logos */
-            z-index: 100; /* Ensure it's above other content */
-            border-top: 1px solid rgba(0,0,0,0.08); /* Subtle top border */
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05); /* Subtle shadow for lift */
+            gap: 22px;
+            z-index: 100;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
         }
 
         .quick-links a {
@@ -94,41 +149,16 @@
         }
 
         .quick-links a:hover {
-            transform: translateY(-3px); /* Slight lift on hover */
+            transform: translateY(-3px);
             opacity: 1;
         }
 
         .quick-links img {
-            height: 30px; /* Consistent logo height, slightly smaller */
-            width: auto;   /* Maintain aspect ratio */
+            height: 30px;
+            width: auto;
             vertical-align: middle;
         }
 
-        /* Note Corner Styling */
-        #note-corner {
-            position: fixed;
-            bottom: 80px; /* Positioned above the quick links bar (70px body padding + 10px margin) */
-            right: 20px;
-            z-index: 101; /* Above quick links */
-        }
-
-        #note-area {
-            width: 220px;  /* Slightly wider */
-            height: 160px; /* Slightly taller */
-            border: 1px solid #d3c9a3; /* Softer border color */
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 0.9em;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12); /* Slightly more pronounced shadow */
-            background-color: #FFFFE0; /* Light yellow, like a sticky note */
-            resize: none; /* Prevent user resizing */
-            outline: none; /* Remove default focus outline, relying on border/shadow */
-            transition: box-shadow 0.2s ease-in-out;
-        }
-        #note-area:focus {
-            box-shadow: 0 5px 20px rgba(0,0,0,0.18); /* Enhanced shadow on focus */
-        }
     </style>
 </head>
 <body>
@@ -136,9 +166,16 @@
 
     <div class="content-wrapper">
         <div class="container">
-            <div id="lesson-display">
-                <h2 id="lesson-title"></h2>
-                <p id="lesson-text"></p>
+            <div class="lesson-and-tao-wrapper">
+                <div id="lesson-display">
+                    <h2 id="lesson-title"></h2>
+                    <p id="lesson-text"></p>
+                </div>
+                <div id="tao-te-ching-display">
+                    <img id="tao-image" src="https://placehold.co/600x400/eeeeee/999999?text=Loading+POTD..." alt="Picture of the Day">
+                    <h3 id="tao-te-ching-title"></h3>
+                    <p id="tao-te-ching-text"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -153,6 +190,9 @@
         <a href="https://tasks.google.com/" target="_blank" rel="noopener noreferrer" title="Google Tasks">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
         </a>
+        <a href="https://keep.google.com/" target="_blank" rel="noopener noreferrer" title="Google Keep">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Google_Keep_2020_Logo.svg" alt="Google Keep Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+        </a>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" title="Google Gemini">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
         </a>
@@ -162,10 +202,6 @@
         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube">
             <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
         </a>
-    </div>
-
-    <div id="note-corner">
-        <textarea id="note-area" placeholder="Type your session notes here..."></textarea>
     </div>
 
     <script>
@@ -198,7 +234,6 @@
                 { title: "Become a Master of Adaptation", text: "The world is constantly changing. Cultivate the ability to adapt to new situations and learn new things quickly. This flexibility will serve you well in an ever-evolving world." },
                 { title: "Practice Unplugging", text: "Constant connectivity can lead to information overload and decreased well-being. Schedule regular digital detoxes to disconnect from technology and reconnect with yourself and the world around you." },
                 { title: "Find Joy in the Journey", text: "Don't get so fixated on the destination that you miss out on the journey itself. Savor the process of learning, growing, and experiencing new things. Life is a beautiful adventure, embrace it!" },
-                // Newly Added Lessons from previous step
                 { title: "Life's Fragility & Present Action", text: "Your entire life can change in an instant. So instead of passively taking what you have for granted, be grateful for it and do whatever good you can with it. Life is fragile and unpredictable. Appreciate what you have now and strive to make a positive impact while you can, as circumstances can shift without warning." },
                 { title: "It's Okay to Feel Lost", text: "Feeling lost is a normal part of life's journey of self-discovery. You owe nothing to your younger self, but you owe everything to your present self. You are not bound by the expectations of your past self; your primary responsibility is to nurture and guide the person you are today." },
                 { title: "Action Breeds Clarity", text: "You can’t think your way into a new life, you have to act your way into one. Understanding your true desires and path often comes through doing, not just thinking. Experiment, try new things, and learn from the experience, as action provides the clarity that contemplation alone cannot." },
@@ -252,31 +287,220 @@
             }
             displayRandomLesson();
 
+            // --- Tao Te Ching Logic ---
+            const taoTeChingChapters = [
+                {
+                    title: "Chapter 1",
+                    text: "The Tao that can be trodden is not the enduring and unchanging Tao. The name that can be named is not the enduring and unchanging name.\n(Conceived of as) having no name, it is the Originator of heaven and earth; (conceived of as) having a name, it is the Mother of all things.\nAlways without desire we must be found, If its deep mystery we would sound; But if desire always within us be, Its outer fringe is all that we shall see.\nUnder these two aspects, it is really the same; but as development takes place, it receives the different names. Together we call them the Mystery. Where the Mystery is the deepest is the gate of all that is subtle and wonderful."
+                },
+                {
+                    title: "Chapter 2",
+                    text: "All in the world know the beauty of the beautiful, and in doing this they have (the idea of) what ugliness is; they all know the skill of the skilful, and in doing this they have (the idea of) what the want of skill is.\nSo it is that existence and non-existence give birth the one to (the idea of) the other; that difficulty and ease produce the one (the idea of) the other; that length and shortness fashion out the one the figure of the other; that (the ideas of) height and lowness arise from the contrast of the one with the other; that the musical notes and tones become harmonious through the relation of one with another; and that being before and behind give the idea of one following another.\nTherefore the sage manages affairs without doing anything, and conveys his instructions without the use of speech.\nAll things spring up, and there is not one which declines to show itself; they grow, and there is no claim made for their ownership; they go through their processes, and there is no expectation (of a reward for the results). The work is accomplished, and there is no resting in it (as an achievement).\nThe work is done, but how no one can see; 'Tis this that makes the power not cease to be."
+                },
+                {
+                    title: "Chapter 3",
+                    text: "Not to value and employ men of superior ability is the way to keep the people from rivalry among themselves; not to prize articles which are difficult to procure is the way to keep them from becoming thieves; not to show them what is likely to excite their desires is the way to keep their minds from disorder.\nTherefore the sage, in the exercise of his government, empties their minds, fills their bellies, weakens their wills, and strengthens their bones.\nHe constantly (tries to) keep them without knowledge and without desire, and where there are those who have knowledge, to keep them from presuming to act (on it).\nWhen there is this abstinence from action, good order is universal."
+                },
+                {
+                    title: "Chapter 4",
+                    text: "The Tao is (like) the emptiness of a vessel; and in our employment of it we must be on our guard against all fulness. How deep and unfathomable it is, as if it were the Honoured Ancestor of all things!\nWe should blunt our sharp points, and unravel the complications of things; we should attemper our brightness, and bring ourselves into agreement with the obscurity of others. How pure and still the Tao is, as if it would continue for ever!\nI do not know whose son it is. It might appear to have been before God."
+                },
+                {
+                    title: "Chapter 5",
+                    text: "Heaven and earth do not act from (the impulse of) any wish to be benevolent; they deal with all things as the dogs of grass are dealt with. The sages do not act from (any wish to be) benevolent; they deal with the people as the dogs of grass are dealt with.\nMay not the space between heaven and earth be compared to a bellows?\n'Tis emptied, yet it loses not its power; 'Tis moved again, and sends forth air the more. Much speech to swift exhaustion lead we see; Your inner being guard, and keep it free."
+                },
+                {
+                    title: "Chapter 52",
+                    text: "The world has a beginning\nWe regard it as the mother of the world\nHaving its mother\nWe can know her children\nKnowing her children\nStill holding on to the mother\nLive without danger all through life\nClose the mouth\nShut the doors\nLive without toil all through life\nOpen the mouth\nMeddle in the affairs\nLive without salvation all through life\nSeeing details is called clarity\nHolding on to the soft is called strength\nUtilize the light\nReturn to the clarity\nLeaving no disasters for the self\nThis is called practicing constancy"
+                },
+                {
+                    title: "Chapter 55",
+                    text: "Those who hold an abundance of virtue\nAre similar to newborn infants\nPoisonous insects do not sting them\nWild beasts do not claw them\nBirds of prey do not attack them\nTheir bones are weak, tendons are soft\nBut their grasp is firm\nThey do not know of sexual union but can manifest arousal\nDue to the optimum of essence\nThey can cry the whole day and yet not be hoarse\nDue to the optimum of harmony\nKnowing harmony is said to be constancy\nKnowing constancy is said to be clarity\nExcessive vitality is said to be inauspicious\nMind overusing energy is said to be aggressive\nThings become strong and then grow old\nThis is called contrary to the Tao\nThat which is contrary to the Tao will soon perish"
+                },
+                {
+                    title: "Chapter 58",
+                    text: "When governing is lackluster\nThe people are simple and honest\nWhen governing is scrutinizing\nThe people are shrewd and crafty\nMisfortune is what fortune depends upon\nFortune is where misfortune hides beneath\nWho knows their ultimate end\nOr if they have no determined outcome?\nRightness reverts to become strange\nGoodness reverts to become wicked\nThe confusion of people\nhas lasted many long days\nTherefore the sages are:\nRighteous without being scathing\nIncorruptible without being piercing\nStraightforward without being ruthless\nIlluminated without being flashy"
+                },
+                {
+                    title: "Chapter 59",
+                    text: "In governing people and serving Heaven\nThere is nothing like conservation\nOnly with conservation is it called submitting early\nSubmitting early is called emphasis on accumulating virtues\nAccumulating virtues means there is nothing one cannot overcome\nWhen there is nothing that one cannot overcome\nOne's limits are unknown\nThe limitations being unknown, one can possess sovereignty\nWith this mother principle of power, one can be everlasting\nThis is called deep roots and firm foundation\nThe Tao of longevity and lasting vision"
+                },
+                {
+                    title: "Chapter 62",
+                    text: "The Tao is the wonder of all things\nThe treasure of the kind person\nThe protection of the unkind person\nAdmirable words can win the public's respect\nAdmirable actions can improve people\nThose who are unkind\nHow can they be abandoned?\nTherefore, when crowning the Emperor\nAnd installing the three ministers\nAlthough there is the offering of jade before four horses\nNone of it can compare to being seated in this Tao\nWhy did the ancients value this Tao so much?\nIs it not said that those who seek will find,\nAnd those with guilt will not be faulted?\nTherefore, it is the greatest value in the world"
+                },
+                {
+                    title: "Chapter 65",
+                    text: "Those of ancient times who were adept at the Tao\nUsed it not to make people brighter\nBut to keep them simple\nThe difficulty in governing people\nIs due their excessive cleverness\nTherefore, using cleverness to govern the state\nIs being a thief of the state\nNot using cleverness to govern the state\nIs being a blessing of the state\nKnow that these two are both standards\nAlways knowing these standards\nIs called Mystic Virtue\nMystic Virtue: Profound! Far-reaching!\nIt goes opposite to material things\nThen it reaches great congruence"
+                },
+                {
+                    title: "Chapter 66",
+                    text: "Rivers and oceans can be the kings of a hundred valleys\nBecause of their goodness in staying low\nSo they can be the kings of a hundred valleys\nThus if sages wish to be over people\nThey must speak humbly to them\nIf they wish to be in front of people\nThey must place themselves behind them\nThus the sages are positioned above\nBut the people do not feel burdened\nThey are positioned in front\nBut the people do not feel harmed\nThus the world is glad to push them forward without resentment\nBecause they do not contend\nSo the world cannot contend with them"
+                },
+                {
+                    title: "Chapter 68",
+                    text: "The great generals are not warlike\nThe great warriors do not get angry\nThose who are good at defeating enemies do not engage them\nThose who are good at managing people lower themselves\nIt is called the virtue of non-contention\nIt is called the power of managing people\nIt is called being harmonious with Heaven\nThe ultimate principle of the ancients"
+                },
+                {
+                    title: "Chapter 69",
+                    text: "In using the military, there is a saying:\nI dare not be the host, but prefer to be the guest\nI dare not advance an inch, but prefer to withdraw a foot\nThis is called:\nMarching in formation without formation\nRaising arms without arms\nGrappling enemies without enemies\nHolding weapons without weapons\nThere is no greater disaster than to underestimate the enemy\nUnderestimating the enemy almost made me lose my treasures\nSo when evenly matched armies meet\nThe side that is compassionate shall win"
+                },
+                {
+                    title: "Chapter 73",
+                    text: "The bold in daring will be killed\nThe bold in not daring will survive\nOf these two, one may benefit, the other may harm\nThe one hated by Heaven – who knows the reason?\nEven the sages still find this difficult\nThe Tao of Heaven:\nDoes not contend and yet excels in winning\nDoes not speak and yet excels in responding\nIs not summoned and yet comes on its own\nIs unhurried and yet excels in planning\nThe heavenly net is vast\nLoose, and yet does not let anything slip through"
+                },
+                {
+                    title: "Chapter 74",
+                    text: "People do not fear death\nHow can they be threatened with death?\nIf people are made to constantly fear death\nThen those who act unlawfully\nI can capture and kill them\nWho would dare?\nThere exists a master executioner that kills\nIf we substitute for the master executioner to kill\nIt is like substituting for the great carpenter to cut\nThose who substitute for the great carpenter to cut\nIt is rare that they do not hurt their own hands"
+                },
+                {
+                    title: "Chapter 77",
+                    text: "The Tao of Heaven\nIs like drawing a bow\nLower that which is high\nRaise that which is low\nReduce that which has excess\nAdd to that which is lacking\nThe Tao of heaven\nReduces the excessive\nAnd adds to the lacking\nThe Tao of people is not so\nIt reduces the lacking\nIn order to offer to the excessive\nWho can offer their excess to the world?\nOnly those who have the Tao\nTherefore sages act without conceit\nAchieve without claiming credit\nThey do not wish to display their virtue!"
+                },
+                {
+                    title: "Chapter 78",
+                    text: "Nothing in the world is softer or weaker than water\nYet nothing is better at overcoming the hard and strong\nThis is because nothing can replace it\nThat the weak overcomes the strong\nAnd the soft overcomes the hard\nEverybody in the world knows\nBut cannot put into practice\nTherefore sages say:\nThe one who accepts the humiliation of the state\nIs called its master\nThe one who accepts the misfortune of the state\nBecomes king of the world\nThe truth seems like the opposite"
+                },
+                {
+                    title: "Chapter 79",
+                    text: "After settling a great dispute\nThere must be remaining resentments\nHow can this be considered good?\nTherefore the sage holds the left part of the contract\nBut does not demand payment from the other person\nThose who have virtue hold the contract\nThose without virtue hold the collections\nThe Heavenly Tao has no favorites\nIt constantly gives to the kind people"
+                },
+                {
+                    title: "Chapter 80",
+                    text: "Small country, few people\nLet them have many weapons\nBut not use them\nLet the people regard death seriously\nAnd not migrate far away\nAlthough they have boats and chariots\nThey have no need to take them\nAlthough they have armors and weapons\nThey have no need to display them\nLet the people return to tying knots and using them\nSavor their food, admire their clothes\nContent in their homes, happy in their customs\nNeighboring countries see one another\nHear the sounds of roosters and dogs from one another\nThe people, until they grow old and die\nDo not go back and forth with one another"
+                },
+                {
+                    title: "Chapter 81",
+                    text: "True words are not beautiful\nBeautiful words are not true\nThose who are good do not debate\nThose who debate are not good\nThose who know are not broad of knowledge\nThose who are broad of knowledge do not know\nSages do not accumulate\nThe more they assist others, the more they possess\nThe more they give to others, the more they gain\nThe Tao of heaven\nBenefits and does not harm\nThe Tao of sages\nAssists and does not contend"
+                }
+            ];
+
+            const taoImageElement = document.getElementById('tao-image');
+            const taoTitleElement = document.getElementById('tao-te-ching-title');
+            const taoTextElement = document.getElementById('tao-te-ching-text');
+            const taoDisplayContainer = document.getElementById('tao-te-ching-display');
+            let taoContentState = 'image'; // 'image' or 'text'
+
+            // Function to fetch Picture of the Day
+            async function fetchPictureOfTheDay() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+                const day = String(today.getDate()).padStart(2, '0');
+                const apiUrl = `https://api.wikimedia.org/feed/v1/wikipedia/en/featured/${year}/${month}/${day}`;
+                
+                const unavailablePlaceholder = 'https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Available';
+                const unavailableAltText = "Picture of the Day not available at this moment.";
+
+                try {
+                    const response = await fetch(apiUrl);
+
+                    if (!response.ok) {
+                        // Handles HTTP errors e.g. 404 if no picture for the day, or 5xx server errors
+                        console.warn(`Failed to fetch POTD: HTTP status ${response.status} for ${apiUrl}`);
+                        taoImageElement.src = unavailablePlaceholder;
+                        taoImageElement.alt = unavailableAltText;
+                        return; 
+                    }
+
+                    const data = await response.json();
+
+                    if (data.image && data.image.image && data.image.image.source) {
+                        taoImageElement.src = data.image.image.source;
+                        if (data.image.description && data.image.description.text) {
+                            let altText = data.image.description.text;
+                            const maxLength = 200; // Max length for alt text
+                            if (altText.length > maxLength) {
+                                altText = altText.substring(0, maxLength - 3) + "...";
+                            }
+                            taoImageElement.alt = altText;
+                        } else {
+                            taoImageElement.alt = "Wikimedia Picture of the Day"; // Fallback alt text
+                        }
+                    } else {
+                        console.warn("Picture of the Day image data not found in API response structure for " + apiUrl, data);
+                        taoImageElement.src = unavailablePlaceholder;
+                        taoImageElement.alt = unavailableAltText;
+                    }
+                } catch (error) {
+                    // Handles network errors or other issues with the fetch operation itself
+                    console.error("Error during fetch operation for Picture of the Day (" + apiUrl + "):", error);
+                    taoImageElement.src = 'https://placehold.co/600x400/ff0000/ffffff?text=Network+Error';
+                    taoImageElement.alt = 'Error loading Picture of the Day (Network Issue)';
+                }
+            }
+            
+            // Fallback for the image if the src link itself fails (e.g. broken link from API)
+            taoImageElement.onerror = function() {
+                // Prevent infinite loop if this fallback also fails or if the initial src was already a placeholder
+                if (!this.src.startsWith('https://placehold.co')) {
+                    console.warn("Error loading image from src: " + this.currentSrc_before_onerror_triggered);
+                    this.src = 'https://placehold.co/600x400/dddddd/888888?text=Image+Display+Error';
+                    this.alt = 'Image display error';
+                }
+                this.onerror = null; // Important to remove to prevent loops on repeated errors
+            };
+
+
+            // Function to display a random Tao Te Ching chapter
+            function displayRandomTaoTeChingChapter() {
+                if (taoTeChingChapters.length > 0 && taoTitleElement && taoTextElement) {
+                    const randomIndex = Math.floor(Math.random() * taoTeChingChapters.length);
+                    const selectedChapter = taoTeChingChapters[randomIndex];
+                    taoTitleElement.textContent = selectedChapter.title;
+                    taoTextElement.textContent = selectedChapter.text;
+                } else {
+                    if (taoTitleElement) taoTitleElement.textContent = "Tao Te Ching";
+                    if (taoTextElement) taoTextElement.textContent = "Could not load a chapter at this time.";
+                }
+            }
+
+            // Function to toggle between image and text
+            function toggleTaoDisplay() {
+                if (taoContentState === 'image') {
+                    taoImageElement.style.display = 'none';
+                    taoTitleElement.style.display = 'block';
+                    taoTextElement.style.display = 'block';
+                    taoContentState = 'text';
+                } else {
+                    taoImageElement.style.display = 'block';
+                    taoTitleElement.style.display = 'none';
+                    taoTextElement.style.display = 'none';
+                    taoContentState = 'image';
+                }
+            }
+
+            // Add click listener to the container
+            if (taoDisplayContainer) {
+                taoDisplayContainer.addEventListener('click', toggleTaoDisplay);
+            }
+
+            // Initial setup
+            fetchPictureOfTheDay();
+            displayRandomTaoTeChingChapter(); // Load chapter data even if hidden initially
+
+
             // --- Geometric Background Logic ---
             const canvas = document.getElementById('geometric-background');
             const ctx = canvas.getContext('2d');
             let shapes = [];
 
-            // Random parameters for the background
-            let numShapes = Math.floor(Math.random() * 75) + 50; // 50-125 shapes
-            const baseSpeed = (Math.random() * 0.4) + 0.1; // 0.1-0.5
-            const baseHue = Math.random() * 360; // Random base color
-            let minSize = Math.floor(Math.random() * 5) + 2; // 2-7
-            let maxSize = Math.floor(Math.random() * 15) + minSize + 5; // minSize+5 to minSize+20
-            let connectionDistance = Math.floor(Math.random() * 80) + 70; // 70-150
-            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`; // Dark, slightly colored background
+            let numShapes = Math.floor(Math.random() * 75) + 50;
+            const baseSpeed = (Math.random() * 0.4) + 0.1;
+            const baseHue = Math.random() * 360;
+            let minSize = Math.floor(Math.random() * 5) + 2;
+            let maxSize = Math.floor(Math.random() * 15) + minSize + 5;
+            let connectionDistance = Math.floor(Math.random() * 80) + 70;
+            const canvasBackgroundColor = `hsl(${baseHue}, 30%, 10%)`;
 
             canvas.style.backgroundColor = canvasBackgroundColor;
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-
-                // Adjust shape parameters based on screen size for better density
                 const screenArea = canvas.width * canvas.height;
-                numShapes = Math.floor((screenArea / (1920 * 1080)) * 100) + 30; 
-                numShapes = Math.max(30, Math.min(numShapes, 200)); 
-
+                numShapes = Math.floor((screenArea / (1920 * 1080)) * 100) + 30;
+                numShapes = Math.max(30, Math.min(numShapes, 200));
                 minSize = Math.max(2, Math.floor(canvas.width / 300));
                 maxSize = Math.max(minSize + 3, Math.floor(canvas.width / 100));
                 connectionDistance = Math.max(50, Math.floor(canvas.width / 15));
@@ -301,7 +525,6 @@
                 }
 
                 update() {
-                    // Bounce off walls
                     if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
                         this.dx = -this.dx;
                         if (this.x + this.radius > canvas.width) this.x = canvas.width - this.radius;
@@ -319,17 +542,16 @@
             }
 
             function initBackground() {
-                shapes = []; 
-                resizeCanvas(); 
-
+                shapes = [];
+                resizeCanvas();
                 for (let i = 0; i < numShapes; i++) {
                     const radius = Math.random() * (maxSize - minSize) + minSize;
                     const x = Math.random() * (canvas.width - radius * 2) + radius;
                     const y = Math.random() * (canvas.height - radius * 2) + radius;
-                    const dx = (Math.random() - 0.5) * baseSpeed * 2; 
+                    const dx = (Math.random() - 0.5) * baseSpeed * 2;
                     const dy = (Math.random() - 0.5) * baseSpeed * 2;
-                    const saturation = Math.floor(Math.random() * 30) + 70; 
-                    const lightness = Math.floor(Math.random() * 20) + 50; 
+                    const saturation = Math.floor(Math.random() * 30) + 70;
+                    const lightness = Math.floor(Math.random() * 20) + 50;
                     const color = `hsl(${baseHue + (Math.random() * 60 - 30)}, ${saturation}%, ${lightness}%)`;
                     shapes.push(new Shape(x, y, radius, dx, dy, color));
                 }
@@ -338,14 +560,13 @@
             function connectPoints() {
                 let opacityValue = 1;
                 for (let a = 0; a < shapes.length; a++) {
-                    for (let b = a + 1; b < shapes.length; b++) { 
+                    for (let b = a + 1; b < shapes.length; b++) {
                         let distance = Math.sqrt(
                             Math.pow(shapes[a].x - shapes[b].x, 2) + Math.pow(shapes[a].y - shapes[b].y, 2)
                         );
-
                         if (distance < connectionDistance) {
                             opacityValue = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`; 
+                            ctx.strokeStyle = `hsla(${baseHue}, 80%, 70%, ${opacityValue * 0.5})`;
                             ctx.lineWidth = 1;
                             ctx.beginPath();
                             ctx.moveTo(shapes[a].x, shapes[a].y);
@@ -356,19 +577,18 @@
                 }
             }
 
-            let animationFrameId; 
+            let animationFrameId;
             function animateBackground() {
-                animationFrameId = requestAnimationFrame(animateBackground); 
+                animationFrameId = requestAnimationFrame(animateBackground);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
                 for (let i = 0; i < shapes.length; i++) {
                     shapes[i].update();
                 }
-                connectPoints(); 
+                connectPoints();
             }
 
-            initBackground(); 
-            animateBackground(); 
+            initBackground();
+            animateBackground();
 
             let resizeTimer;
             window.addEventListener('resize', () => {
@@ -377,24 +597,10 @@
                     cancelAnimationFrame(animationFrameId);
                 }
                 resizeTimer = setTimeout(() => {
-                    initBackground(); 
-                    animateBackground(); 
-                }, 250); 
+                    initBackground();
+                    animateBackground();
+                }, 250);
             });
-
-            // --- Note Corner Logic ---
-            const noteArea = document.getElementById('note-area');
-
-            // Load saved note from sessionStorage when the page loads
-            if (sessionStorage.getItem('userNote')) {
-                noteArea.value = sessionStorage.getItem('userNote');
-            }
-
-            // Save note to sessionStorage on every input event in the textarea
-            noteArea.addEventListener('input', function() {
-                sessionStorage.setItem('userNote', noteArea.value);
-            });
-
         });
     </script>
 
