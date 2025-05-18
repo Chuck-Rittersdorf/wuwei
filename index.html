@@ -46,16 +46,19 @@
             z-index: 1;
         }
 
-        h1 {
+        /* h1 was removed, so its styles are no longer needed unless other h1 elements are added later */
+        /* h1 {
             color: #2c3e50;
             margin-bottom: 20px;
             font-size: 1.8em;
-        }
+        } */
 
         #lesson-title {
             font-size: 1.4em;
             color: #16a085;
             margin-bottom: 8px;
+            /* Adjust top margin if needed due to h1 removal */
+            margin-top: 0; /* Or a specific value if more space is desired at the top */
         }
 
         #lesson-text {
@@ -133,7 +136,6 @@
 
     <div class="content-wrapper">
         <div class="container">
-            <h1>Life Lesson for Today</h1>
             <div id="lesson-display">
                 <h2 id="lesson-title"></h2>
                 <p id="lesson-text"></p>
