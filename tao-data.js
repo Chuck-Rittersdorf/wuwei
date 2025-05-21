@@ -4,13 +4,13 @@ const taoTeChingData = [
     chapter: 1,
     text: "The Tao that can be spoken is not the eternal Tao\nThe name that can be named is not the eternal name\nThe nameless is the origin of Heaven and Earth\nThe named is the mother of myriad things\nThus, constantly without desire, one observes its essence\nConstantly with desire, one observes its manifestations\nThese two emerge together but differ in name\nThe unity is said to be the mystery\nMystery of mysteries, the door to all wonders",
     annotation: "The Tao cannot be fully understood through intellect or defined by words alone; it must be experienced. Before the universe and human consciousness, the Tao was the nameless origin. Once the universe and humans emerged, things were observed and named. Self-serving desires limit one to a superficial understanding, while considering others allows a deeper connection to reality. The material world (manifestations) and the spiritual realm (essence) both emerge from the Tao, and their fundamental unity is the mystery explored in Tao cultivation.",
-    lifeLesson: ""
+    lifeLesson: "Embrace the unknowable and seek deeper understanding beyond words/n/nNot everything can be fully understood through logic, words, or analysis. There are fundamental truths and essences that must be experienced directly. Lean into the mystery of life, allowing intuition and presence to guide you towards a profound connection with reality beyond its superficial manifestations."
   },
   {
     chapter: 2,
     text: "When the world knows beauty as beauty, ugliness arises\nWhen it knows good as good, evil arises\nThus being and non-being produce each other\nDifficult and easy bring about each other\nLong and short reveal each other\nHigh and low support each other\nMusic and voice harmonize each other\nFront and back follow each other\nTherefore the sages:\nManage the work of detached actions\nConduct the teaching of no words\nThey work with myriad things but do not control\nThey create but do not possess\nThey act but do not presume\nThey succeed but do not dwell on success\nIt is because they do not dwell on success\nThat it never goes away",
     annotation: "The world is understood through relative comparisons; concepts like \"easy\" or \"long\" only have meaning when contrasted with their opposites. This relativity applies to all things, including good and evil. Absolute good or evil rarely, if ever, exist in the real world, much like absolute purity in nature. People are mixtures of qualities, not absolutes.",
-    lifeLesson: ""
+    lifeLesson: "Embrace duality and the nuance of life/n/nLife is composed of interconnected opposites; what we perceive as \"good\" often defines \"evil,\" and \"easy\" exists only in contrast to \"difficult.\" Recognize that absolutes are rare, and understanding the world means appreciating the constant interplay of these forces. By accepting this inherent duality, you can navigate life's complexities with greater wisdom and a less judgmental perspective."
   },
   {
     chapter: 3,
