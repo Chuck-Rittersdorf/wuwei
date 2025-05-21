@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
     <title>APOD & Wikimedia POTD Viewer</title>
     <style>
         body {
@@ -40,26 +41,24 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             overflow: hidden;
             min-height: 300px; 
-            cursor: pointer; /* The box itself is the primary click target for toggling views */
+            cursor: pointer; 
             display: flex;
             flex-direction: column;
             transition: min-height 0.25s ease-out;
         }
 
-        .box.content-shown { /* Box has active content (either media-view or placeholder-view) */
+        .box.content-shown {
             min-height: 1px; 
         }
         
-        /* Specific clickable elements get their own cursor if needed, but box handles main click */
         .media-item-container img, 
         .media-item-container iframe {
-            /* cursor: pointer; /* Handled by parent .box for toggling for now */
+            cursor: pointer; 
         }
         .media-title a {
-            /* cursor: pointer; /* Default link cursor is fine */
+            cursor: pointer; 
         }
 
-        /* Box Content Area - common for both boxes */
         .box-content {
             position: relative; width: 100%; height: auto; box-sizing: border-box;
             background-color: rgba(255, 255, 255, 0.97); 
@@ -69,7 +68,6 @@
             display: flex; flex-direction: column;
         }
 
-        /* Internal views: media-view and placeholder-content-view */
         .media-view, .placeholder-content-view {
             width: 100%; box-sizing: border-box; padding: 20px;
             opacity: 0; max-height: 0; overflow: hidden;
@@ -80,12 +78,17 @@
         }
         .media-view.active-internal-view,
         .placeholder-content-view.active-internal-view {
-            opacity: 1; max-height: 4000px; /* Fallback, JS sets to scrollHeight */
+            opacity: 1; max-height: 4000px; 
             transform: translateY(0);
         }
-        .placeholder-content-view h2 { margin-top: 0; }
+        
+        .placeholder-content-view h2 {
+            margin-top: 0;
+            margin-bottom: 0.8em; 
+            color: #1a2533; 
+            font-size: 1.2em;
+        }
 
-        /* Generic Media View Styles */
         .media-item-container { 
             width: 100%; margin-bottom: 15px; display: flex; 
             justify-content: center; align-items: center;
@@ -105,13 +108,40 @@
         .media-loading, .media-error { 
             text-align: center; padding: 20px; font-style: italic; color: #777; 
         }
+
+        .tao-text-section {
+            white-space: pre-wrap; 
+            margin-bottom: 1em;
+            line-height: 1.6;
+            font-size: 0.95em;
+            text-align: left;
+        }
+        .tao-text-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .tao-attribution {
+            font-size: 0.75em;
+            color: #555;
+            text-align: right; 
+            margin-top: 20px; 
+            padding-top: 10px; 
+            border-top: 1px solid #eaeaea; 
+        }
+        .tao-attribution a {
+            color: #0056b3; 
+            text-decoration: none;
+        }
+        .tao-attribution a:hover {
+            text-decoration: underline;
+        }
         
-        /* Bottom Logo Bar Styles */
         .bottom-logo-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(40, 60, 100, 0.85); padding: 10px 15px; border-radius: 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; gap: 12px; align-items: center; }
         .bottom-logo-bar a { display: inline-flex; align-items: center; justify-content: center; transition: transform 0.2s ease; padding: 3px; }
         .bottom-logo-bar a:hover { transform: scale(1.15); }
         .bottom-logo-bar img { height: 28px; width: auto; display: block; }
         .bottom-logo-bar span.img-alt-text { font-size: 10px; color: #fff; padding: 5px; display: inline-block; border: 1px solid #fff; border-radius: 3px; line-height: 1; }
+
     </style>
 </head>
 <body>
@@ -125,9 +155,11 @@
                     <h3 class="media-title"><a href="#" target="_blank" rel="noopener noreferrer">APOD Title</a></h3>
                 </div>
                 <div class="placeholder-content-view"> 
-                    <h2>Box 1 - Placeholder Details</h2>
-                    <p>This is the detailed placeholder content for Box 1. Click this text to go back to the APOD view.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <h2 id="box1-tao-chapter-title">Tao Te Ching</h2>
+                    <div id="box1-tao-text" class="tao-text-section"></div>
+                    <div class="tao-attribution">
+                        Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,9 +175,8 @@
                     </h3>
                 </div>
                 <div class="placeholder-content-view"> 
-                    <h2>Box 2 - Placeholder Details</h2>
-                    <p>This is the alternative placeholder content for Box 2. Click this text to go back to the Media view.</p>
-                    <p>Some other specific text for Box 2, demonstrating it works independently.</p>
+                    <div id="box2-tao-annotation" class="tao-text-section"></div>
+                    <div id="box2-tao-lifelesson" class="tao-text-section"></div>
                 </div>
             </div>
         </div>
@@ -161,8 +192,10 @@
         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
     </div>
 
+    <script src="tao-data.js"></script> 
     <script>
         const nasaApiKey = 'NyyGoLiGKX7pg76t9ehi4L8n0MHQuHw8xV6QHLNm';
+        let randomTaoChapterData = null; 
 
         function activateView(viewElement, boxElement) {
             requestAnimationFrame(() => {
@@ -175,7 +208,6 @@
             });
         }
         
-        // --- NASA APOD Functions ---
         async function fetchAPOD(boxElement) {
             const boxId = boxElement.id;
             const mediaView = boxElement.querySelector('.media-view'); 
@@ -261,7 +293,6 @@
             if(data.media_type !== 'image'){ updateHeights(); }
         }
 
-        // --- Wikimedia POTD Functions ---
         async function fetchWikimediaPOTD(boxElement) {
             const boxId = boxElement.id;
             const mediaView = boxElement.querySelector('.media-view');
@@ -294,7 +325,6 @@
             let globalUsageData = null;
 
             try {
-                // Step 1: Get the filename
                 const response1 = await fetch(step1Url);
                 if (!response1.ok) throw new Error(`Wikimedia API (step 1) error! status: ${response1.status}`);
                 const data1 = await response1.json();
@@ -303,10 +333,8 @@
                     throw new Error('Could not find Wikimedia POTD filename for today.');
                 }
                 fileName = data1.query.pages[0].images[0].title;
-                console.log("Wikimedia POTD Filename:", fileName);
+                // console.log("Wikimedia POTD Filename:", fileName);
 
-
-                // Step 2: Get image info (including extmetadata for description)
                 const step2Url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&prop=imageinfo&iiprop=url|descriptionurl|canonicaltitle|extmetadata&titles=${encodeURIComponent(fileName)}&iiextmetadatafilter=ImageDescription|ObjectName&iiextmetadatalanguage=en|nl|de&origin=*`;
                 const response2 = await fetch(step2Url);
                 if (!response2.ok) throw new Error(`Wikimedia API (step 2 - imageinfo) error! status: ${response2.status}`);
@@ -317,22 +345,19 @@
                 }
                 imageInfoData = data2.query.pages[0]; 
 
-                // Step 3: Get global usage
                 const step3Url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&prop=globalusage&titles=${encodeURIComponent(fileName)}&guprop=url|wiki&gulimit=100&gunamespace=0&origin=*`;
                 const response3 = await fetch(step3Url);
                 if (!response3.ok) {
-                    console.warn(`Wikimedia API (step 3 - globalusage) fetch failed! status: ${response3.status}. Will fallback on descriptionurl.`);
+                    // console.warn(`Wikimedia API (step 3 - globalusage) fetch failed! status: ${response3.status}. Will fallback on descriptionurl.`);
                 } else {
                     const data3 = await response3.json();
                     if (data3.query && data3.query.pages && data3.query.pages.length > 0 && data3.query.pages[0].globalusage) {
                         globalUsageData = data3.query.pages[0].globalusage;
                     } else {
-                        console.warn("No globalusage array found in API response for:", fileName);
+                        // console.warn("No globalusage array found in API response for:", fileName);
                     }
                 }
-                
                 displayWikimediaPOTDContent(boxElement, imageInfoData, globalUsageData);
-
             } catch (error) {
                 console.error("Error fetching Wikimedia POTD for " + boxId + ":", error);
                 mediaContainer.innerHTML = `<div class="media-error">Failed to load Wikimedia POTD: ${error.message}</div>`;
@@ -372,12 +397,16 @@
             mediaContainer.appendChild(img);
             
             let displayTitle = "";
-            if (imageInfo.extmetadata && imageInfo.extmetadata.ImageDescription) {
-                let rawDescription = imageInfo.extmetadata.ImageDescription.value; // This should be the 'en' version if filtering worked
-                if (typeof rawDescription === 'object' && rawDescription.en) { // Fallback if API returns object
+            if (imageInfo.extmetadata && imageInfo.extmetadata.ImageDescription && imageInfo.extmetadata.ImageDescription.value) {
+                let rawDescription = imageInfo.extmetadata.ImageDescription.value;
+                if (typeof rawDescription === 'object' && rawDescription.en) { 
                      rawDescription = rawDescription.en;
-                } else if (typeof rawDescription !== 'string') {
-                    rawDescription = ''; 
+                } else if (typeof rawDescription !== 'string') { 
+                    if(typeof rawDescription === 'object' && rawDescription !== null && '*' in rawDescription) {
+                        rawDescription = rawDescription['*'];
+                    } else {
+                        rawDescription = ''; 
+                    }
                 }
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = rawDescription; 
@@ -399,7 +428,7 @@
             let finalLink = imageInfo.descriptionurl; 
             let linkSource = "Commons Description URL (default)"; 
 
-            console.log(`[${pageData.title}] Global Usage Data:`, globalUsageArray);
+            // console.log(`[${pageData.title}] Global Usage Data:`, globalUsageArray);
 
             if (globalUsageArray && globalUsageArray.length > 0) {
                 let enWikiArticle = null, enWikiAny = null;
@@ -440,30 +469,26 @@
                 }
             }
             
-            console.log(`[${pageData.title}] Selected link: ${finalLink} (Source: ${linkSource})`);
+            // console.log(`[${pageData.title}] Selected link: ${finalLink} (Source: ${linkSource})`);
             titleLink.href = finalLink;
 
             updateHeights(); 
         }
 
-        // Generic click handler for boxes
         function handleMediaBoxClick(event) {
             const box = event.currentTarget; 
             const mediaView = box.querySelector('.media-view');
             const placeholderView = box.querySelector('.placeholder-content-view');
 
-            // If the click is on the media title's link, let the link do its job.
             if (event.target.closest('.media-title a')) {
                 return; 
             }
 
             const isPlaceholderActive = placeholderView.classList.contains('active-internal-view');
-            // Click target for toggle: either the placeholder (if active) or the media item (if media view active)
             const clickedOnMedia = event.target.closest('.media-item-container img, .media-item-container iframe');
-            const clickedOnPlaceholder = placeholderView.contains(event.target);
+            const clickedOnPlaceholder = isPlaceholderActive && placeholderView.contains(event.target);
 
-
-            if ((isPlaceholderActive && clickedOnPlaceholder) || (!isPlaceholderActive && clickedOnMedia)) {
+            if (clickedOnPlaceholder || (!isPlaceholderActive && clickedOnMedia)) {
                 box.classList.add('content-shown'); 
 
                 if (isPlaceholderActive) { 
@@ -472,25 +497,47 @@
                     
                     mediaView.classList.add('active-internal-view');
                     activateView(mediaView, box);
-                } else { // Media view was active and media item was clicked
+                } else { 
                     mediaView.classList.remove('active-internal-view');
                     mediaView.style.maxHeight = '0px'; 
 
+                    if (randomTaoChapterData) {
+                        if (box.id === 'box1') {
+                            const titleEl = placeholderView.querySelector('#box1-tao-chapter-title');
+                            const textEl = placeholderView.querySelector('#box1-tao-text');
+                            if (titleEl) titleEl.textContent = `Tao Te Ching ${randomTaoChapterData.chapter}`;
+                            if (textEl) textEl.textContent = randomTaoChapterData.text; 
+                        } else if (box.id === 'box2') {
+                            const annotationEl = placeholderView.querySelector('#box2-tao-annotation');
+                            const lifeLessonEl = placeholderView.querySelector('#box2-tao-lifelesson');
+                            if (annotationEl) annotationEl.textContent = randomTaoChapterData.annotation;
+                            if (lifeLessonEl) lifeLessonEl.textContent = randomTaoChapterData.lifeLesson;
+                        }
+                    } else {
+                         placeholderView.innerHTML = '<h2>Error</h2><p>Tao Te Ching data not loaded.</p>';
+                    }
+
                     placeholderView.classList.add('active-internal-view');
-                    activateView(placeholderView, box);
+                    activateView(placeholderView, box); 
                 }
             }
         }
         
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Box 1 (APOD)
+            if (typeof taoTeChingData !== 'undefined' && taoTeChingData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * taoTeChingData.length);
+                randomTaoChapterData = taoTeChingData[randomIndex];
+                // console.log("Selected Tao Te Ching Chapter:", randomTaoChapterData.chapter);
+            } else {
+                console.error("taoTeChingData is not available or empty. Make sure tao-data.js is loaded and populated correctly.");
+            }
+
             const box1 = document.getElementById('box1');
             const box1MediaView = box1.querySelector('.media-view');
             box1.classList.add('content-shown'); 
             box1MediaView.classList.add('active-internal-view');
             fetchAPOD(box1); 
 
-            // Initialize Box 2 (Wikimedia POTD)
             const box2 = document.getElementById('box2');
             const box2MediaView = box2.querySelector('.media-view');
             box2.classList.add('content-shown');
