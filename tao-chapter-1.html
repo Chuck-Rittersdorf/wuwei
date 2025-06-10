@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
+    <title></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e6f3ff;
+            font-family: 'Lora', serif;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+
+        .chapter-button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 2px solid rgba(40, 60, 100, 0.4);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 2.5s ease, color 2.5s ease, border-color 2.5s ease;
+            user-select: none;
+        }
+
+        .chapter-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .chapter-box-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
+            display: flex;
+            background-color: transparent;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            max-width: 90vw;
+            max-height: 85vh;
+        }
+
+        .chapter-box-container.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+            transition-delay: 0s;
+        }
+
+        .main-content {
+            padding: 25px 30px;
+            cursor: pointer;
+            overflow-y: auto;
+            width: 450px;
+            max-width: 60vw;
+            flex-shrink: 0;
+            background-color: rgba(255, 255, 255, 0.98);
+        }
+
+        .main-content h2 {
+            margin-top: 0;
+            margin-bottom: 1em;
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        .main-content p {
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-size: 0.95em;
+            color: #4a4a4a;
+        }
+
+        .side-panel {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background-color: rgba(220, 240, 220, 0.98);
+            border-left: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .side-panel.show {
+            width: 300px;
+        }
+
+        .side-panel-content {
+            padding: 25px 30px;
+            width: 300px;
+            overflow-y: auto;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .side-panel-content p {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 0.9em;
+            color: #555;
+            margin: 0;
+        }
+
+        .tao-attribution {
+            font-size: 0.75em;
+            color: #555;
+            text-align: right; 
+            margin-top: 20px; 
+            padding-top: 10px; 
+            border-top: 1px solid #eaeaea; 
+        }
+        .tao-attribution a {
+            color: #0056b3; 
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .tao-attribution a:hover {
+            text-decoration: none;
+            color: #003d7a;
+        }
+    </style>
+</head>
+<body>
+    <script src="tao-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof taoTeChingData === 'undefined' || taoTeChingData.length === 0) {
+                document.body.innerHTML = '<h1>Error: tao-data.js not loaded.</h1>';
+                return;
+            }
+
+            const container = document.body;
+            const buttons = [];
+            const buttonRadius = 27;
+            const { innerWidth, innerHeight } = window;
+            let activeButtonObject = null;
+            let isAnimationPaused = false;
+            let isFadingOut = false;
+            let fadeOutStartTime = 0;
+
+            function setButtonAppearance(buttonObject, isActive = false) {
+                const whiteColor = '#f5f5f5';
+                const blackColor = '#222';
+                const defaultBorderColor = 'rgba(40, 60, 100, 0.4)';
+                
+                if (isActive) {
+                    buttonObject.element.style.backgroundColor = '#c0392b';
+                    buttonObject.element.style.color = '#fff';
+                    buttonObject.element.style.borderColor = '#a93226';
+                } else {
+                    if (buttonObject.isWhite) {
+                        buttonObject.element.style.backgroundColor = whiteColor;
+                        buttonObject.element.style.color = blackColor;
+                    } else {
+                        buttonObject.element.style.backgroundColor = blackColor;
+                        buttonObject.element.style.color = whiteColor;
+                    }
+                    buttonObject.element.style.borderColor = defaultBorderColor;
+                }
+            }
+
+            taoTeChingData.forEach(chapter => {
+                const button = document.createElement('div');
+                button.className = 'chapter-button';
+                button.textContent = chapter.chapter;
+                button.dataset.chapter = chapter.chapter;
+
+                let x, y, overlapping;
+                let attempts = 0;
+                const maxAttempts = 200; // Safety break to prevent infinite loops
+
+                do {
+                    overlapping = false;
+                    x = Math.random() * (innerWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (innerHeight - buttonRadius * 2) + buttonRadius;
+
+                    for (const existingButton of buttons) {
+                        const dx = x - existingButton.x;
+                        const dy = y - existingButton.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < (buttonRadius + existingButton.radius)) {
+                            overlapping = true;
+                            break;
+                        }
+                    }
+                    attempts++;
+                } while (overlapping && attempts < maxAttempts);
+                
+                container.appendChild(button);
+                
+                const buttonObject = {
+                    element: button,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: buttonRadius,
+                    isWhite: Math.random() < 0.5,
+                    isHovered: false
+                };
+                
+                buttons.push(buttonObject);
+                setButtonAppearance(buttonObject); // Set initial color
+
+                button.addEventListener('mouseenter', () => {
+                    buttonObject.isHovered = true;
+                });
+                button.addEventListener('mouseleave', () => {
+                    buttonObject.isHovered = false;
+                });
+
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showChapterBox(chapter);
+                });
+            });
+
+            function animate() {
+                let speedMultiplier = 1.0;
+                if (isFadingOut) {
+                    const elapsedTime = performance.now() - fadeOutStartTime;
+                    const fadeDuration = 2000; // 2 seconds
+                    if (elapsedTime >= fadeDuration) {
+                        isFadingOut = false;
+                        isAnimationPaused = true;
+                    } else {
+                        // Using a simple linear fade-out
+                        speedMultiplier = 1 - (elapsedTime / fadeDuration);
+                    }
+                }
+
+                if (isAnimationPaused) {
+                    requestAnimationFrame(animate);
+                    return;
+                }
+
+                const { innerWidth, innerHeight } = window;
+
+                buttons.forEach((b1, i) => {
+                    if (!b1.isHovered) {
+                        b1.x += b1.vx * speedMultiplier;
+                        b1.y += b1.vy * speedMultiplier;
+                    }
+
+                    if (!b1.isHovered) {
+                        if (b1.x + b1.radius > innerWidth || b1.x - b1.radius < 0) {
+                            b1.vx *= -1;
+                            b1.x = Math.max(b1.radius, Math.min(innerWidth - b1.radius, b1.x));
+                        }
+                        if (b1.y + b1.radius > innerHeight || b1.y - b1.radius < 0) {
+                            b1.vy *= -1;
+                            b1.y = Math.max(b1.radius, Math.min(innerHeight - b1.radius, b1.y));
+                        }
+                    }
+
+                    for (let j = i + 1; j < buttons.length; j++) {
+                        const b2 = buttons[j];
+                        const dx = b2.x - b1.x;
+                        const dy = b2.y - b1.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < b1.radius + b2.radius) {
+                            const nx = dx / distance;
+                            const ny = dy / distance;
+                            const tx = -ny;
+                            const ty = nx;
+
+                            const overlap = 0.5 * (b1.radius + b2.radius - distance);
+                            b1.x -= overlap * nx;
+                            b1.y -= overlap * ny;
+                            b2.x += overlap * nx;
+                            b2.y += overlap * ny;
+                            
+                            if (b1.isHovered && !b2.isHovered) {
+                                const dot = b2.vx * nx + b2.vy * ny;
+                                b2.vx -= 2 * dot * nx;
+                                b2.vy -= 2 * dot * ny;
+                            } else if (!b1.isHovered && b2.isHovered) {
+                                const dot = b1.vx * nx + b1.vy * ny;
+                                b1.vx -= 2 * dot * nx;
+                                b1.vy -= 2 * dot * ny;
+                            } else if (!b1.isHovered && !b2.isHovered) {
+                                const dpTan1 = b1.vx * tx + b1.vy * ty;
+                                const dpTan2 = b2.vx * tx + b2.vy * ty;
+                                const dpNorm1 = b1.vx * nx + b1.vy * ny;
+                                const dpNorm2 = b2.vx * nx + b2.vy * ny;
+                                const m1 = dpNorm2;
+                                const m2 = dpNorm1;
+                                b1.vx = tx * dpTan1 + nx * m1;
+                                b1.vy = ty * dpTan1 + ny * m1;
+                                b2.vx = tx * dpTan2 + nx * m2;
+                                b2.vy = ty * dpTan2 + ny * m2;
+                            }
+                            
+                            if (!b1.isHovered && b1 !== activeButtonObject) {
+                                b1.isWhite = !b1.isWhite;
+                                setButtonAppearance(b1);
+                            }
+                            if (!b2.isHovered && b2 !== activeButtonObject) {
+                                b2.isWhite = !b2.isWhite;
+                                setButtonAppearance(b2);
+                            }
+                        }
+                    }
+                    
+                    b1.element.style.left = `${b1.x - b1.radius}px`;
+                    b1.element.style.top = `${b1.y - b1.radius}px`;
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+
+            function showChapterBox(chapterData) {
+                const createNewBox = () => {
+                    isFadingOut = true;
+                    fadeOutStartTime = performance.now();
+                    // Deactivate old button if it exists
+                    if (activeButtonObject) {
+                        setButtonAppearance(activeButtonObject, false);
+                    }
+                    // Find and activate the new button
+                    const currentButtonObject = buttons.find(b => b.element.dataset.chapter === String(chapterData.chapter));
+                    if (currentButtonObject) {
+                        setButtonAppearance(currentButtonObject, true);
+                        activeButtonObject = currentButtonObject;
+                    }
+
+                    const boxContainer = document.createElement('div');
+                    boxContainer.className = 'chapter-box-container';
+                    boxContainer.dataset.chapter = chapterData.chapter;
+
+                    boxContainer.innerHTML = `
+                        <div class="main-content">
+                            <h2>Tao Te Ching ${chapterData.chapter}</h2>
+                            <p>${chapterData.text}</p>
+                            <div class="tao-attribution">
+                                Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
+                            </div>
+                        </div>
+                        <div class="side-panel">
+                            <div class="side-panel-content">
+                                 <p>${chapterData.annotation}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    document.body.appendChild(boxContainer);
+
+                    const mainContent = boxContainer.querySelector('.main-content');
+                    const sidePanel = boxContainer.querySelector('.side-panel');
+
+                    mainContent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        sidePanel.classList.toggle('show');
+                    });
+
+                    sidePanel.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        sidePanel.classList.remove('show');
+                    });
+
+                    boxContainer.addEventListener('dblclick', () => {
+                        if (activeButtonObject) {
+                            setButtonAppearance(activeButtonObject, false);
+                            activeButtonObject = null;
+                        }
+                        isAnimationPaused = false;
+                        isFadingOut = false;
+                        boxContainer.classList.remove('show');
+                        boxContainer.addEventListener('transitionend', () => {
+                            if (!boxContainer.classList.contains('show')) {
+                               boxContainer.remove();
+                            }
+                        }, { once: true });
+                    });
+
+                    requestAnimationFrame(() => {
+                        boxContainer.classList.add('show');
+                    });
+                };
+
+                const existingBox = document.querySelector('.chapter-box-container.show');
+                if (existingBox) {
+                    if (existingBox.dataset.chapter === String(chapterData.chapter)) {
+                        return; // Do nothing if the same chapter is clicked again
+                    }
+
+                    existingBox.classList.remove('show');
+                    existingBox.addEventListener('transitionend', () => {
+                        if (!existingBox.classList.contains('show')) {
+                            existingBox.remove();
+                        }
+                        createNewBox();
+                    }, { once: true });
+                } else {
+                    createNewBox();
+                }
+            }
+
+            document.addEventListener('click', (event) => {
+                const openBox = document.querySelector('.chapter-box-container.show');
+                const clickedButton = event.target.closest('.chapter-button');
+
+                if (openBox && !openBox.contains(event.target) && !clickedButton) {
+                    if (activeButtonObject) {
+                        setButtonAppearance(activeButtonObject, false);
+                        activeButtonObject = null;
+                    }
+                    isAnimationPaused = false;
+                    isFadingOut = false;
+                    openBox.classList.remove('show');
+                    openBox.addEventListener('transitionend', () => {
+                        if (!openBox.classList.contains('show')) {
+                           openBox.remove();
+                        }
+                    }, { once: true });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
