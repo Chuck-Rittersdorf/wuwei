@@ -197,52 +197,52 @@
             }
 
             .chapter-box-container {
+                display: block;
                 width: 95vw;
                 max-width: 95vw;
                 height: 90vh;
                 max-height: 90vh;
-            }
-
-            .panels-wrapper {
-                display: flex;
-                width: 200%;
-                height: 100%;
-                transform: translateX(0);
-            }
-
-            .main-content, .side-panel {
-                width: 50%;
-                height: 100%;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                box-sizing: border-box;
-                transition: none;
-                padding: 20px 15px;
             }
 
             .main-content {
-                background-color: rgba(255, 255, 255, 0.98);
-                cursor: grab;
-            }
-
-            .main-content:active {
-                cursor: grabbing;
+                width: auto;
+                max-width: none;
+                padding: 20px 15px;
+                overflow-y: visible;
+                cursor: pointer;
             }
             
+            .main-content h2 {
+                font-size: 1.1em;
+            }
+
+            .main-content p,
+            .side-panel-content p {
+                font-size: 0.9em;
+                line-height: 1.6;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
             .side-panel {
-                width: 50%; /* Explicitly override desktop style */
-                background-color: rgba(220, 240, 220, 0.98);
+                width: 100%;
+                max-height: 0;
+                overflow: hidden;
                 border-left: none;
+                border-top: 1px solid #ddd;
+                box-sizing: border-box;
+                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             }
 
             .side-panel.show {
-                width: 50%; /* Ensure it doesn't break from desktop logic */
+                max-height: 1500px;
             }
 
             .side-panel-content {
-                width: 100%;
-                height: 100%;
-                padding: 0;
+                width: auto;
+                padding: 20px 15px;
                 overflow-y: visible;
             }
         }
@@ -562,11 +562,11 @@
                 const createNewBox = () => {
                     isFadingOut = true;
                     fadeOutStartTime = performance.now();
-                    
+                    // Deactivate old button if it exists
                     if (activeButtonObject) {
                         setButtonAppearance(activeButtonObject, false);
                     }
-                    
+                    // Find and activate the new button
                     const currentButtonObject = buttons.find(b => b.element.dataset.chapter === String(chapterData.chapter));
                     if (currentButtonObject) {
                         setButtonAppearance(currentButtonObject, true);
@@ -578,18 +578,16 @@
                     boxContainer.dataset.chapter = chapterData.chapter;
 
                     boxContainer.innerHTML = `
-                        <div class="panels-wrapper">
-                            <div class="main-content">
-                                <h2>Tao Te Ching ${chapterData.chapter}</h2>
-                                <p>${chapterData.text}</p>
-                                <div class="tao-attribution">
-                                    Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
-                                </div>
+                        <div class="main-content">
+                            <h2>Tao Te Ching ${chapterData.chapter}</h2>
+                            <p>${chapterData.text}</p>
+                            <div class="tao-attribution">
+                                Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
                             </div>
-                            <div class="side-panel">
-                                <div class="side-panel-content">
-                                     <p>${chapterData.annotation}</p>
-                                </div>
+                        </div>
+                        <div class="side-panel">
+                            <div class="side-panel-content">
+                                 <p>${chapterData.annotation}</p>
                             </div>
                         </div>
                     `;
@@ -599,64 +597,15 @@
                     const mainContent = boxContainer.querySelector('.main-content');
                     const sidePanel = boxContainer.querySelector('.side-panel');
 
-                    if (isMobile) {
-                        const panelsWrapper = boxContainer.querySelector('.panels-wrapper');
-                        let touchStartX = 0, currentTranslateX = 0, panelWidth = 0;
-                        let isDragging = false;
-                        let panelState = 'main';
+                    mainContent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        sidePanel.classList.toggle('show');
+                    });
 
-                        const updatePanelWidth = () => { if (panelWidth === 0) panelWidth = boxContainer.offsetWidth; };
-
-                        const onTouchStart = (e) => {
-                            if (e.touches.length > 1) return;
-                            updatePanelWidth();
-                            isDragging = true;
-                            touchStartX = e.touches[0].clientX;
-                            const matrix = new DOMMatrixReadOnly(window.getComputedStyle(panelsWrapper).transform);
-                            currentTranslateX = matrix.m41;
-                            panelsWrapper.style.transition = 'none';
-                        };
-
-                        const onTouchMove = (e) => {
-                            if (!isDragging || e.touches.length > 1) return;
-                            const diff = e.touches[0].clientX - touchStartX;
-                            let newTranslateX = Math.max(-panelWidth, Math.min(0, currentTranslateX + diff));
-                            panelsWrapper.style.transform = `translateX(${newTranslateX}px)`;
-                        };
-
-                        const snapToPosition = () => {
-                            if (!isDragging) return;
-                            isDragging = false;
-                            panelsWrapper.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                            const matrix = new DOMMatrixReadOnly(window.getComputedStyle(panelsWrapper).transform);
-                            const finalTranslateX = matrix.m41;
-                            const threshold = panelWidth * 0.3;
-
-                            if ((panelState === 'main' && finalTranslateX < -threshold) || (panelState === 'annotation' && finalTranslateX < -(panelWidth - threshold))) {
-                                panelsWrapper.style.transform = `translateX(${-panelWidth}px)`;
-                                panelState = 'annotation';
-                            } else {
-                                panelsWrapper.style.transform = 'translateX(0px)';
-                                panelState = 'main';
-                            }
-                        };
-                        
-                        panelsWrapper.addEventListener('touchstart', onTouchStart, { passive: true });
-                        panelsWrapper.addEventListener('touchmove', onTouchMove, { passive: true });
-                        panelsWrapper.addEventListener('touchend', snapToPosition);
-                        panelsWrapper.addEventListener('touchcancel', snapToPosition);
-                        
-                    } else {
-                        mainContent.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            sidePanel.classList.toggle('show');
-                        });
-
-                        sidePanel.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            sidePanel.classList.remove('show');
-                        });
-                    }
+                    sidePanel.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        sidePanel.classList.remove('show');
+                    });
 
                     boxContainer.addEventListener('dblclick', () => {
                         if (activeButtonObject) {
@@ -681,12 +630,14 @@
                 const existingBox = document.querySelector('.chapter-box-container.show');
                 if (existingBox) {
                     if (existingBox.dataset.chapter === String(chapterData.chapter)) {
-                        return;
+                        return; // Do nothing if the same chapter is clicked again
                     }
 
                     existingBox.classList.remove('show');
                     existingBox.addEventListener('transitionend', () => {
-                        if (!existingBox.classList.contains('show')) existingBox.remove();
+                        if (!existingBox.classList.contains('show')) {
+                            existingBox.remove();
+                        }
                         createNewBox();
                     }, { once: true });
                 } else {
