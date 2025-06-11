@@ -182,8 +182,8 @@
 
         @media (max-width: 768px) {
             .chapter-button {
-                width: 32px;
-                height: 32px;
+                width: 30px;
+                height: 30px;
                 font-size: 0.9em;
             }
 
@@ -241,7 +241,7 @@
             const container = document.body;
             const buttons = [];
             const isMobile = window.innerWidth <= 768;
-            const buttonRadius = isMobile ? 16 : 27;
+            const buttonRadius = isMobile ? 17 : 27;
             const { innerWidth, innerHeight } = window;
             let activeButtonObject = null;
             let isAnimationPaused = false;
@@ -415,12 +415,6 @@
                     }, 500); // 500ms delay
                 });
                 searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        searchInput.blur();
-                        return;
-                    }
-
                     if (e.key === 'Backspace') {
                         e.preventDefault();
                         searchInput.value = '';
@@ -429,7 +423,7 @@
                         return;
                     }
 
-                    if (['ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Home', 'End'].includes(e.key)) {
+                    if (['ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Delete', 'Home', 'End'].includes(e.key)) {
                         return;
                     }
 
