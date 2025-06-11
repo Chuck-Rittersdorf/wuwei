@@ -179,6 +179,54 @@
         .blinking {
             animation: blink 0.5s ease-in-out;
         }
+
+        @media (max-width: 768px) {
+            .chapter-button {
+                width: 36px;
+                height: 36px;
+                font-size: 1em;
+            }
+
+            .search-bubble input {
+                font-size: 1em;
+            }
+
+            .chapter-box-container {
+                flex-direction: column;
+                width: 95vw;
+                max-width: 95vw;
+                height: 90vh;
+                max-height: 90vh;
+            }
+
+            .main-content {
+                width: 100%;
+                max-width: 100%;
+                padding: 20px 15px;
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+
+            .side-panel {
+                width: 100%;
+                height: auto;
+                max-height: 0;
+                overflow: hidden;
+                border-left: none;
+                border-top: 1px solid #ddd;
+                flex: 0 0 auto;
+                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            .side-panel.show {
+                max-height: 45vh;
+            }
+
+            .side-panel-content {
+                width: auto;
+                padding: 20px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -192,7 +240,8 @@
 
             const container = document.body;
             const buttons = [];
-            const buttonRadius = 27;
+            const isMobile = window.innerWidth <= 768;
+            const buttonRadius = isMobile ? 20 : 27;
             const { innerWidth, innerHeight } = window;
             let activeButtonObject = null;
             let isAnimationPaused = false;
