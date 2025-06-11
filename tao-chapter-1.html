@@ -207,11 +207,12 @@
             }
 
             .main-content {
-                width: auto;
+                width: 100%;
                 max-width: none;
-                padding: 20px 15px;
+                padding: 20px 25px;
                 overflow-y: visible;
                 cursor: pointer;
+                box-sizing: border-box;
             }
             
             .main-content h2 {
@@ -238,12 +239,14 @@
 
             .side-panel.show {
                 max-height: 1500px;
+                width: auto;
             }
 
             .side-panel-content {
                 width: auto;
-                padding: 20px 15px;
+                padding: 20px 25px;
                 overflow-y: visible;
+                height: auto;
             }
         }
     </style>
