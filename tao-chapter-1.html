@@ -197,7 +197,7 @@
             }
 
             .chapter-box-container {
-                flex-direction: column;
+                display: block;
                 width: 95vw;
                 max-width: 95vw;
                 height: 90vh;
@@ -207,20 +207,23 @@
             }
 
             .main-content {
-                width: 100%;
-                max-width: 100%;
+                width: auto;
+                max-width: none;
                 padding: 20px 15px;
-                flex-shrink: 0;
                 overflow-y: visible;
+                cursor: pointer;
             }
             
             .main-content h2 {
                 font-size: 1.1em;
             }
 
-            .main-content p {
+            .main-content p,
+            .side-panel-content p {
                 font-size: 0.9em;
                 line-height: 1.6;
+                white-space: pre-wrap;
+                word-wrap: break-word;
             }
 
             .side-panel {
@@ -229,7 +232,7 @@
                 overflow: hidden;
                 border-left: none;
                 border-top: 1px solid #ddd;
-                flex-shrink: 0;
+                box-sizing: border-box;
                 transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             }
 
@@ -241,11 +244,6 @@
                 width: auto;
                 padding: 20px 15px;
                 overflow-y: visible;
-            }
-            
-            .side-panel-content p {
-                font-size: 0.9em;
-                line-height: 1.6;
             }
         }
     </style>
