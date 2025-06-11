@@ -139,6 +139,46 @@
             text-decoration: none;
             color: #003d7a;
         }
+
+        .search-bubble {
+            background-color: #ffffe0 !important; /* Light Yellow */
+            color: #333 !important;
+        }
+
+        .search-bubble input {
+            display: none;
+            width: 90%;
+            height: 90%;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            outline: none;
+        }
+        
+        .search-bubble input::-webkit-outer-spin-button,
+        .search-bubble input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .chapter-button.highlighted {
+            background-color: #3498db !important; /* Blue */
+            color: #fff !important;
+            border-color: #2980b9 !important;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+
+        .blinking {
+            animation: blink 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +198,7 @@
             let isAnimationPaused = false;
             let isFadingOut = false;
             let fadeOutStartTime = 0;
+            let highlightedButton = null;
 
             function setButtonAppearance(buttonObject, isActive = false) {
                 const whiteColor = '#f5f5f5';
@@ -177,6 +218,13 @@
                         buttonObject.element.style.color = whiteColor;
                     }
                     buttonObject.element.style.borderColor = defaultBorderColor;
+                }
+            }
+
+            function resetHighlight() {
+                if (highlightedButton) {
+                    highlightedButton.classList.remove('highlighted', 'blinking');
+                    highlightedButton = null;
                 }
             }
 
@@ -218,7 +266,8 @@
                     vy: (Math.random() - 0.5) * 1.5,
                     radius: buttonRadius,
                     isWhite: Math.random() < 0.5,
-                    isHovered: false
+                    isHovered: false,
+                    isSearch: false
                 };
                 
                 buttons.push(buttonObject);
@@ -236,6 +285,113 @@
                     showChapterBox(chapter);
                 });
             });
+
+            // Create and add the special search bubble
+            const searchButtonElement = document.createElement('div');
+            searchButtonElement.className = 'chapter-button search-bubble';
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.inputMode = 'numeric';
+            searchButtonElement.appendChild(searchInput);
+            
+            (() => {
+                let searchTimeout;
+                let x, y, overlapping;
+                let attempts = 0;
+                const maxAttempts = 200;
+                do {
+                    overlapping = false;
+                    x = Math.random() * (innerWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (innerHeight - buttonRadius * 2) + buttonRadius;
+                    for (const existingButton of buttons) {
+                        const dx = x - existingButton.x;
+                        const dy = y - existingButton.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < (buttonRadius + existingButton.radius)) {
+                            overlapping = true;
+                            break;
+                        }
+                    }
+                    attempts++;
+                } while (overlapping && attempts < maxAttempts);
+
+                container.appendChild(searchButtonElement);
+                const searchButtonObject = {
+                    element: searchButtonElement,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: buttonRadius,
+                    isSearch: true,
+                    isHovered: false
+                };
+                buttons.push(searchButtonObject);
+
+                searchButtonElement.addEventListener('mouseenter', () => searchButtonObject.isHovered = true);
+                searchButtonElement.addEventListener('mouseleave', () => {
+                    if (document.activeElement !== searchInput) {
+                        searchButtonObject.isHovered = false;
+                    }
+                });
+                searchButtonElement.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchInput.style.display = 'block';
+                    searchInput.focus();
+                });
+                searchInput.addEventListener('blur', () => {
+                    clearTimeout(searchTimeout);
+                    searchInput.style.display = 'none';
+                    searchInput.value = '';
+                    searchButtonObject.isHovered = false;
+                    resetHighlight();
+                });
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        resetHighlight();
+                        const chapterNum = parseInt(searchInput.value, 10);
+                        if (chapterNum >= 1 && chapterNum <= 81) {
+                            const targetButton = document.querySelector(`.chapter-button[data-chapter="${chapterNum}"]`);
+                            if (targetButton) {
+                                highlightedButton = targetButton;
+                                targetButton.classList.add('highlighted', 'blinking');
+                                targetButton.addEventListener('animationend', () => {
+                                    if(targetButton.classList.contains('blinking')) {
+                                        targetButton.classList.remove('blinking');
+                                    }
+                                }, { once: true });
+                            }
+                        }
+                    }, 500); // 500ms delay
+                });
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace') {
+                        e.preventDefault();
+                        searchInput.value = '';
+                        resetHighlight();
+                        clearTimeout(searchTimeout);
+                        return;
+                    }
+
+                    if (['ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Delete', 'Home', 'End'].includes(e.key)) {
+                        return;
+                    }
+
+                    if (!/^[0-9]$/.test(e.key)) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    const { value, selectionStart, selectionEnd } = e.target;
+                    const nextValueStr = value.slice(0, selectionStart) + e.key + value.slice(selectionEnd);
+                    const nextValueInt = parseInt(nextValueStr, 10);
+
+                    if (nextValueInt < 1 || nextValueInt > 81) {
+                        e.preventDefault();
+                    }
+                });
+            })();
 
             function animate() {
                 let speedMultiplier = 1.0;
@@ -314,11 +470,11 @@
                                 b2.vy = ty * dpTan2 + ny * m2;
                             }
                             
-                            if (!b1.isHovered && b1 !== activeButtonObject) {
+                            if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch) {
                                 b1.isWhite = !b1.isWhite;
                                 setButtonAppearance(b1);
                             }
-                            if (!b2.isHovered && b2 !== activeButtonObject) {
+                            if (!b2.isHovered && b2 !== activeButtonObject && !b2.isSearch) {
                                 b2.isWhite = !b2.isWhite;
                                 setButtonAppearance(b2);
                             }
