@@ -148,6 +148,21 @@
             color: #333 !important;
         }
 
+        .search-bubble .random-chapter-display {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+            color: #bbb;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+            line-height: 1;
+        }
+
         .search-bubble input {
             display: none;
             width: 90%;
@@ -156,10 +171,12 @@
             border: none;
             background: transparent;
             font-family: 'Quicksand', sans-serif;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: 600;
             color: #333;
             outline: none;
+            position: relative;
+            z-index: 1;
         }
         
         .search-bubble input::-webkit-outer-spin-button,
@@ -220,6 +237,56 @@
             background-color: rgba(0, 0, 0, 0.1);
             color: rgba(0, 0, 0, 0.7);
             transform: scale(1.1);
+        }
+
+        .fullscreen-bubble {
+            background-color: #f1f8e9 !important; /* Lighter green */
+        }
+
+        .fullscreen-bubble:hover {
+            background-color: #dcedc8 !important; /* Lighter hover green */
+        }
+
+        .fullscreen-icon {
+            width: 55%;
+            height: 55%;
+            background-color: #777; /* Softer icon color */
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            transition: transform 0.2s ease;
+        }
+        
+        @keyframes pulse-corners {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotate-x {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-180deg); }
+        }
+
+        .fullscreen-bubble:hover .fullscreen-icon-enter {
+            animation: pulse-corners 1.2s ease-in-out 2;
+        }
+
+        .fullscreen-bubble:hover .fullscreen-icon-exit {
+            animation: rotate-x 0.6s linear;
+        }
+
+        .fullscreen-icon-enter {
+            -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+            mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+        }
+        
+        .fullscreen-icon-exit {
+            -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
+            mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
         }
 
         .annotation-hint {
@@ -404,7 +471,8 @@
                     radius: buttonRadius,
                     isWhite: Math.random() < 0.5,
                     isHovered: false,
-                    isSearch: false
+                    isSearch: false,
+                    isFullScreen: false
                 };
                 
                 buttons.push(buttonObject);
@@ -423,6 +491,8 @@
                 });
             });
 
+            createFullScreenButton();
+
             // Create and add the special search bubble
             const searchButtonElement = document.createElement('div');
             searchButtonElement.className = 'chapter-button search-bubble';
@@ -430,6 +500,10 @@
             searchInput.type = 'text';
             searchInput.inputMode = 'numeric';
             searchButtonElement.appendChild(searchInput);
+
+            const randomNumberDisplay = document.createElement('span');
+            randomNumberDisplay.className = 'random-chapter-display';
+            searchButtonElement.appendChild(randomNumberDisplay);
             
             (() => {
                 let searchTimeout;
@@ -461,7 +535,8 @@
                     vy: (Math.random() - 0.5) * 1.5,
                     radius: buttonRadius,
                     isSearch: true,
-                    isHovered: false
+                    isHovered: false,
+                    fadeTimeout: null
                 };
                 buttons.push(searchButtonObject);
 
@@ -475,6 +550,10 @@
                     e.stopPropagation();
                     searchInput.style.display = 'block';
                     searchInput.focus();
+                    randomNumberDisplay.style.opacity = '0';
+                    if (searchButtonObject.fadeTimeout) {
+                        clearTimeout(searchButtonObject.fadeTimeout);
+                    }
                 });
                 searchInput.addEventListener('blur', () => {
                     clearTimeout(searchTimeout);
@@ -543,6 +622,52 @@
                     }
                 });
             })();
+
+            function createFullScreenButton() {
+                const fsButtonElement = document.createElement('div');
+                fsButtonElement.className = 'chapter-button fullscreen-bubble';
+                fsButtonElement.id = 'fullscreen-btn';
+
+                const fsIcon = document.createElement('span');
+                fsIcon.className = 'fullscreen-icon fullscreen-icon-enter';
+                fsButtonElement.appendChild(fsIcon);
+
+                let x, y, overlapping;
+                let attempts = 0;
+                const maxAttempts = 200;
+                do {
+                    overlapping = false;
+                    x = Math.random() * (currentWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (currentHeight - buttonRadius * 2) + buttonRadius;
+                    for (const existingButton of buttons) {
+                        const dx = x - existingButton.x;
+                        const dy = y - existingButton.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < (buttonRadius + existingButton.radius)) {
+                            overlapping = true;
+                            break;
+                        }
+                    }
+                    attempts++;
+                } while (overlapping && attempts < maxAttempts);
+
+                container.appendChild(fsButtonElement);
+
+                const fsButtonObject = {
+                    element: fsButtonElement,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: buttonRadius,
+                    isHovered: false,
+                    isFullScreen: true,
+                };
+                buttons.push(fsButtonObject);
+
+                fsButtonElement.addEventListener('mouseenter', () => fsButtonObject.isHovered = true);
+                fsButtonElement.addEventListener('mouseleave', () => fsButtonObject.isHovered = false);
+            }
 
             function handleResize() {
                 const newWidth = window.innerWidth;
@@ -627,6 +752,31 @@
                             b2.x += overlap * nx;
                             b2.y += overlap * ny;
                             
+                            const b1IsSearch = b1.isSearch && !b1.isFullScreen;
+                            const b2IsSearch = b2.isSearch && !b2.isFullScreen;
+
+                            if (b1IsSearch || b2IsSearch) {
+                                const searchButtonObject = b1IsSearch ? b1 : b2;
+                                const otherButton = b1IsSearch ? b2 : b1;
+
+                                if (!otherButton.isSearch && !otherButton.isFullScreen) {
+                                    const randomNumberDisplayEl = searchButtonObject.element.querySelector('.random-chapter-display');
+                                    const searchInputEl = searchButtonObject.element.querySelector('input');
+
+                                    if (randomNumberDisplayEl && searchInputEl && document.activeElement !== searchInputEl) {
+                                        if (searchButtonObject.fadeTimeout) {
+                                            clearTimeout(searchButtonObject.fadeTimeout);
+                                        }
+                                        randomNumberDisplayEl.textContent = Math.floor(Math.random() * 81) + 1;
+                                        randomNumberDisplayEl.style.opacity = '1';
+
+                                        searchButtonObject.fadeTimeout = setTimeout(() => {
+                                            randomNumberDisplayEl.style.opacity = '0';
+                                        }, 1000);
+                                    }
+                                }
+                            }
+
                             if (b1.isHovered && !b2.isHovered) {
                                 const dot = b2.vx * nx + b2.vy * ny;
                                 b2.vx -= 2 * dot * nx;
@@ -648,11 +798,11 @@
                                 b2.vy = ty * dpTan2 + ny * m2;
                             }
                             
-                            if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch) {
+                            if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch && !b1.isFullScreen) {
                                 b1.isWhite = !b1.isWhite;
                                 setButtonAppearance(b1);
                             }
-                            if (!b2.isHovered && b2 !== activeButtonObject && !b2.isSearch) {
+                            if (!b2.isHovered && b2 !== activeButtonObject && !b2.isSearch && !b2.isFullScreen) {
                                 b2.isWhite = !b2.isWhite;
                                 setButtonAppearance(b2);
                             }
@@ -836,6 +986,58 @@
                     }, { once: true });
                 }
             });
+
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+            if (fullscreenBtn) {
+                function toggleFullScreen() {
+                    const docElm = document.documentElement;
+                    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                        if (docElm.requestFullscreen) {
+                            docElm.requestFullscreen();
+                        } else if (docElm.mozRequestFullScreen) { /* Firefox */
+                            docElm.mozRequestFullScreen();
+                        } else if (docElm.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                            docElm.webkitRequestFullscreen();
+                        } else if (docElm.msRequestFullscreen) { /* IE/Edge */
+                            docElm.msRequestFullscreen();
+                        }
+                    } else {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.mozCancelFullScreen) { /* Firefox */
+                            document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                            document.webkitExitFullscreen();
+                        } else if (document.msExitFullscreen) { /* IE/Edge */
+                            document.msExitFullscreen();
+                        }
+                    }
+                }
+
+                fullscreenBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFullScreen();
+                });
+
+                function updateFullscreenButton() {
+                    const icon = fullscreenBtn.querySelector('.fullscreen-icon');
+                    if (!icon) return;
+                    
+                    if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                        icon.classList.remove('fullscreen-icon-enter');
+                        icon.classList.add('fullscreen-icon-exit');
+                    } else {
+                        icon.classList.remove('fullscreen-icon-exit');
+                        icon.classList.add('fullscreen-icon-enter');
+                    }
+                }
+
+                document.addEventListener('fullscreenchange', updateFullscreenButton);
+                document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+                document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+                document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+            }
         });
     </script>
 </body>
