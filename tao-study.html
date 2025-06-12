@@ -231,13 +231,12 @@
             }
 
             .chapter-box-container {
-                display: flex;
+                display: block;
                 width: 95vw;
                 max-width: 95vw;
                 height: 90vh;
                 max-height: 90vh;
-                overflow-x: auto;
-                overflow-y: hidden;
+                overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
 
@@ -245,11 +244,9 @@
                 width: 100%;
                 max-width: none;
                 padding: 20px 25px;
-                overflow-y: auto;
+                overflow-y: visible;
                 cursor: pointer;
                 box-sizing: border-box;
-                height: 100%;
-                flex-shrink: 0;
             }
             
             .main-content h2 {
@@ -265,24 +262,25 @@
             }
 
             .side-panel {
-                width: 0;
+                width: 100%;
+                max-height: 0;
                 overflow: hidden;
-                border-left: 1px solid #ddd;
+                border-left: none;
+                border-top: 1px solid #ddd;
                 box-sizing: border-box;
-                transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-                flex-shrink: 0;
+                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             }
 
             .side-panel.show {
-                width: 85vw;
+                max-height: 1500px;
+                width: auto;
             }
 
             .side-panel-content {
-                width: 85vw;
+                width: auto;
                 padding: 20px 25px;
-                overflow-y: auto;
-                height: 100%;
-                box-sizing: border-box;
+                overflow-y: visible;
+                height: auto;
             }
 
             .chapter-nav {
