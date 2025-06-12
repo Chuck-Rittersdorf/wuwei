@@ -308,9 +308,10 @@
 
             const container = document.body;
             const buttons = [];
-            const isMobile = window.innerWidth <= 768;
-            const buttonRadius = isMobile ? 17 : 27;
-            const { innerWidth, innerHeight } = window;
+            let isMobile = window.innerWidth <= 768;
+            let buttonRadius = isMobile ? 17 : 27;
+            let currentWidth = window.innerWidth;
+            let currentHeight = window.innerHeight;
             let activeButtonObject = null;
             let isAnimationPaused = false;
             let isFadingOut = false;
@@ -357,8 +358,8 @@
 
                 do {
                     overlapping = false;
-                    x = Math.random() * (innerWidth - buttonRadius * 2) + buttonRadius;
-                    y = Math.random() * (innerHeight - buttonRadius * 2) + buttonRadius;
+                    x = Math.random() * (currentWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (currentHeight - buttonRadius * 2) + buttonRadius;
 
                     for (const existingButton of buttons) {
                         const dx = x - existingButton.x;
@@ -418,8 +419,8 @@
                 const maxAttempts = 200;
                 do {
                     overlapping = false;
-                    x = Math.random() * (innerWidth - buttonRadius * 2) + buttonRadius;
-                    y = Math.random() * (innerHeight - buttonRadius * 2) + buttonRadius;
+                    x = Math.random() * (currentWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (currentHeight - buttonRadius * 2) + buttonRadius;
                     for (const existingButton of buttons) {
                         const dx = x - existingButton.x;
                         const dy = y - existingButton.y;
@@ -523,6 +524,33 @@
                     }
                 });
             })();
+
+            function handleResize() {
+                const newWidth = window.innerWidth;
+                const newHeight = window.innerHeight;
+
+                isMobile = newWidth <= 768;
+                buttonRadius = isMobile ? 17 : 27;
+
+                buttons.forEach(b => {
+                    b.radius = buttonRadius;
+                    
+                    b.x = b.x * (newWidth / currentWidth);
+                    b.y = b.y * (newHeight / currentHeight);
+                    
+                    b.x = Math.max(b.radius, Math.min(newWidth - b.radius, b.x));
+                    b.y = Math.max(b.radius, Math.min(newHeight - b.radius, b.y));
+                });
+                
+                currentWidth = newWidth;
+                currentHeight = newHeight;
+            }
+
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 100);
+            });
 
             function animate() {
                 let speedMultiplier = 1.0;
