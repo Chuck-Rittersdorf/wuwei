@@ -266,14 +266,15 @@
                 max-height: 0;
                 overflow: hidden;
                 border-left: none;
-                border-top: 1px solid #ddd;
+                border-top: 1px solid transparent;
                 box-sizing: border-box;
-                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease;
             }
 
             .side-panel.show {
                 max-height: 1500px;
                 width: auto;
+                border-top-color: #ddd;
             }
 
             .side-panel-content {
