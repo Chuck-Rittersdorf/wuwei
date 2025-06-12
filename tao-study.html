@@ -82,6 +82,7 @@
             max-width: 60vw;
             flex-shrink: 0;
             background-color: rgba(255, 255, 255, 0.98);
+            position: relative;
         }
 
         .main-content h2 {
@@ -221,6 +222,23 @@
             transform: scale(1.1);
         }
 
+        .annotation-hint {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.75em;
+            color: #777;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .annotation-hint.show {
+            opacity: 1;
+        }
+
         @media (max-width: 768px), (max-height: 550px) {
             .chapter-button {
                 width: 30px;
@@ -317,6 +335,7 @@
             let isFadingOut = false;
             let fadeOutStartTime = 0;
             let highlightedButton = null;
+            let hasShownAnnotationHint = false;
 
             function setButtonAppearance(buttonObject, isActive = false) {
                 const whiteColor = '#f5f5f5';
@@ -700,6 +719,7 @@
 
                 boxContainer.innerHTML = `
                     <div class="main-content">
+                        <span class="annotation-hint">Click for annotation</span>
                         <h2>Tao Te Ching ${chapterData.chapter}</h2>
                         <p>${chapterData.text}</p>
                         <div class="main-content-footer">
@@ -780,6 +800,21 @@
                 requestAnimationFrame(() => {
                     boxContainer.classList.add('show');
                 });
+
+                if (!hasShownAnnotationHint) {
+                    setTimeout(() => {
+                        const hintText = boxContainer.querySelector('.annotation-hint');
+                        
+                        if (hintText) {
+                            hintText.classList.add('show');
+
+                            setTimeout(() => {
+                                hintText.classList.remove('show');
+                            }, 4000); // Hint text fades out after 4 seconds
+                        }
+                        hasShownAnnotationHint = true;
+                    }, 500); // Delay to allow the box to fade in first
+                }
             }
 
             document.addEventListener('click', (event) => {
