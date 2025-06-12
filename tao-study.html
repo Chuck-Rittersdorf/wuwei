@@ -221,7 +221,7 @@
             transform: scale(1.1);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 768px), (max-height: 550px) {
             .chapter-button {
                 width: 30px;
                 height: 30px;
@@ -308,7 +308,7 @@
 
             const container = document.body;
             const buttons = [];
-            let isMobile = window.innerWidth <= 768;
+            let isMobile = window.innerWidth <= 768 || window.innerHeight <= 550;
             let buttonRadius = isMobile ? 17 : 27;
             let currentWidth = window.innerWidth;
             let currentHeight = window.innerHeight;
@@ -529,7 +529,7 @@
                 const newWidth = window.innerWidth;
                 const newHeight = window.innerHeight;
 
-                isMobile = newWidth <= 768;
+                isMobile = newWidth <= 768 || newHeight <= 550;
                 buttonRadius = isMobile ? 17 : 27;
 
                 buttons.forEach(b => {
