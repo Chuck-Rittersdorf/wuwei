@@ -478,11 +478,15 @@
                 buttons.push(buttonObject);
                 setButtonAppearance(buttonObject); // Set initial color
 
-                button.addEventListener('mouseenter', () => {
-                    buttonObject.isHovered = true;
+                button.addEventListener('pointerenter', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        buttonObject.isHovered = true;
+                    }
                 });
-                button.addEventListener('mouseleave', () => {
-                    buttonObject.isHovered = false;
+                button.addEventListener('pointerleave', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        buttonObject.isHovered = false;
+                    }
                 });
 
                 button.addEventListener('click', (e) => {
@@ -540,9 +544,13 @@
                 };
                 buttons.push(searchButtonObject);
 
-                searchButtonElement.addEventListener('mouseenter', () => searchButtonObject.isHovered = true);
-                searchButtonElement.addEventListener('mouseleave', () => {
-                    if (document.activeElement !== searchInput) {
+                searchButtonElement.addEventListener('pointerenter', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        searchButtonObject.isHovered = true;
+                    }
+                });
+                searchButtonElement.addEventListener('pointerleave', (e) => {
+                    if (e.pointerType === 'mouse') {
                         searchButtonObject.isHovered = false;
                     }
                 });
@@ -665,8 +673,16 @@
                 };
                 buttons.push(fsButtonObject);
 
-                fsButtonElement.addEventListener('mouseenter', () => fsButtonObject.isHovered = true);
-                fsButtonElement.addEventListener('mouseleave', () => fsButtonObject.isHovered = false);
+                fsButtonElement.addEventListener('pointerenter', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        fsButtonObject.isHovered = true;
+                    }
+                });
+                fsButtonElement.addEventListener('pointerleave', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        fsButtonObject.isHovered = false;
+                    }
+                });
             }
 
             function handleResize() {
