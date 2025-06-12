@@ -185,6 +185,40 @@
             animation: blink 0.5s ease-in-out;
         }
 
+        .chapter-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-arrow {
+            width: 24px;
+            height: 24px;
+            background-color: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: serif;
+            font-size: 1.1em;
+            color: rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            padding-bottom: 2px;
+            box-sizing: border-box;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: rgba(0, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .chapter-button {
                 width: 30px;
@@ -247,6 +281,18 @@
                 padding: 20px 25px;
                 overflow-y: visible;
                 height: auto;
+            }
+
+            .chapter-nav {
+                bottom: 15px;
+                left: 20px;
+                gap: 8px;
+            }
+
+            .nav-arrow {
+                width: 22px;
+                height: 22px;
+                font-size: 1em;
             }
         }
     </style>
@@ -437,6 +483,20 @@
                     }, 500); // 500ms delay
                 });
                 searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        clearTimeout(searchTimeout);
+                        const chapterNum = parseInt(searchInput.value, 10);
+                        if (chapterNum >= 1 && chapterNum <= 81) {
+                            const chapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === chapterNum);
+                            if (chapterData) {
+                                showChapterBox(chapterData);
+                            }
+                        }
+                        searchInput.blur();
+                        return;
+                    }
+
                     if (e.key === 'Backspace') {
                         e.preventDefault();
                         searchInput.value = '';
@@ -445,7 +505,7 @@
                         return;
                     }
 
-                    if (['ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Delete', 'Home', 'End'].includes(e.key)) {
+                    if (['ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Home', 'End'].includes(e.key)) {
                         return;
                     }
 
@@ -562,90 +622,134 @@
             animate();
 
             function showChapterBox(chapterData) {
-                const createNewBox = () => {
-                    isFadingOut = true;
-                    fadeOutStartTime = performance.now();
-                    // Deactivate old button if it exists
+                const existingBox = document.querySelector('.chapter-box-container.show');
+
+                if (existingBox) {
+                    if (existingBox.dataset.chapter === String(chapterData.chapter)) {
+                        return; // Do nothing if the same chapter is clicked
+                    }
+
+                    // Update active button state
                     if (activeButtonObject) {
                         setButtonAppearance(activeButtonObject, false);
                     }
-                    // Find and activate the new button
                     const currentButtonObject = buttons.find(b => b.element.dataset.chapter === String(chapterData.chapter));
                     if (currentButtonObject) {
                         setButtonAppearance(currentButtonObject, true);
                         activeButtonObject = currentButtonObject;
                     }
 
-                    const boxContainer = document.createElement('div');
-                    boxContainer.className = 'chapter-box-container';
-                    boxContainer.dataset.chapter = chapterData.chapter;
-
-                    boxContainer.innerHTML = `
-                        <div class="main-content">
-                            <h2>Tao Te Ching ${chapterData.chapter}</h2>
-                            <p>${chapterData.text}</p>
-                            <div class="tao-attribution">
-                                Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
-                            </div>
-                        </div>
-                        <div class="side-panel">
-                            <div class="side-panel-content">
-                                 <p>${chapterData.annotation}</p>
-                            </div>
-                        </div>
-                    `;
-
-                    document.body.appendChild(boxContainer);
-
-                    const mainContent = boxContainer.querySelector('.main-content');
-                    const sidePanel = boxContainer.querySelector('.side-panel');
-
-                    mainContent.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        sidePanel.classList.toggle('show');
-                    });
-
-                    sidePanel.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        sidePanel.classList.remove('show');
-                    });
-
-                    boxContainer.addEventListener('dblclick', () => {
-                        if (activeButtonObject) {
-                            setButtonAppearance(activeButtonObject, false);
-                            activeButtonObject = null;
-                        }
-                        isAnimationPaused = false;
-                        isFadingOut = false;
-                        boxContainer.classList.remove('show');
-                        boxContainer.addEventListener('transitionend', () => {
-                            if (!boxContainer.classList.contains('show')) {
-                               boxContainer.remove();
-                            }
-                        }, { once: true });
-                    });
-
-                    requestAnimationFrame(() => {
-                        boxContainer.classList.add('show');
-                    });
-                };
-
-                const existingBox = document.querySelector('.chapter-box-container.show');
-                if (existingBox) {
-                    if (existingBox.dataset.chapter === String(chapterData.chapter)) {
-                        return; // Do nothing if the same chapter is clicked again
-                    }
-
-                    existingBox.classList.remove('show');
-                    existingBox.addEventListener('transitionend', () => {
-                        if (!existingBox.classList.contains('show')) {
-                            existingBox.remove();
-                        }
-                        createNewBox();
-                    }, { once: true });
-                } else {
-                    createNewBox();
+                    // Update content immediately
+                    const mainContent = existingBox.querySelector('.main-content');
+                    const sidePanel = existingBox.querySelector('.side-panel');
+                    const sidePanelContent = existingBox.querySelector('.side-panel-content');
+                    
+                    existingBox.dataset.chapter = chapterData.chapter;
+                    mainContent.querySelector('h2').textContent = `Tao Te Ching ${chapterData.chapter}`;
+                    mainContent.querySelector('p').textContent = chapterData.text;
+                    sidePanelContent.querySelector('p').textContent = chapterData.annotation;
+                    
+                    // Update nav arrow visibility
+                    const currentChapter = parseInt(chapterData.chapter, 10);
+                    existingBox.querySelector('#prev-chapter-arrow').style.display = currentChapter <= 1 ? 'none' : 'flex';
+                    existingBox.querySelector('#next-chapter-arrow').style.display = currentChapter >= 81 ? 'none' : 'flex';
+                    
+                    return;
                 }
+
+                // If no box exists, create a new one
+                isFadingOut = true;
+                fadeOutStartTime = performance.now();
+                const currentButtonObject = buttons.find(b => b.element.dataset.chapter === String(chapterData.chapter));
+                if (currentButtonObject) {
+                    setButtonAppearance(currentButtonObject, true);
+                    activeButtonObject = currentButtonObject;
+                }
+
+                const boxContainer = document.createElement('div');
+                boxContainer.className = 'chapter-box-container';
+                boxContainer.dataset.chapter = chapterData.chapter;
+
+                boxContainer.innerHTML = `
+                    <div class="main-content">
+                        <h2>Tao Te Ching ${chapterData.chapter}</h2>
+                        <p>${chapterData.text}</p>
+                        <div class="tao-attribution">
+                            Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
+                        </div>
+                    </div>
+                    <div class="side-panel">
+                        <div class="side-panel-content">
+                                <p>${chapterData.annotation}</p>
+                        </div>
+                    </div>
+                    <div class="chapter-nav">
+                        <div class="nav-arrow" id="prev-chapter-arrow">&lsaquo;</div>
+                        <div class="nav-arrow" id="next-chapter-arrow">&rsaquo;</div>
+                    </div>
+                `;
+
+                document.body.appendChild(boxContainer);
+
+                const prevArrow = boxContainer.querySelector('#prev-chapter-arrow');
+                const nextArrow = boxContainer.querySelector('#next-chapter-arrow');
+                const currentChapter = parseInt(chapterData.chapter, 10);
+
+                if (currentChapter <= 1) prevArrow.style.display = 'none';
+                if (currentChapter >= 81) nextArrow.style.display = 'none';
+
+                prevArrow.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentBox = e.target.closest('.chapter-box-container');
+                    const currentChapterNum = parseInt(currentBox.dataset.chapter, 10);
+                    if (currentChapterNum > 1) {
+                        const prevChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === (currentChapterNum - 1));
+                        if (prevChapterData) showChapterBox(prevChapterData);
+                    }
+                });
+
+                nextArrow.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentBox = e.target.closest('.chapter-box-container');
+                    const currentChapterNum = parseInt(currentBox.dataset.chapter, 10);
+                    if (currentChapterNum < 81) {
+                        const nextChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === (currentChapterNum + 1));
+                        if (nextChapterData) showChapterBox(nextChapterData);
+                    }
+                });
+
+
+                const mainContent = boxContainer.querySelector('.main-content');
+                const sidePanel = boxContainer.querySelector('.side-panel');
+
+                mainContent.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidePanel.classList.toggle('show');
+                });
+
+                sidePanel.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidePanel.classList.remove('show');
+                });
+
+                boxContainer.addEventListener('dblclick', () => {
+                    if (activeButtonObject) {
+                        setButtonAppearance(activeButtonObject, false);
+                        activeButtonObject = null;
+                    }
+                    isAnimationPaused = false;
+                    isFadingOut = false;
+                    boxContainer.classList.remove('show');
+                    boxContainer.addEventListener('transitionend', () => {
+                        if (!boxContainer.classList.contains('show')) {
+                            boxContainer.remove();
+                        }
+                    }, { once: true });
+                });
+
+                requestAnimationFrame(() => {
+                    boxContainer.classList.add('show');
+                });
             }
 
             document.addEventListener('click', (event) => {
