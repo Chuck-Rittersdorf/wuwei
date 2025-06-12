@@ -103,6 +103,7 @@
             overflow: hidden;
             transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             background-color: rgba(220, 240, 220, 0.98);
+            border-left: 1px solid #ddd;
             flex-shrink: 0;
         }
 
@@ -116,7 +117,6 @@
             overflow-y: auto;
             height: 100%;
             box-sizing: border-box;
-            border-left: 1px solid #ddd;
         }
 
         .side-panel-content p {
@@ -231,12 +231,13 @@
             }
 
             .chapter-box-container {
-                display: block;
+                display: flex;
                 width: 95vw;
                 max-width: 95vw;
                 height: 90vh;
                 max-height: 90vh;
-                overflow-y: auto;
+                overflow-x: auto;
+                overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
             }
 
@@ -244,9 +245,11 @@
                 width: 100%;
                 max-width: none;
                 padding: 20px 25px;
-                overflow-y: visible;
+                overflow-y: auto;
                 cursor: pointer;
                 box-sizing: border-box;
+                height: 100%;
+                flex-shrink: 0;
             }
             
             .main-content h2 {
@@ -262,26 +265,24 @@
             }
 
             .side-panel {
-                width: 100%;
-                max-height: 0;
+                width: 0;
                 overflow: hidden;
-                border-left: none;
+                border-left: 1px solid #ddd;
                 box-sizing: border-box;
-                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                flex-shrink: 0;
             }
 
             .side-panel.show {
-                max-height: 1500px;
-                width: auto;
+                width: 85vw;
             }
 
             .side-panel-content {
-                width: auto;
+                width: 85vw;
                 padding: 20px 25px;
-                overflow-y: visible;
-                height: auto;
-                border-left: none;
-                border-top: 1px solid #ddd;
+                overflow-y: auto;
+                height: 100%;
+                box-sizing: border-box;
             }
 
             .chapter-nav {
