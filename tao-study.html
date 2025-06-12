@@ -103,7 +103,6 @@
             overflow: hidden;
             transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             background-color: rgba(220, 240, 220, 0.98);
-            border-left: 1px solid #ddd;
             flex-shrink: 0;
         }
 
@@ -117,6 +116,7 @@
             overflow-y: auto;
             height: 100%;
             box-sizing: border-box;
+            border-left: 1px solid #ddd;
         }
 
         .side-panel-content p {
@@ -266,15 +266,13 @@
                 max-height: 0;
                 overflow: hidden;
                 border-left: none;
-                border-top: 1px solid transparent;
                 box-sizing: border-box;
-                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease;
+                transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             }
 
             .side-panel.show {
                 max-height: 1500px;
                 width: auto;
-                border-top-color: #ddd;
             }
 
             .side-panel-content {
@@ -282,6 +280,8 @@
                 padding: 20px 25px;
                 overflow-y: visible;
                 height: auto;
+                border-left: none;
+                border-top: 1px solid #ddd;
             }
 
             .chapter-nav {
