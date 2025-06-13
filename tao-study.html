@@ -561,11 +561,14 @@
                 });
                 searchButtonElement.addEventListener('pointerleave', (e) => {
                     if (e.pointerType === 'mouse') {
-                        searchButtonObject.isHovered = false;
+                        if (document.activeElement !== searchInput) {
+                            searchButtonObject.isHovered = false;
+                        }
                     }
                 });
                 searchButtonElement.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    searchButtonObject.isHovered = true;
                     searchInput.style.display = 'block';
                     searchInput.focus();
                     randomNumberDisplay.style.opacity = '0';
@@ -815,10 +818,12 @@
                                 const searchElement = searchButtonObject.element;
 
                                 // Pulsate on any collision
-                                if (searchElement && !searchElement.style.animation) {
-                                    searchElement.style.animation = 'pulse-corners 0.4s ease-in-out 1';
+                                if (searchElement && !searchElement.dataset.animating) {
+                                    searchElement.dataset.animating = 'true';
+                                    searchElement.style.animation = 'pulse-corners 0.4s ease-in-out';
                                     searchElement.addEventListener('animationend', () => {
                                         searchElement.style.animation = '';
+                                        delete searchElement.dataset.animating;
                                     }, { once: true });
                                 }
                                 
