@@ -1086,6 +1086,10 @@
 
                 fullscreenBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    const fsButtonObject = buttons.find(b => b.isFullScreen);
+                    if (fsButtonObject && e.pointerType !== 'mouse') {
+                        fsButtonObject.isHovered = false;
+                    }
                     toggleFullScreen();
                 });
 
