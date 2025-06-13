@@ -939,6 +939,30 @@
                     }
                 });
 
+                let touchStartX = 0;
+                let touchStartY = 0;
+                const minSwipeDistance = 50;
+
+                boxContainer.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
+
+                boxContainer.addEventListener('touchend', (e) => {
+                    const touchEndX = e.changedTouches[0].screenX;
+                    const touchEndY = e.changedTouches[0].screenY;
+                    const swipeX = touchEndX - touchStartX;
+                    const swipeY = touchEndY - touchStartY;
+                    
+                    if (Math.abs(swipeX) > minSwipeDistance && Math.abs(swipeX) > Math.abs(swipeY)) {
+                        e.stopPropagation();
+                        if (swipeX > 0) { // Right swipe for previous chapter
+                            if (prevArrow.style.display !== 'none') prevArrow.click();
+                        } else { // Left swipe for next chapter
+                            if (nextArrow.style.display !== 'none') nextArrow.click();
+                        }
+                    }
+                });
 
                 const mainContent = boxContainer.querySelector('.main-content');
                 const sidePanel = boxContainer.querySelector('.side-panel');
