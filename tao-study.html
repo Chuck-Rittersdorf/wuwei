@@ -148,11 +148,6 @@
             color: #333 !important;
         }
 
-        .search-bubble:hover {
-            transform: scale(1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
         .search-bubble .random-chapter-display {
             font-family: 'Quicksand', sans-serif;
             font-size: 1em;
@@ -561,14 +556,11 @@
                 });
                 searchButtonElement.addEventListener('pointerleave', (e) => {
                     if (e.pointerType === 'mouse') {
-                        if (document.activeElement !== searchInput) {
-                            searchButtonObject.isHovered = false;
-                        }
+                        searchButtonObject.isHovered = false;
                     }
                 });
                 searchButtonElement.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    searchButtonObject.isHovered = true;
                     searchInput.style.display = 'block';
                     searchInput.focus();
                     randomNumberDisplay.style.opacity = '0';
@@ -781,53 +773,13 @@
                             b2.x += overlap * nx;
                             b2.y += overlap * ny;
                             
-                            // Animate fullscreen button on collision
-                            let fsButtonObject;
-                            if (b1.isFullScreen) fsButtonObject = b1;
-                            else if (b2.isFullScreen) fsButtonObject = b2;
-
-                            if (fsButtonObject) {
-                                const icon = fsButtonObject.element.querySelector('.fullscreen-icon');
-                                
-                                if (icon && !icon.dataset.animating) {
-                                    let animationName = '';
-                                    if (icon.classList.contains('fullscreen-icon-enter')) {
-                                        animationName = 'pulse-corners 0.4s ease-in-out';
-                                    } else if (icon.classList.contains('fullscreen-icon-exit')) {
-                                        animationName = 'rotate-x 0.6s linear';
-                                    }
-
-                                    if (animationName) {
-                                        icon.dataset.animating = 'true';
-                                        icon.style.animation = animationName;
-                                        
-                                        icon.addEventListener('animationend', () => {
-                                            icon.style.animation = '';
-                                            delete icon.dataset.animating;
-                                        }, { once: true });
-                                    }
-                                }
-                            }
-                            
                             const b1IsSearch = b1.isSearch && !b1.isFullScreen;
                             const b2IsSearch = b2.isSearch && !b2.isFullScreen;
 
                             if (b1IsSearch || b2IsSearch) {
                                 const searchButtonObject = b1IsSearch ? b1 : b2;
                                 const otherButton = b1IsSearch ? b2 : b1;
-                                const searchElement = searchButtonObject.element;
 
-                                // Pulsate on any collision
-                                if (searchElement && !searchElement.dataset.animating) {
-                                    searchElement.dataset.animating = 'true';
-                                    searchElement.style.animation = 'pulse-corners 0.4s ease-in-out';
-                                    searchElement.addEventListener('animationend', () => {
-                                        searchElement.style.animation = '';
-                                        delete searchElement.dataset.animating;
-                                    }, { once: true });
-                                }
-                                
-                                // Show random chapter number on collision with chapter button
                                 if (!otherButton.isSearch && !otherButton.isFullScreen) {
                                     const randomNumberDisplayEl = searchButtonObject.element.querySelector('.random-chapter-display');
                                     const searchInputEl = searchButtonObject.element.querySelector('input');
@@ -1086,10 +1038,6 @@
 
                 fullscreenBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const fsButtonObject = buttons.find(b => b.isFullScreen);
-                    if (fsButtonObject && e.pointerType !== 'mouse') {
-                        fsButtonObject.isHovered = false;
-                    }
                     toggleFullScreen();
                 });
 
@@ -1097,13 +1045,7 @@
                     const icon = fullscreenBtn.querySelector('.fullscreen-icon');
                     if (!icon) return;
                     
-                    // Reset any ongoing animation
-                    icon.style.animation = '';
-                    delete icon.dataset.animating;
-
-                    const isCurrentlyFullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-
-                    if (isCurrentlyFullscreen) {
+                    if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
                         icon.classList.remove('fullscreen-icon-enter');
                         icon.classList.add('fullscreen-icon-exit');
                     } else {
