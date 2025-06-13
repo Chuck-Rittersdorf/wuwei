@@ -731,7 +731,7 @@
                     }
                 }
 
-                if (isAnimationPaused) {
+                if (isAnimationPaused || document.hidden) {
                     requestAnimationFrame(animate);
                     return;
                 }
