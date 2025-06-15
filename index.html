@@ -50,6 +50,49 @@
             transition: min-height 0.25s ease-out;
         }
 
+        /* Add specific styling for box2 */
+        #box2 {
+            margin-right: 30px; /* Add extra right margin */
+        }
+
+        /* Apply green background to the entire content area when showing annotation */
+        #box2 .box-content {
+            background-color: rgba(255, 255, 255, 0.97); /* Default white background */
+        }
+        #box2 .box-content:has(.placeholder-content-view.active-internal-view) {
+            background-color: rgba(220, 240, 220, 0.98);
+        }
+
+        /* Adjust margin for portrait orientation */
+        @media (orientation: portrait) {
+            #box2 {
+                margin-right: 0; /* Remove extra margin in portrait mode */
+            }
+        }
+
+        /* Add orientation-based layout */
+        @media (orientation: portrait) {
+            .wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .box {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        /* Keep existing mobile styles but remove the flex-direction change since it's handled by orientation */
+        @media (max-width: 768px), (max-height: 550px) {
+            .wrapper {
+                padding: 15px;
+                gap: 15px;
+            }
+            .box {
+                min-width: 100%;
+            }
+        }
+
         .box.content-shown {
             min-height: 1px; 
         }
