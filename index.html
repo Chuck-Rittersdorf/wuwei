@@ -147,11 +147,85 @@
             color: #003d7a;
         }
         
-        .bottom-logo-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(40, 60, 100, 0.85); padding: 10px 15px; border-radius: 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; gap: 12px; align-items: center; }
-        .bottom-logo-bar a { display: inline-flex; align-items: center; justify-content: center; transition: transform 0.2s ease; padding: 3px; }
-        .bottom-logo-bar a:hover { transform: scale(1.15); }
-        .bottom-logo-bar img { height: 28px; width: auto; display: block; }
-        .bottom-logo-bar span.img-alt-text { font-size: 10px; color: #fff; padding: 5px; display: inline-block; border: 1px solid #fff; border-radius: 3px; line-height: 1; }
+        .bottom-logo-bar { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background-color: rgba(40, 60, 100, 0.85); 
+            padding: 10px 15px; 
+            border-radius: 12px; 
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2); 
+            z-index: 1000; 
+            display: flex; 
+            gap: 12px; 
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .bottom-logo-bar a { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: transform 0.2s ease; 
+            padding: 3px; 
+        }
+        .bottom-logo-bar a:hover { 
+            transform: scale(1.15); 
+        }
+        .bottom-logo-bar img { 
+            height: 28px; 
+            width: auto; 
+            display: block; 
+        }
+        .bottom-logo-bar span.img-alt-text { 
+            font-size: 10px; 
+            color: #fff; 
+            padding: 5px; 
+            display: inline-block; 
+            border: 1px solid #fff; 
+            border-radius: 3px; 
+            line-height: 1; 
+        }
+
+        /* Add responsive styles for mobile devices */
+        @media (max-width: 768px) {
+            .bottom-logo-bar {
+                padding: 8px 12px;
+                gap: 8px;
+                bottom: 15px;
+            }
+            .bottom-logo-bar img {
+                height: 22px; /* Smaller logos on mobile */
+            }
+            .bottom-logo-bar a {
+                padding: 2px;
+            }
+            .bottom-logo-bar a:hover {
+                transform: scale(1.1); /* Slightly reduced hover effect on mobile */
+            }
+            .bottom-logo-bar span.img-alt-text {
+                font-size: 8px;
+                padding: 3px;
+            }
+            .bach-logo-img {
+                height: 22px; /* Match other logos */
+            }
+        }
+
+        /* Add extra small screen support */
+        @media (max-width: 360px) {
+            .bottom-logo-bar {
+                padding: 6px 10px;
+                gap: 6px;
+                bottom: 12px;
+            }
+            .bottom-logo-bar img {
+                height: 20px; /* Even smaller logos for very small screens */
+            }
+            .bach-logo-img {
+                height: 20px;
+            }
+        }
 
         .logo-popup-container {
             position: relative;
