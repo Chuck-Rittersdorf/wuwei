@@ -131,6 +131,7 @@
         .placeholder-content-view h2 {
             margin-top: 0;
             margin-bottom: 1em; 
+            margin-left: 25px; /* Match the text section margin */
             color: #333; 
             font-size: 1.3em;
             font-weight: 600;
@@ -162,12 +163,19 @@
         .tao-text-section {
             white-space: pre-wrap; 
             margin-bottom: 1.2em;
+            margin-left: 25px; /* Add left margin for all text sections */
             line-height: 1.7;
             font-size: 1em;
             color: #4a4a4a;
             text-align: left;
             font-family: 'Lora', serif;
         }
+
+        /* Add specific margin for box2's annotation and life lesson text */
+        #box2 .tao-text-section {
+            margin-right: 80px;
+        }
+
         .tao-text-section:last-child {
             margin-bottom: 0;
         }
@@ -333,6 +341,11 @@
 
         .bottom-logo-bar a[href="tao-study.html"]:hover img {
             animation: spin 2s linear infinite;
+        }
+
+        /* Add specific padding for box2's annotation content */
+        #box2 .placeholder-content-view {
+            padding-right: 40px; /* Increase right padding for annotation content */
         }
 
     </style>
