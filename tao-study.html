@@ -1032,6 +1032,89 @@
                 }
             });
 
+            // Add enhanced keyboard navigation for desktop users
+            document.addEventListener('keydown', (event) => {
+                const openBox = document.querySelector('.chapter-box-container.show');
+                const currentChapterNum = openBox ? parseInt(openBox.dataset.chapter, 10) : null;
+
+                // Handle escape key to close chapter box
+                if (event.key === 'Escape' && openBox) {
+                    event.preventDefault();
+                    if (activeButtonObject) {
+                        setButtonAppearance(activeButtonObject, false);
+                        activeButtonObject = null;
+                    }
+                    isAnimationPaused = false;
+                    isFadingOut = false;
+                    openBox.classList.remove('show');
+                    openBox.addEventListener('transitionend', () => {
+                        if (!openBox.classList.contains('show')) {
+                            openBox.remove();
+                        }
+                    }, { once: true });
+                    return;
+                }
+
+                // Handle random chapter with 'r' key
+                if (event.key.toLowerCase() === 'r') {
+                    event.preventDefault();
+                    const randomChapter = Math.floor(Math.random() * 81) + 1;
+                    const randomChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === randomChapter);
+                    if (randomChapterData) {
+                        showChapterBox(randomChapterData);
+                    }
+                    return;
+                }
+
+                // Only handle navigation keys when a chapter box is open
+                if (!openBox) return;
+
+                const prevArrow = openBox.querySelector('#prev-chapter-arrow');
+                const nextArrow = openBox.querySelector('#next-chapter-arrow');
+
+                // Handle left arrow for previous chapter
+                if (event.key === 'ArrowLeft' && prevArrow.style.display !== 'none') {
+                    event.preventDefault();
+                    const prevChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === (currentChapterNum - 1));
+                    if (prevChapterData) showChapterBox(prevChapterData);
+                }
+                // Handle right arrow for next chapter
+                else if (event.key === 'ArrowRight' && nextArrow.style.display !== 'none') {
+                    event.preventDefault();
+                    const nextChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === (currentChapterNum + 1));
+                    if (nextChapterData) showChapterBox(nextChapterData);
+                }
+                // Handle home key for first chapter
+                else if (event.key === 'Home') {
+                    event.preventDefault();
+                    const firstChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === 1);
+                    if (firstChapterData) showChapterBox(firstChapterData);
+                }
+                // Handle end key for last chapter
+                else if (event.key === 'End') {
+                    event.preventDefault();
+                    const lastChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === 81);
+                    if (lastChapterData) showChapterBox(lastChapterData);
+                }
+                // Handle number keys (1-9) for quick chapter access
+                else if (/^[1-9]$/.test(event.key)) {
+                    event.preventDefault();
+                    const chapterNum = parseInt(event.key, 10);
+                    const chapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === chapterNum);
+                    if (chapterData) showChapterBox(chapterData);
+                }
+                // Handle number keys (0-9) for two-digit chapter numbers
+                else if (/^[0-9]$/.test(event.key) && currentChapterNum !== null) {
+                    // If we're already on a chapter, check if we can form a valid two-digit number
+                    const potentialChapter = parseInt(currentChapterNum.toString().slice(-1) + event.key, 10);
+                    if (potentialChapter >= 1 && potentialChapter <= 81) {
+                        event.preventDefault();
+                        const chapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === potentialChapter);
+                        if (chapterData) showChapterBox(chapterData);
+                    }
+                }
+            });
+
             const fullscreenBtn = document.getElementById('fullscreen-btn');
 
             if (fullscreenBtn) {
