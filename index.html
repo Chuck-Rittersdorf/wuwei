@@ -348,69 +348,9 @@
             padding-right: 40px; /* Increase right padding for annotation content */
         }
 
-        /* Secret fullscreen button styles */
-        .secret-fullscreen {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 30px;
-            height: 30px;
-            background-color: rgba(40, 60, 100, 0.1);
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        .secret-fullscreen:hover {
-            background-color: rgba(40, 60, 100, 0.2);
-            transform: scale(1.1);
-            opacity: 1;
-        }
-
-        .secret-fullscreen-icon {
-            width: 16px;
-            height: 16px;
-            background-color: rgba(40, 60, 100, 0.5);
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
-            transition: transform 0.2s ease;
-        }
-
-        .secret-fullscreen-icon-enter {
-            -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
-            mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
-        }
-
-        .secret-fullscreen-icon-exit {
-            -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
-            mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
-        }
-
-        @keyframes rotate-x {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(-180deg); }
-        }
-
-        .secret-fullscreen:hover .secret-fullscreen-icon-exit {
-            animation: rotate-x 0.6s linear;
-        }
-
     </style>
 </head>
 <body>
-    <div class="secret-fullscreen" id="secret-fullscreen-btn">
-        <span class="secret-fullscreen-icon secret-fullscreen-icon-enter"></span>
-    </div>
-
     <div class="wrapper">
         <div class="box" id="box1" onclick="handleMediaBoxClick(event)">
             <div class="box-content"> 
@@ -457,6 +397,7 @@
         <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
         <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Google Maps Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://npo.nl/start/live" target="_blank" rel="noopener noreferrer"><img src="https://static.wikia.nocookie.net/logopedia/images/5/50/NPO_logo_2013.svg/revision/latest?cb=20140709230350" alt="NPO Start Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
         <div class="logo-popup-container">
             <div class="popup-trigger" id="bach-popup-trigger">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Bachsiegel.svg" alt="JS Bach Logo" class="bach-logo-img" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'">
@@ -471,59 +412,6 @@
 
     <script src="tao-data.js"></script> 
     <script>
-        // Add fullscreen functionality for the secret button
-        const secretFullscreenBtn = document.getElementById('secret-fullscreen-btn');
-        
-        if (secretFullscreenBtn) {
-            function toggleFullScreen() {
-                const docElm = document.documentElement;
-                if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                    if (docElm.requestFullscreen) {
-                        docElm.requestFullscreen();
-                    } else if (docElm.mozRequestFullScreen) {
-                        docElm.mozRequestFullScreen();
-                    } else if (docElm.webkitRequestFullscreen) {
-                        docElm.webkitRequestFullscreen();
-                    } else if (docElm.msRequestFullscreen) {
-                        docElm.msRequestFullscreen();
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                }
-            }
-
-            secretFullscreenBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFullScreen();
-            });
-
-            function updateFullscreenButton() {
-                const icon = secretFullscreenBtn.querySelector('.secret-fullscreen-icon');
-                if (!icon) return;
-                
-                if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-                    icon.classList.remove('secret-fullscreen-icon-enter');
-                    icon.classList.add('secret-fullscreen-icon-exit');
-                } else {
-                    icon.classList.remove('secret-fullscreen-icon-exit');
-                    icon.classList.add('secret-fullscreen-icon-enter');
-                }
-            }
-
-            document.addEventListener('fullscreenchange', updateFullscreenButton);
-            document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
-            document.addEventListener('mozfullscreenchange', updateFullscreenButton);
-            document.addEventListener('MSFullscreenChange', updateFullscreenButton);
-        }
-
         const nasaApiKey = 'NyyGoLiGKX7pg76t9ehi4L8n0MHQuHw8xV6QHLNm';
         let randomTaoChapterData = null; 
 
