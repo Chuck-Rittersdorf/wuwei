@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         html {
             height: 100%;
@@ -306,6 +307,85 @@
             opacity: 1;
         }
 
+        .info-bubble {
+            background-color: #e8eaf6 !important; /* Indigo 50 */
+        }
+
+        .info-bubble i {
+            font-family: 'Dancing Script', cursive;
+            font-style: normal;
+            font-size: 1.5em;
+            line-height: 1;
+            color: #333;
+        }
+
+        .info-bubble:hover {
+            background-color: #c5cae9 !important; /* Indigo 100 */
+        }
+
+        .info-panel-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            padding: 25px 35px;
+            width: auto;
+            max-width: 420px;
+            cursor: default;
+        }
+
+        .info-panel-container.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+            transition-delay: 0s;
+        }
+
+        .info-panel-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+            font-family: 'Lora', serif;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .info-panel-container ul {
+            list-style: none;
+            padding: 0;
+            font-family: 'Lora', serif;
+            font-size: 0.95em;
+        }
+
+        .info-panel-container li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .info-panel-container .key {
+            display: inline-block;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9em;
+            color: #333;
+            margin-right: 15px;
+            min-width: 45px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
         @media (max-width: 768px), (max-height: 550px) {
             .chapter-button {
                 width: 30px;
@@ -477,7 +557,8 @@
                     isWhite: Math.random() < 0.5,
                     isHovered: false,
                     isSearch: false,
-                    isFullScreen: false
+                    isFullScreen: false,
+                    isInfo: false
                 };
                 
                 buttons.push(buttonObject);
@@ -501,6 +582,9 @@
             });
 
             createFullScreenButton();
+
+            // Create and add the special info bubble
+            createInfoButton();
 
             // Create and add the special search bubble
             const searchButtonElement = document.createElement('div');
@@ -545,6 +629,7 @@
                     radius: buttonRadius,
                     isSearch: true,
                     isHovered: false,
+                    isInfo: false,
                     fadeTimeout: null
                 };
                 buttons.push(searchButtonObject);
@@ -675,6 +760,7 @@
                     radius: buttonRadius,
                     isHovered: false,
                     isFullScreen: true,
+                    isInfo: false,
                 };
                 buttons.push(fsButtonObject);
 
@@ -686,6 +772,69 @@
                 fsButtonElement.addEventListener('pointerleave', (e) => {
                     if (e.pointerType === 'mouse') {
                         fsButtonObject.isHovered = false;
+                    }
+                });
+            }
+
+            function createInfoButton() {
+                const infoButtonElement = document.createElement('div');
+                infoButtonElement.className = 'chapter-button info-bubble';
+                infoButtonElement.innerHTML = `<i>i</i>`;
+
+                let x, y, overlapping;
+                let attempts = 0;
+                const maxAttempts = 200;
+                do {
+                    overlapping = false;
+                    x = Math.random() * (currentWidth - buttonRadius * 2) + buttonRadius;
+                    y = Math.random() * (currentHeight - buttonRadius * 2) + buttonRadius;
+                    for (const existingButton of buttons) {
+                        const dx = x - existingButton.x;
+                        const dy = y - existingButton.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < (buttonRadius + existingButton.radius)) {
+                            overlapping = true;
+                            break;
+                        }
+                    }
+                    attempts++;
+                } while (overlapping && attempts < maxAttempts);
+
+                container.appendChild(infoButtonElement);
+
+                const infoButtonObject = {
+                    element: infoButtonElement,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: buttonRadius,
+                    isHovered: false,
+                    isSearch: false,
+                    isFullScreen: false,
+                    isInfo: true
+                };
+                buttons.push(infoButtonObject);
+
+                infoButtonElement.addEventListener('pointerenter', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        infoButtonObject.isHovered = true;
+                    }
+                });
+                infoButtonElement.addEventListener('pointerleave', (e) => {
+                    if (e.pointerType === 'mouse') {
+                        infoButtonObject.isHovered = false;
+                    }
+                });
+                infoButtonElement.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const infoBox = document.querySelector('.info-panel-container.show');
+
+                    if (infoBox) {
+                        closeInfoBox();
+                    } else {
+                        closeChapterBox();
+                        showInfoBox();
                     }
                 });
             }
@@ -773,14 +922,14 @@
                             b2.x += overlap * nx;
                             b2.y += overlap * ny;
                             
-                            const b1IsSearch = b1.isSearch && !b1.isFullScreen;
-                            const b2IsSearch = b2.isSearch && !b2.isFullScreen;
+                            const b1IsSearch = b1.isSearch && !b1.isFullScreen && !b1.isInfo;
+                            const b2IsSearch = b2.isSearch && !b2.isFullScreen && !b2.isInfo;
 
                             if (b1IsSearch || b2IsSearch) {
                                 const searchButtonObject = b1IsSearch ? b1 : b2;
                                 const otherButton = b1IsSearch ? b2 : b1;
 
-                                if (!otherButton.isSearch && !otherButton.isFullScreen) {
+                                if (!otherButton.isSearch && !otherButton.isFullScreen && !otherButton.isInfo) {
                                     const randomNumberDisplayEl = searchButtonObject.element.querySelector('.random-chapter-display');
                                     const searchInputEl = searchButtonObject.element.querySelector('input');
 
@@ -819,11 +968,11 @@
                                 b2.vy = ty * dpTan2 + ny * m2;
                             }
                             
-                            if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch && !b1.isFullScreen) {
+                            if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch && !b1.isFullScreen && !b1.isInfo) {
                                 b1.isWhite = !b1.isWhite;
                                 setButtonAppearance(b1);
                             }
-                            if (!b2.isHovered && b2 !== activeButtonObject && !b2.isSearch && !b2.isFullScreen) {
+                            if (!b2.isHovered && b2 !== activeButtonObject && !b2.isSearch && !b2.isFullScreen && !b2.isInfo) {
                                 b2.isWhite = !b2.isWhite;
                                 setButtonAppearance(b2);
                             }
@@ -839,6 +988,45 @@
             
             animate();
 
+            function showInfoBox() {
+                if (document.querySelector('.info-panel-container.show')) {
+                    return; 
+                }
+
+                if (!document.querySelector('.chapter-box-container.show')) {
+                    isFadingOut = true;
+                    fadeOutStartTime = performance.now();
+                }
+
+                const infoContainer = document.createElement('div');
+                infoContainer.className = 'info-panel-container';
+
+                infoContainer.innerHTML = `
+                    <h2>Keyboard shortcuts</h2>
+                    <ul>
+                        <li><span class="key">F</span> Toggle fullscreen</li>
+                        <li><span class="key">S</span> Search (enter chapter number + enter)</li>
+                        <li><span class="key">I</span> Show/hide this menu</li>
+                        <li><span class="key">R</span> Show random chapter</li>
+                        <li><span class="key">Esc</span> Close current view</li>
+                    </ul>
+                    <h2 style="font-size: 1.1em; margin-top: 25px;">When chapter is open:</h2>
+                    <ul>
+                        <li><span class="key">A</span> Show/hide annotation (or on click)</li>
+                        <li><span class="key">&larr;</span> Previous chapter</li>
+                        <li><span class="key">&rarr;</span> Next chapter</li>
+                        <li><span class="key">Home</span> First chapter</li>
+                        <li><span class="key">End</span> Last chapter</li>
+                    </ul>
+                `;
+
+                document.body.appendChild(infoContainer);
+
+                requestAnimationFrame(() => {
+                    infoContainer.classList.add('show');
+                });
+            }
+
             function showChapterBox(chapterData) {
                 const existingBox = document.querySelector('.chapter-box-container.show');
 
@@ -846,6 +1034,8 @@
                     if (existingBox.dataset.chapter === String(chapterData.chapter)) {
                         return; // Do nothing if the same chapter is clicked
                     }
+
+                    closeInfoBox(); // Close info box if open
 
                     // Update active button state
                     if (activeButtonObject) {
@@ -876,6 +1066,7 @@
                 }
 
                 // If no box exists, create a new one
+                closeInfoBox(); // Close info box if open
                 isFadingOut = true;
                 fadeOutStartTime = performance.now();
                 const currentButtonObject = buttons.find(b => b.element.dataset.chapter === String(chapterData.chapter));
@@ -1012,51 +1203,108 @@
                 }
             }
 
-            document.addEventListener('click', (event) => {
-                const openBox = document.querySelector('.chapter-box-container.show');
-                const clickedButton = event.target.closest('.chapter-button');
+            function closeInfoBox() {
+                const infoBox = document.querySelector('.info-panel-container.show');
+                if (infoBox) {
+                    infoBox.classList.remove('show');
+                    infoBox.addEventListener('transitionend', () => {
+                        if (!infoBox.classList.contains('show')) {
+                           infoBox.remove();
+                        }
+                        if (!document.querySelector('.chapter-box-container.show')) {
+                             isAnimationPaused = false;
+                             isFadingOut = false;
+                        }
+                    }, { once: true });
+                }
+            }
 
-                if (openBox && !openBox.contains(event.target) && !clickedButton) {
+            function closeChapterBox() {
+                const chapterBox = document.querySelector('.chapter-box-container.show');
+                if(chapterBox) {
                     if (activeButtonObject) {
                         setButtonAppearance(activeButtonObject, false);
                         activeButtonObject = null;
                     }
-                    isAnimationPaused = false;
-                    isFadingOut = false;
-                    openBox.classList.remove('show');
-                    openBox.addEventListener('transitionend', () => {
-                        if (!openBox.classList.contains('show')) {
-                           openBox.remove();
+                    chapterBox.classList.remove('show');
+                    chapterBox.addEventListener('transitionend', () => {
+                        if (!chapterBox.classList.contains('show')) {
+                           chapterBox.remove();
+                        }
+                        if (!document.querySelector('.info-panel-container.show')) {
+                            isAnimationPaused = false;
+                            isFadingOut = false;
                         }
                     }, { once: true });
+                }
+            }
+
+            function closeAllBoxes() {
+                closeChapterBox();
+                closeInfoBox();
+            }
+
+            document.addEventListener('click', (event) => {
+                const openChapterBox = document.querySelector('.chapter-box-container.show');
+                const openInfoBox = document.querySelector('.info-panel-container.show');
+                const clickedButton = event.target.closest('.chapter-button');
+
+                if (openInfoBox && !openInfoBox.contains(event.target) && !clickedButton) {
+                    closeInfoBox();
+                }
+
+                if (openChapterBox && !openChapterBox.contains(event.target) && !clickedButton) {
+                    closeAllBoxes();
                 }
             });
 
             // Add enhanced keyboard navigation for desktop users
             document.addEventListener('keydown', (event) => {
                 const openBox = document.querySelector('.chapter-box-container.show');
-                const currentChapterNum = openBox ? parseInt(openBox.dataset.chapter, 10) : null;
+                const infoBox = document.querySelector('.info-panel-container.show');
 
-                // Handle escape key to close chapter box
-                if (event.key === 'Escape' && openBox) {
+                // Handle 'f' for fullscreen
+                if (event.key.toLowerCase() === 'f' && document.activeElement.tagName.toLowerCase() !== 'input') {
                     event.preventDefault();
-                    if (activeButtonObject) {
-                        setButtonAppearance(activeButtonObject, false);
-                        activeButtonObject = null;
-                    }
-                    isAnimationPaused = false;
-                    isFadingOut = false;
-                    openBox.classList.remove('show');
-                    openBox.addEventListener('transitionend', () => {
-                        if (!openBox.classList.contains('show')) {
-                            openBox.remove();
-                        }
-                    }, { once: true });
+                    toggleFullScreen();
                     return;
                 }
 
+                // Handle 's' for search
+                if (event.key.toLowerCase() === 's' && document.activeElement.tagName.toLowerCase() !== 'input') {
+                    event.preventDefault();
+                    closeAllBoxes();
+                    searchButtonElement.click();
+                    return;
+                }
+
+                // Handle 'i' for info box
+                if (event.key.toLowerCase() === 'i' && document.activeElement.tagName.toLowerCase() !== 'input') {
+                    event.preventDefault();
+                    if (infoBox) {
+                        closeInfoBox();
+                    } else {
+                        closeChapterBox();
+                        showInfoBox();
+                    }
+                    return;
+                }
+                
+                // Handle escape key to close chapter or info box
+                if (event.key === 'Escape') {
+                     if (infoBox) {
+                        event.preventDefault();
+                        closeInfoBox();
+                    }
+                    if (openBox) {
+                        event.preventDefault();
+                        closeAllBoxes();
+                        return;
+                    }
+                }
+
                 // Handle random chapter with 'r' key
-                if (event.key.toLowerCase() === 'r') {
+                if (event.key.toLowerCase() === 'r' && document.activeElement.tagName.toLowerCase() !== 'input') {
                     event.preventDefault();
                     const randomChapter = Math.floor(Math.random() * 81) + 1;
                     const randomChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === randomChapter);
@@ -1069,6 +1317,16 @@
                 // Only handle navigation keys when a chapter box is open
                 if (!openBox) return;
 
+                // Handle 'a' for annotation
+                if (event.key.toLowerCase() === 'a') {
+                    event.preventDefault();
+                    const sidePanel = openBox.querySelector('.side-panel');
+                    if (sidePanel) {
+                        sidePanel.classList.toggle('show');
+                    }
+                }
+
+                const currentChapterNum = parseInt(openBox.dataset.chapter, 10);
                 const prevArrow = openBox.querySelector('#prev-chapter-arrow');
                 const nextArrow = openBox.querySelector('#next-chapter-arrow');
 
@@ -1095,23 +1353,6 @@
                     event.preventDefault();
                     const lastChapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === 81);
                     if (lastChapterData) showChapterBox(lastChapterData);
-                }
-                // Handle number keys (1-9) for quick chapter access
-                else if (/^[1-9]$/.test(event.key)) {
-                    event.preventDefault();
-                    const chapterNum = parseInt(event.key, 10);
-                    const chapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === chapterNum);
-                    if (chapterData) showChapterBox(chapterData);
-                }
-                // Handle number keys (0-9) for two-digit chapter numbers
-                else if (/^[0-9]$/.test(event.key) && currentChapterNum !== null) {
-                    // If we're already on a chapter, check if we can form a valid two-digit number
-                    const potentialChapter = parseInt(currentChapterNum.toString().slice(-1) + event.key, 10);
-                    if (potentialChapter >= 1 && potentialChapter <= 81) {
-                        event.preventDefault();
-                        const chapterData = taoTeChingData.find(c => parseInt(c.chapter, 10) === potentialChapter);
-                        if (chapterData) showChapterBox(chapterData);
-                    }
                 }
             });
 
