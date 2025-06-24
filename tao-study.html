@@ -133,6 +133,8 @@
             font-size: 0.75em;
             color: #555;
             text-align: right; 
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
         }
         .tao-attribution a {
             color: #0056b3; 
@@ -1055,7 +1057,13 @@
                     existingBox.dataset.chapter = chapterData.chapter;
                     mainContent.querySelector('h2').textContent = `Tao Te Ching ${chapterData.chapter}`;
                     mainContent.querySelector('p').textContent = chapterData.text;
-                    sidePanelContent.querySelector('p').textContent = chapterData.annotation;
+                    
+                    // Add special link for Chapter 1
+                    let annotationContent = chapterData.annotation;
+                    if (chapterData.chapter === 1) {
+                        annotationContent += '\n\n<a href="tao-te-ching-01" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
+                    }
+                    sidePanelContent.querySelector('p').innerHTML = annotationContent;
                     
                     // Update nav arrow visibility
                     const currentChapter = parseInt(chapterData.chapter, 10);
@@ -1079,6 +1087,12 @@
                 boxContainer.className = 'chapter-box-container';
                 boxContainer.dataset.chapter = chapterData.chapter;
 
+                // Add special link for Chapter 1
+                let annotationContent = chapterData.annotation;
+                if (chapterData.chapter === 1) {
+                    annotationContent += '\n\n<a href="tao-te-ching-01" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
+                }
+
                 boxContainer.innerHTML = `
                     <div class="main-content">
                         <span class="annotation-hint">Click for annotation</span>
@@ -1096,7 +1110,7 @@
                     </div>
                     <div class="side-panel">
                         <div class="side-panel-content">
-                                <p>${chapterData.annotation}</p>
+                                <p>${annotationContent}</p>
                         </div>
                     </div>
                 `;

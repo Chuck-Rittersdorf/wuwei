@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
+    <title>Tao Te Ching Chapter 1 - Taoistic Reading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            height: 100%;
+        }
+        
+        body {
+            background-color: #e6f3ff;
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            height: calc(100vh - 40px);
+            min-height: 0;
+        }
+
+        .column {
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .right-columns {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        .chapter-column {
+            flex: 0 0 auto;
+            position: relative;
+        }
+
+        .chapter-number-corner {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5em;
+            font-weight: 600;
+            color: rgba(94, 113, 255, 0.469);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .essay-column {
+            flex: 1;
+            min-height: 0;
+            background-color: rgba(220, 240, 220, 0.98);
+        }
+
+        .column h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.4em;
+            text-align: center;
+            border-bottom: 2px solid #e6f3ff;
+            padding-bottom: 10px;
+        }
+
+        .chapter-text {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 0.9em;
+            color: #4a4a4a;
+            flex-grow: 1;
+        }
+
+        .artwork-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            min-height: 0;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .artwork-placeholder {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            border: 2px dashed #ccc;
+        }
+
+        .artwork-placeholder::before {
+            content: "Artwork Placeholder";
+            font-size: 1.2em;
+        }
+
+        .artwork-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .artwork-image:hover {
+            transform: scale(1.02);
+        }
+
+        .artwork-footer {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .translation-section {
+            flex: 2;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .info-section {
+            flex: 1;
+            text-align: right;
+        }
+
+        .poem-original {
+            font-family: 'Lora', serif;
+            font-size: 0.8em;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .poem-translation {
+            font-size: 0.9em;
+            color: #333;
+            line-height: 1.6;
+            font-family: 'Lora', serif;
+            font-weight: 600;
+        }
+
+        .essay {
+            line-height: 1.7;
+            font-size: 0.95em;
+            color: #4a4a4a;
+            flex-grow: 1;
+        }
+
+        .essay p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+
+        .essay p:first-child {
+            margin-top: 0;
+        }
+
+        .essay p:last-child {
+            margin-bottom: 0;
+        }
+
+        .chapter-number {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .annotation {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(220, 240, 220, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .tao-attribution {
+            font-size: 0.7em;
+            color: #555;
+            text-align: right;
+            margin-top: 15px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+        .tao-attribution a {
+            color: #0056b3; 
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .tao-attribution a:hover {
+            text-decoration: none;
+            color: #003d7a;
+        }
+
+        /* Responsive design for portrait orientation */
+        @media (max-width: 768px), (max-height: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 20px;
+                height: auto;
+            }
+
+            .right-columns {
+                gap: 15px;
+            }
+
+            .column {
+                padding: 20px;
+                min-height: auto;
+            }
+
+            .column h2 {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .chapter-number {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+
+            .chapter-text {
+                font-size: 0.85em;
+                line-height: 1.7;
+            }
+
+            .essay {
+                font-size: 0.9em;
+                line-height: 1.6;
+            }
+
+            .artwork-placeholder {
+                height: 250px;
+                max-width: 100%;
+            }
+
+            .annotation {
+                font-size: 0.85em;
+                margin-top: 15px;
+                padding: 12px;
+            }
+
+            .tao-attribution {
+                font-size: 0.65em;
+                margin-top: 12px;
+                font-family: 'Quicksand', sans-serif;
+                font-weight: 600;
+                text-align: right;
+            }
+        }
+
+        /* Medium screens - 2 columns */
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .column:nth-child(1) {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .column:nth-child(2) {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .column:nth-child(3) {
+                grid-column: 1 / -1;
+                grid-row: 2;
+            }
+        }
+
+        /* Smooth scrolling */
+        .column {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        .column::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .column::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .column::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .column::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Fullscreen modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-image {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #ccc;
+        }
+
+        .essay-title {
+            font-family: 'Lora', serif;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Column: Artwork (Wider) -->
+        <div class="column">
+            <div class="artwork-container">
+                <img src="images/ttc01.jpg" alt="Gong Xian's painting - A lone figure on a bridge in ink-washed mountains" class="artwork-image">
+                <div class="artwork-footer">
+                    <div class="translation-section">
+                        <div class="poem-translation">
+                            Within the caverns, immortal sanctums open their gates of dawn,<br>
+                            Vermilion clouds disgorge the sun, only to swallow it again.<br>
+                            As I walk up the bridge to dry my hair,<br>
+                            I catch a glimpse — a torrent collapses and the water rushes away.
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <p style="color: #555; font-size: 0.7em; margin: 0; font-family: 'Quicksand', sans-serif; font-weight: 600;">
+                            Leaf H from: <em>Landscapes with poems</em> (1688)<br>
+                            Gong Xian (Chinese, 1619–1689)<br>
+                            <a href="https://www.metmuseum.org/art/collection/search/36131" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: none;">Metropolitan Museum of Art</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Chapter Text and Essay (Stacked) -->
+        <div class="right-columns">
+            <!-- Chapter Text Column -->
+            <div class="column chapter-column">
+                <div class="chapter-number-corner">1</div>
+                <div class="chapter-text">The Tao that can be spoken is not the eternal Tao
+The name that can be named is not the eternal name
+The nameless is the origin of Heaven and Earth
+The named is the mother of myriad things
+Thus, constantly without desire, one observes its essence
+Constantly with desire, one observes its manifestations
+These two emerge together but differ in name
+The unity is said to be the mystery
+Mystery of mysteries, the door to all wonders</div>
+                <div class="tao-attribution">
+                    Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
+                </div>
+            </div>
+
+            <!-- Essay Column -->
+            <div class="column essay-column">
+                <div class="essay-title">The Bridge Between Worlds</div>
+                <div class="essay">
+                    <p>
+                        In a landscape of ink-washed mountains and deep, silent valleys, we see a bridge and rocks scattered on a river bed. This scene, captured by the 17th-century Chinese master Gong Xian, is more than just a beautiful painting; it is a meditation on the nature of reality itself. Paired with a short, inscribed poem, the artwork serves as a visual guide to the deepest teachings of Daoism, echoing the wisdom found in the opening chapter of the foundational text, the Tao Te Ching. It reveals how a fleeting, personal moment can become a gateway to the eternal.
+                    </p>
+
+                    <p>
+                        The Tao Te Ching begins by drawing a distinction between two realms: the "named" and the "nameless." The "named," it says, "is the mother of myriad things"—it is the tangible world we can see, identify, and categorize: a rock, a tree, a river. The "nameless," by contrast, is the eternal, ineffable source of all existence, the underlying unity from which all forms arise. Gong Xian's painting masterfully depicts both. We see the "myriad things" in the sharp details of the arched bridge, the gnarled trees, and the stream. But we also feel the presence of the "nameless" in the vast, undifferentiated ink wash that blends trees into mist and mist into an mountains.
+                    </p>
+
+                    <p>
+                        The accompanying poem gives us a voice for this landscape, describing a scene that begins with the grand, cyclical rhythm of the cosmos:
+                    </p>
+
+                    <p style="font-style: italic; text-align: center; margin: 20px 0; color: #666;">
+                        Within the caverns, immortal sanctums open their gates of dawn,<br>
+                        Vermilion clouds disgorge the sun, only to swallow it again.
+                    </p>
+
+                    <p>
+                        This is the world of the nameless, eternal Tao—a majestic, impersonal force. But the poem then crashes this cosmic vision into a single, human moment:
+                    </p>
+
+                    <p style="font-style: italic; text-align: center; margin: 20px 0; color: #666;">
+                        As I walk up the bridge to dry my hair,<br>
+                        I catch a glimpse — a torrent collapses and the water rushes away.
+                    </p>
+
+                    <p>
+                        Here, the narrator becomes the lens through which we explore the Daoist path to wisdom. The Tao Te Ching teaches that one can observe the world in two ways: "Constantly with desire, one observes its manifestations. Constantly without desire, one observes its essence." The narrator begins in the first state. His journey onto the bridge is purposeful, driven by the simple "desire" to dry his hair. This act, simple and mundane as it is, shows a profound interconnectedness. In this moment, the human body, the sun, the air, and the flow of energy are all part of a single, harmonious system. It suggests that the principles of the Dao are not found in mystical striving, but are present in the most ordinary aspects of our lives.
+                    </p>
+
+                    <p>
+                        The bridge itself is a powerful symbol. As a man-made structure within a wild landscape, it represents the human experience: a life of form and intention lived amidst the vast, untamable forces of nature. By lifting the narrator above the water, it provides the necessary perspective to move from merely being in the world to truly seeing it. It is on this bridge, a literal and figurative meeting point between the earthly and the celestial, the named and the nameless, that the moment of insight occurs.
+                    </p>
+
+                    <p>
+                        In a state of quiet, receptive stillness, without desire, the narrator "catches a glimpse." He doesn't see a vision or a deity. He sees the water, but he perceives it in a new way. He sees a ruinous force a "collapsing torrent", water that "rushes away." In that instant, he sees the "essence" within the "manifestation." The water is no longer just water; it is a direct, visceral symbol of the unstoppable, irreversible, and transient nature of all things.
+                    </p>
+
+                    <p>
+                        The Tao Te Ching tells us that the unity of these two realms—the manifest and the essential—is the ultimate mystery. The artwork reveals that this mystery is not an unsolvable puzzle, but an experience. The final, startling line of the poem is the unlocking of "the door to all wonders." The poet, standing on a simple bridge in a fleeting moment of everyday life, has seen through the surface of reality and felt the fundamental pulse of the universe. Gong Xian's masterpiece teaches us that enlightenment is not about escaping the world, but about learning to see it, and our place within it, with absolute clarity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-content">
+            <img src="images/ttc01.jpg" alt="Gong Xian's painting - Full screen view" class="modal-image">
+        </div>
+    </div>
+
+    <script>
+        // Fullscreen image functionality
+        const artworkImage = document.querySelector('.artwork-image');
+        const modal = document.getElementById('imageModal');
+
+        // Open modal when image is clicked
+        artworkImage.addEventListener('click', () => {
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+
+        // Close modal when clicking anywhere on the modal
+        modal.addEventListener('click', () => {
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
