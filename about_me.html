@@ -63,17 +63,12 @@
             object-fit: contain;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+            transition: opacity 0.3s ease;
             opacity: 0;
         }
 
         .profile-image.loaded {
             opacity: 1;
-        }
-
-        .profile-image:hover {
-            transform: scale(1.02);
         }
 
         .about-column {
@@ -304,18 +299,9 @@
         </div>
     </div>
 
-    <!-- Fullscreen Modal -->
-    <div class="modal-overlay" id="imageModal">
-        <div class="modal-content">
-            <img src="images/profile.jpg" alt="Zhuō Tóng - Full screen view" class="modal-image">
-        </div>
-    </div>
-
     <script>
         // Image preloading functionality
         const profileImage = document.querySelector('.profile-image');
-        const modal = document.getElementById('imageModal');
-        const modalImage = modal.querySelector('.modal-image');
         const loadingIndicator = document.querySelector('.loading-indicator');
 
         // Function to preload image completely
@@ -346,29 +332,6 @@
 
         // Preload the profile image
         preloadImage(profileImage);
-
-        // Preload the modal image as well
-        preloadImage(modalImage);
-
-        // Fullscreen modal functionality
-        profileImage.addEventListener('click', () => {
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        });
-
-        // Close modal when clicking anywhere on the modal
-        modal.addEventListener('click', () => {
-            modal.classList.remove('show');
-            document.body.style.overflow = ''; // Restore scrolling
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        });
     </script>
 </body>
 </html>
