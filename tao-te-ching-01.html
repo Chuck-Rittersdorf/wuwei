@@ -102,6 +102,7 @@
             min-height: 0;
             overflow: hidden;
             padding: 10px;
+            position: relative;
         }
 
         .artwork-placeholder {
@@ -132,6 +133,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .artwork-image.loaded {
+            opacity: 1;
         }
 
         .artwork-image:hover {
@@ -411,6 +418,17 @@
             margin-bottom: 20px;
             line-height: 1.2;
         }
+
+        /* Loading indicator */
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-style: italic;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -418,6 +436,7 @@
         <!-- Left Column: Artwork (Wider) -->
         <div class="column">
             <div class="artwork-container">
+                <div class="loading-indicator">Loading artwork...</div>
                 <img src="images/ttc01.jpg" alt="Gong Xian's painting - A lone figure on a bridge in ink-washed mountains" class="artwork-image">
                 <div class="artwork-footer">
                     <div class="translation-section">
@@ -494,7 +513,7 @@ Mystery of mysteries, the door to all wonders</div>
                         I catch a glimpse of fleeting time collapsing in the rushing stream.
                     </p>
                     <p>
-                        In a state of suspension, the narrator looks down. He doesn't see a vision or a deity. What he sees is unassuming, yet profound: water rushing beneath him, carrying with it something more than motion. In that moment, time reveals itself not as a steady flow, but as something collapsing inward, hiding the force that ages and erodes. This is the paradox Gong encounters: while time rushes onward like the stream, a glimpse has the power to halt its passage, dissolving the relentless current into an experience of the present, where time seems to vanish.
+                        In a state of suspension, the narrator looks down. He doesn't see a vision or a deity. What he sees is unassuming, yet profound: water rushing beneath him, carrying with it something more than motion. In that moment, time ceases to be a steady flow, but collapses inward, hiding its force that ages and erodes. This is the paradox Gong encounters: while time rushes onward like the stream, a glimpse has the power to halt its passage, dissolving the relentless current into an experience of the present, where time seems to vanish altogether.
                     </p>
                     <p style="text-align: right; margin: 20px 0; color: #666;">
                         ░ Zhuō Tóng, June 2025
@@ -512,11 +531,45 @@ Mystery of mysteries, the door to all wonders</div>
     </div>
 
     <script>
-        // Fullscreen image functionality
+        // Image preloading functionality
         const artworkImage = document.querySelector('.artwork-image');
         const modal = document.getElementById('imageModal');
+        const modalImage = modal.querySelector('.modal-image');
+        const loadingIndicator = document.querySelector('.loading-indicator');
 
-        // Open modal when image is clicked
+        // Function to preload image completely
+        function preloadImage(imgElement, onComplete) {
+            const img = new Image();
+            
+            img.onload = function() {
+                // Image is fully loaded, now show it
+                imgElement.classList.add('loaded');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+                if (onComplete) onComplete();
+            };
+            
+            img.onerror = function() {
+                // Handle loading error
+                console.error('Failed to load image:', imgElement.src);
+                if (loadingIndicator) {
+                    loadingIndicator.textContent = 'Failed to load artwork';
+                    loadingIndicator.style.color = '#ff6b6b';
+                }
+            };
+            
+            // Start loading the image
+            img.src = imgElement.src;
+        }
+
+        // Preload the main artwork image
+        preloadImage(artworkImage);
+
+        // Preload the modal image as well
+        preloadImage(modalImage);
+
+        // Fullscreen modal functionality
         artworkImage.addEventListener('click', () => {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
