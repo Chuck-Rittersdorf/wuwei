@@ -26,7 +26,7 @@ const writingsData = [
                     We both left in opposite directions.
 
                     Later, we reunited at the car park.
-                    She got in her car, and while driving off,
+                    She hung up, got in, and while driving off,
                     she spoke confidently,
                     but I couldn't read her lips,
                     so I shrugged and waved, flimsily.`
