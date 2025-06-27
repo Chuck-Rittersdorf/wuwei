@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
+    <title>Writings by Zhuō Tóng (拙童)</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for writings.html */
+        /* Override shared body styles for writings page */
+        html {
+            overflow: auto !important;
+            height: auto !important;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overflow: auto !important; /* Allow scrolling */
+            display: block !important; /* Remove flex centering */
+            justify-content: initial !important;
+            align-items: initial !important;
+            height: auto !important;
+            min-height: 100vh;
+            position: static !important; /* Override fixed positioning */
+            padding: 0 !important; /* Remove shared padding */
+            margin: 0 !important; /* Remove shared margin */
+        }
+
+        .writings-container {
+            max-width: 720px; /* Reduced from 1200px to about 60% */
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: auto;
+            height: auto;
+        }
+
+        .writings-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .writings-title {
+            font-family: 'Lora', serif;
+            font-size: 2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .controls-section {
+            display: flex;
+            justify-content: flex-end; /* Align to the right */
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 3px; /* Increased from 15px for more space */
+        }
+
+        .search-box {
+            flex: 0 0 auto;
+            width: 120px; /* Much smaller width */
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 6px 10px; /* Match the dropdown padding */
+            border: 2px solid #e6f3ff;
+            border-radius: 6px; /* Match the dropdown border-radius */
+            font-family: 'Quicksand', sans-serif; /* Same font as sort controls */
+            font-size: 0.85em; /* Same size as sort controls */
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: border-color 0.2s ease;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            color: #666; /* Match the dropdown text color */
+        }
+
+        .search-input::placeholder {
+            color: #999; /* Match the dropdown default text color */
+            opacity: 1; /* Ensure full opacity */
+        }
+
+        /* Text selection highlighting */
+        ::selection {
+            background-color: rgba(94, 113, 255, 0.3); /* Lighter blue for selection */
+            color: #333; /* Dark text for good contrast */
+        }
+
+        ::-moz-selection {
+            background-color: rgba(94, 113, 255, 0.3); /* Firefox support */
+            color: #333; /* Dark text for good contrast */
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(94, 113, 255, 0.469);
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 10px; /* Smaller gap */
+            align-items: center;
+        }
+
+        .sort-label {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            color: #666; /* Same grey as search placeholder */
+            font-size: 0.85em; /* Same size as other elements */
+        }
+
+        .sort-select {
+            padding: 6px 10px; /* Same padding as search input */
+            border: 2px solid #e6f3ff; /* Same border as search input */
+            border-radius: 6px; /* Same border-radius as search input */
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.85em; /* Same size as other elements */
+            background-color: rgba(255, 255, 255, 0.9); /* Same background as search input */
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.4s ease; /* Smoother color transition */
+            color: #999; /* Lighter grey for default state (like placeholder) */
+            font-weight: 500; /* Slightly lighter weight */
+            width: 120px; /* Same width as search box */
+            box-sizing: border-box; /* Include padding and border in width calculation */
+        }
+
+        .sort-select.active {
+            color: #666; /* Darker grey when active (like typed text) */
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: rgba(94, 113, 255, 0.469);
+        }
+
+        .sort-select option {
+            color: #666;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.85em; /* Same size as other elements */
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .writings-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        /* Multi-column layout for type sorting in landscape mode */
+        .writings-grid.type-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 1200px; /* Fixed width instead of max-width */
+            margin: 0 auto;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%); /* Center the wider grid */
+        }
+
+        .type-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 0; /* Allow column to shrink */
+            width: 100%; /* Ensure equal width */
+        }
+
+        .type-column-header {
+            font-family: 'Quicksand', sans-serif; /* Same font as tags */
+            font-size: 1.2em; /* Larger than tags but not too big */
+            font-weight: 600; /* Same weight as tags */
+            color: #555; /* Same color as tags */
+            text-align: center;
+            margin-bottom: 0; /* Remove margin since gap handles spacing */
+            padding: 12px 20px; /* Larger padding than tags */
+            background-color: rgba(220, 240, 220, 0.98); /* Green color matching type tags */
+            border-radius: 15px; /* Same border radius as tags */
+            text-transform: capitalize;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Same shadow as writing cards */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent; /* Transparent border for hover effect */
+        }
+
+        .type-column-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: rgba(76, 175, 80, 0.3); /* Softer green outline on hover */
+        }
+
+        .writing-card {
+            position: relative; /* For absolute positioning of focus icon */
+            background-color: rgba(94, 113, 255, 0.1); /* Blue color matching logo bar */
+            border-radius: 15px;
+            padding: 15px; /* Reduced from 25px */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .writing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: rgba(94, 113, 255, 0.3);
+        }
+
+        .writing-header {
+            display: flex;
+            justify-content: flex-start; /* Changed from space-between to flex-start */
+            align-items: flex-start;
+            margin-bottom: 10px; /* Reduced from 15px */
+        }
+
+        .writing-title {
+            font-family: 'Lora', serif;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin: 0; /* Reset all margins */
+            flex: 1;
+            text-align: left; /* Ensure left alignment */
+        }
+
+        .writing-date {
+            font-family: inherit; /* Use same font as writing content */
+            font-weight: 600;
+        }
+
+        .writing-type {
+            position: absolute; /* Position absolutely */
+            top: 10px; /* Same top as focus icon */
+            right: 40px; /* Position just left of focus icon (20px width + 10px gap) */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            z-index: 5; /* Above content but below focus icon */
+        }
+
+        .type-tag {
+            background-color: rgba(220, 240, 220, 0.98); /* Green color matching essay background */
+            color: #555;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .writing-content {
+            height: 3.2em; /* Fixed height for collapsed state */
+            overflow: hidden;
+            transition: height 0.2s ease-out;
+            line-height: 1.7;
+            font-size: 0.95em;
+            color: #4a4a4a;
+            text-indent: 0;
+            margin: 0; /* Reset all margins to match title */
+            padding-left: 10px; /* Add left padding to match title position */
+            white-space: pre-line; /* Preserve line breaks for all content types */
+        }
+
+        .writing-content.expanded {
+            height: auto; /* Auto height when expanded */
+        }
+
+        /* Preserve line breaks for poetry */
+        .writing-card[data-type="poetry"] .writing-content {
+            white-space: pre-line; /* Preserve line breaks while allowing text wrapping */
+        }
+
+        /* Focus icon styling */
+        .focus-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(94, 113, 255, 0.469); /* Keep the blue color */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+            z-index: 10;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+
+        .focus-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .focus-icon::before {
+            content: "";
+            width: 55%;
+            height: 55%;
+            background-color: white;
+            -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+            mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+        }
+
+        /* Full-screen modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.98);
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 800px;
+            padding: 40px 40px 40px 60px; /* Increased left padding from 40px to 60px */
+            border-radius: 15px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: sticky; /* Changed to sticky positioning */
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001; /* Higher than modal overlay */
+            float: right; /* Float to the right */
+            margin-bottom: 20px; /* Add some space below */
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-title {
+            font-family: 'Lora', serif;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .modal-content-text {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            white-space: pre-line; /* Preserve line breaks for all content types */
+        }
+
+        .modal-content-text[data-type="poetry"] {
+            white-space: pre-line;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .expand-indicator {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: 10px;
+            transition: opacity 0.2s ease;
+        }
+
+        .writing-card.expanded .expand-indicator {
+            opacity: 0;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .writing-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(94, 113, 255, 0.2);
+            font-size: 0.9em; /* Match modal-footer font size */
+            color: #666; /* Match modal-footer color */
+        }
+
+        .writing-author {
+            font-family: inherit; /* Use same font as writing content */
+            font-weight: 600;
+            color: #666; /* Match modal-author color */
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .writings-container {
+                padding: 20px 15px;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .sort-controls {
+                justify-content: center;
+            }
+
+            .writing-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .writing-date {
+                margin-left: 0;
+            }
+
+            .writings-grid.type-columns {
+                grid-template-columns: 1fr;
+                width: 720px; /* Match single column width on mobile */
+                left: 0;
+                transform: none;
+            }
+        }
+
+        /* Print styles for modal */
+        @media print {
+            .modal-overlay {
+                position: static !important;
+                background: none !important;
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            .modal-content {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                max-width: none !important;
+                max-height: none !important;
+                width: auto !important;
+                padding: 20px !important;
+            }
+            
+            .modal-close {
+                display: none !important;
+            }
+            
+            /* Hide everything else when modal is open */
+            .modal-overlay.show ~ *,
+            .modal-overlay.show + * {
+                display: none !important;
+            }
+            
+            /* Hide main content when modal is open */
+            body:has(.modal-overlay.show) .writings-container {
+                display: none !important;
+            }
+            
+            /* Alternative: hide all except modal when it's open */
+            .modal-overlay.show ~ *,
+            .modal-overlay.show + *,
+            body:has(.modal-overlay.show) > *:not(.modal-overlay) {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="writings-container">
+        <div class="writings-header">
+            <h1 class="writings-title">Writings by Zhuō Tóng (拙童)</h1>
+        </div>
+
+        <div class="controls-section">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="search" id="searchInput">
+            </div>
+            <div class="sort-controls">
+                <select class="sort-select" id="sortSelect">
+                    <option value="type">type</option>
+                    <option value="date-desc">date (newest)</option>
+                    <option value="date-asc">date (oldest)</option>
+                    <option value="title-asc">title (a-z)</option>
+                    <option value="title-desc">title (z-a)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="writings-grid" id="writingsGrid">
+            <!-- Writings will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Full-screen modal -->
+    <div class="modal-overlay" id="fullScreenModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h1 class="modal-title" id="modalTitle"></h1>
+            <div class="modal-content-text" id="modalContentText"></div>
+            <div class="modal-footer">
+                <span class="modal-date" id="modalDate"></span>
+                <span class="modal-author">░ <a href="about_me.html" style="color: #0056b3; text-decoration: none;">Zhuō Tóng (拙童)</a> <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;"><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="height: 16px; vertical-align: middle;"></a></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="writings.js"></script>
+    <script>
+        let currentWritings = [...writingsData];
+        let searchTerm = '';
+        let sortBy = 'type';
+        let selectedType = null; // Track if a specific type is selected
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWritings();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const sortSelect = document.getElementById('sortSelect');
+
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value.toLowerCase();
+                filterAndSortWritings();
+            });
+
+            sortSelect.addEventListener('change', (e) => {
+                sortBy = e.target.value;
+                filterAndSortWritings();
+                
+                // Make dropdown text darker when interacted with
+                sortSelect.classList.add('active');
+                
+                // Return to light grey after 3 seconds
+                setTimeout(() => {
+                    sortSelect.classList.remove('active');
+                }, 3000);
+            });
+
+            // Also handle focus/blur events for better UX
+            sortSelect.addEventListener('focus', () => {
+                sortSelect.classList.add('active');
+            });
+
+            sortSelect.addEventListener('blur', () => {
+                // Keep active for 3 seconds after blur
+                setTimeout(() => {
+                    sortSelect.classList.remove('active');
+                }, 3000);
+            });
+        }
+
+        function updateSortDropdown() {
+            const sortSelect = document.getElementById('sortSelect');
+            const currentValue = sortSelect.value;
+            
+            // Clear current options
+            sortSelect.innerHTML = '';
+            
+            // Add options based on whether a type is selected
+            if (selectedType) {
+                // When a type is selected, don't show the "Type" option
+                sortSelect.innerHTML = `
+                    <option value="date-desc">Date (Newest)</option>
+                    <option value="date-asc">Date (Oldest)</option>
+                    <option value="title-asc">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
+                `;
+            } else {
+                // Show all options including "Type" when no specific type is selected
+                sortSelect.innerHTML = `
+                    <option value="type">Type</option>
+                    <option value="date-desc">Date (Newest)</option>
+                    <option value="date-asc">Date (Oldest)</option>
+                    <option value="title-asc">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
+                `;
+            }
+            
+            // Set the appropriate value based on current state
+            if (selectedType) {
+                // When a type is selected, use the current sortBy value
+                sortSelect.value = sortBy;
+            } else {
+                // When returning to all types, always default to "type" sorting
+                sortSelect.value = 'type';
+                sortBy = 'type';
+            }
+        }
+
+        function filterAndSortWritings() {
+            // Filter writings based on search term and selected type
+            let filtered = writingsData.filter(writing => {
+                // First filter by search term
+                if (searchTerm) {
+                    const searchableText = [
+                        writing.title,
+                        writing.content,
+                        writing.type,
+                        formatDate(writing.date)
+                    ].join(' ').toLowerCase();
+                    
+                    if (!searchableText.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+                
+                // Then filter by selected type if any
+                if (selectedType && writing.type !== selectedType) {
+                    return false;
+                }
+                
+                return true;
+            });
+
+            // Sort writings
+            filtered.sort((a, b) => {
+                switch (sortBy) {
+                    case 'type':
+                        // First sort by type, then by date (newest first) within each type
+                        const typeComparison = a.type?.localeCompare(b.type || '') || 0;
+                        if (typeComparison !== 0) return typeComparison;
+                        return new Date(b.date) - new Date(a.date);
+                    case 'date-desc':
+                        return new Date(b.date) - new Date(a.date);
+                    case 'date-asc':
+                        return new Date(a.date) - new Date(b.date);
+                    case 'title-asc':
+                        return (a.title || a.date).localeCompare(b.title || b.date);
+                    case 'title-desc':
+                        return (b.title || b.date).localeCompare(a.title || a.date);
+                    default:
+                        return 0;
+                }
+            });
+
+            currentWritings = filtered;
+            renderWritings();
+        }
+
+        function renderWritings() {
+            const grid = document.getElementById('writingsGrid');
+            
+            if (currentWritings.length === 0) {
+                grid.innerHTML = '<div class="no-results">No writings found matching your search.</div>';
+                return;
+            }
+
+            // Check if we're sorting by type
+            if (sortBy === 'type') {
+                // Group writings by type
+                const writingsByType = {};
+                currentWritings.forEach(writing => {
+                    if (!writingsByType[writing.type]) {
+                        writingsByType[writing.type] = [];
+                    }
+                    writingsByType[writing.type].push(writing);
+                });
+
+                // Define consistent type order
+                const typeOrder = ['poetry', 'prose', 'essay'];
+                
+                // Create columns for each type in consistent order
+                grid.className = 'writings-grid type-columns';
+                grid.innerHTML = typeOrder.filter(type => writingsByType[type]).map(type => `
+                    <div class="type-column">
+                        <div class="type-column-header" onclick="toggleTypeFilter('${type}')">${type}</div>
+                        ${writingsByType[type].map(writing => `
+                            <div class="writing-card" data-type="${writing.type}" onclick="toggleWriting(${writing.id})">
+                                <div class="focus-icon" onclick="event.stopPropagation(); showFullScreen(${writing.id})"></div>
+                                <div class="writing-header">
+                                    <h3 class="writing-title">${writing.title || formatDate(writing.date)}</h3>
+                                </div>
+                                <div class="writing-content" id="content-${writing.id}">
+                                    ${writing.content}
+                                    <div class="writing-footer">
+                                        <span class="writing-date">${formatDate(writing.date)}</span>
+                                        <span class="writing-author">░ <a href="about_me.html" style="color: #0056b3; text-decoration: none;">Zhuō Tóng (拙童)</a> <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;"><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="height: 16px; vertical-align: middle;"></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('');
+            } else {
+                // Regular single column layout
+                grid.className = 'writings-grid';
+                
+                // Add header if a type is selected
+                let headerHtml = '';
+                if (selectedType) {
+                    headerHtml = `
+                        <div class="type-column-header" onclick="toggleTypeFilter('${selectedType}')" style="position: relative;">
+                            ${selectedType}
+                            <div style="position: absolute; top: 8px; right: 12px; font-size: 1.2em; color: rgba(94, 113, 255, 0.469); cursor: pointer;">↩</div>
+                        </div>
+                    `;
+                }
+                
+                grid.innerHTML = headerHtml + currentWritings.map(writing => `
+                    <div class="writing-card" data-type="${writing.type}" onclick="toggleWriting(${writing.id})">
+                        <div class="focus-icon" onclick="event.stopPropagation(); showFullScreen(${writing.id})"></div>
+                        <div class="writing-header">
+                            <h3 class="writing-title">${writing.title || formatDate(writing.date)}</h3>
+                        </div>
+                        ${!selectedType && sortBy !== 'type' ? `
+                            <div class="writing-type">
+                                <span class="type-tag">${writing.type}</span>
+                            </div>
+                        ` : ''}
+                        <div class="writing-content" id="content-${writing.id}">
+                            ${writing.content}
+                            <div class="writing-footer">
+                                <span class="writing-date">${formatDate(writing.date)}</span>
+                                <span class="writing-author">░ <a href="about_me.html" style="color: #0056b3; text-decoration: none;">Zhuō Tóng (拙童)</a> <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;"><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="height: 16px; vertical-align: middle;"></a></span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function toggleWriting(id) {
+            const card = document.querySelector(`[onclick="toggleWriting(${id})"]`);
+            const content = document.getElementById(`content-${id}`);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                card.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                card.classList.add('expanded');
+            }
+        }
+
+        function toggleTypeFilter(type) {
+            if (selectedType === type) {
+                // If clicking the same type again, go back to type sorting
+                selectedType = null;
+                sortBy = 'type';
+            } else {
+                // Filter to show only the selected type
+                selectedType = type;
+                sortBy = 'date-desc'; // Sort by date within the selected type
+            }
+            updateSortDropdown(); // Update dropdown options
+            filterAndSortWritings();
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function showFullScreen(writingId) {
+            const writing = writingsData.find(w => w.id === writingId);
+            if (!writing) return;
+
+            const modal = document.getElementById('fullScreenModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContentText = document.getElementById('modalContentText');
+            const modalDate = document.getElementById('modalDate');
+
+            modalTitle.textContent = writing.title || formatDate(writing.date);
+            modalContentText.textContent = writing.content;
+            modalContentText.setAttribute('data-type', writing.type);
+            modalDate.textContent = formatDate(writing.date);
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('fullScreenModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal when clicking outside the content
+        document.getElementById('fullScreenModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('fullScreenModal');
+                if (modal.classList.contains('show')) {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
