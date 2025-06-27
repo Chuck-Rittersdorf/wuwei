@@ -5,7 +5,7 @@ const writingsData = [
         title: "The Smell of Late Spring",
         date: "2025-01-27",
         type: "poetry",
-        content:    `I guess she went to walk her phone 
+        content:    `I suppose she went to walk her phone 
                     and I noticed she was following me.
                     She didn't mind me overhearing her -
                     "The park smells like sperm," she said.
@@ -19,13 +19,13 @@ const writingsData = [
                     he always wanted to stay in."
 
                     In the pond, a lone duckling swam in circles.
-                    I tried to catch it, but squeaking, it fluttered off,
-                    The lady came and said:
+                    I tried to catch it, but it squeaked and fluttered off.
+                    Closing the distance, the lady said:
                     "Best to leave it alone,
                     let nature take its course."
                     We both left in opposite directions.
 
-                    Later, we reunited at the parking lot.
+                    Later, we reunited at the car park.
                     She got in her car, and while driving off,
                     she spoke confidently,
                     but I couldn't read her lips,
