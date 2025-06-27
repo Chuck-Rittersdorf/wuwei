@@ -27,7 +27,7 @@ const writingsData = [
 
                     Later, we reunited at the car park.
                     She hung up, got in, and while driving off,
-                    she spoke confidently,
+                    she spoke with great confidence,
                     but I couldn't read her lips,
                     so I shrugged and waved, flimsily.`
     },
