@@ -8,7 +8,7 @@ const writingsData = [
         content:    `I suppose she went to walk her phone 
                     and I noticed she was following me.
                     She didn't mind me overhearing her -
-                    "The park smells like sperm," she said.
+                    "The park smells like sperm," she said,
                     "The chestnut trees are blossoming."
 
                     I threw a stick, but the dog didn't respond.
