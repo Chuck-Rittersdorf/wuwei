@@ -5,76 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
     <title></title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        html {
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        body {
-            background-color: #e6f3ff;
-            font-family: 'Lora', serif;
-            margin: 0;
-            overflow: hidden;
-            position: relative;
-            height: 100%;
-        }
-
-        .chapter-button {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(255, 255, 255, 0.85);
-            border: 2px solid rgba(40, 60, 100, 0.4);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #333;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 2.5s ease, color 2.5s ease, border-color 2.5s ease;
-            user-select: none;
-        }
-
-        .chapter-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-
-        .chapter-box-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
-            display: flex;
-            background-color: transparent;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            overflow: hidden;
-            max-width: 90vw;
-            max-height: 85vh;
-        }
-
-        .chapter-box-container.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-            transition-delay: 0s;
-        }
-
+        /* Page-specific styles for tao-study.html */
         .main-content {
             padding: 25px 30px;
             cursor: pointer;
@@ -129,28 +67,6 @@
             margin: 0;
         }
 
-        .tao-attribution {
-            font-size: 0.75em;
-            color: #555;
-            text-align: right; 
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-        }
-        .tao-attribution a {
-            color: #0056b3; 
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .tao-attribution a:hover {
-            text-decoration: none;
-            color: #003d7a;
-        }
-
-        .search-bubble {
-            background-color: #ffffe0 !important; /* Light Yellow */
-            color: #333 !important;
-        }
-
         .search-bubble .random-chapter-display {
             font-family: 'Quicksand', sans-serif;
             font-size: 1em;
@@ -195,14 +111,6 @@
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
-        @keyframes blink {
-            50% { opacity: 0.3; }
-        }
-
-        .blinking {
-            animation: blink 0.5s ease-in-out;
-        }
-
         .main-content-footer {
             display: flex;
             justify-content: space-between;
@@ -217,39 +125,6 @@
             gap: 10px;
         }
 
-        .nav-arrow {
-            width: 24px;
-            height: 24px;
-            background-color: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: serif;
-            font-size: 1.1em;
-            color: rgba(0, 0, 0, 0.4);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-            padding-bottom: 2px;
-            box-sizing: border-box;
-        }
-
-        .nav-arrow:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-            color: rgba(0, 0, 0, 0.7);
-            transform: scale(1.1);
-        }
-
-        .fullscreen-bubble {
-            background-color: #f1f8e9 !important; /* Lighter green */
-        }
-
-        .fullscreen-bubble:hover {
-            background-color: #dcedc8 !important; /* Lighter hover green */
-        }
-
         .fullscreen-icon {
             width: 55%;
             height: 55%;
@@ -261,17 +136,6 @@
             -webkit-mask-position: center;
             mask-position: center;
             transition: transform 0.2s ease;
-        }
-        
-        @keyframes pulse-corners {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes rotate-x {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(-180deg); }
         }
 
         .fullscreen-bubble:hover .fullscreen-icon-enter {
@@ -292,62 +156,12 @@
             mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
         }
 
-        .annotation-hint {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 0.75em;
-            color: #777;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .annotation-hint.show {
-            opacity: 1;
-        }
-
-        .info-bubble {
-            background-color: #e8eaf6 !important; /* Indigo 50 */
-        }
-
         .info-bubble i {
             font-family: 'Dancing Script', cursive;
             font-style: normal;
             font-size: 1.5em;
             line-height: 1;
             color: #333;
-        }
-
-        .info-bubble:hover {
-            background-color: #c5cae9 !important; /* Indigo 100 */
-        }
-
-        .info-panel-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
-            background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            padding: 25px 35px;
-            width: auto;
-            max-width: 420px;
-            cursor: default;
-        }
-
-        .info-panel-container.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-            transition-delay: 0s;
         }
 
         .info-panel-container h2 {
@@ -388,25 +202,10 @@
             box-sizing: border-box;
         }
 
+        /* Mobile responsive adjustments */
         @media (max-width: 768px), (max-height: 550px) {
-            .chapter-button {
-                width: 30px;
-                height: 30px;
-                font-size: 0.9em;
-            }
-
             .search-bubble input {
                 font-size: 1em;
-            }
-
-            .chapter-box-container {
-                display: block;
-                width: 95vw;
-                max-width: 95vw;
-                height: auto;
-                max-height: 90vh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
             }
 
             .main-content {
@@ -1061,7 +860,7 @@
                     // Add special link for Chapter 1
                     let annotationContent = chapterData.annotation;
                     if (chapterData.chapter === 1) {
-                        annotationContent += '\n\n<a href="tao-te-ching-01" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
+                        annotationContent += '\n\n<a href="tao-te-ching-01.html" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
                     }
                     sidePanelContent.querySelector('p').innerHTML = annotationContent;
                     
@@ -1090,7 +889,7 @@
                 // Add special link for Chapter 1
                 let annotationContent = chapterData.annotation;
                 if (chapterData.chapter === 1) {
-                    annotationContent += '\n\n<a href="tao-te-ching-01" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
+                    annotationContent += '\n\n<a href="tao-te-ching-01.html" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
                 }
 
                 boxContainer.innerHTML = `

@@ -1,0 +1,746 @@
+/* ========================================
+   SHARED STYLESHEET FOR WUWEI PROJECT
+   ======================================== */
+
+/* ========================================
+   FONT IMPORTS
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+html {
+    height: 100%;
+    overflow: hidden; /* For tao-study.html */
+}
+
+body {
+    background-color: #e6f3ff;
+    font-family: 'Lora', serif;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* For tao-study.html */
+    position: relative; /* For tao-study.html */
+    height: 100%; /* For tao-study.html */
+}
+
+/* ========================================
+   LAYOUT COMPONENTS
+   ======================================== */
+
+/* Main container styles */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    height: calc(100vh - 40px);
+    min-height: 0;
+}
+
+/* Wrapper for index.html */
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-color: rgba(173, 216, 230, 0.3);
+    border-radius: 15px;
+    max-width: 1200px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+/* Column styles */
+.column {
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Box styles for index.html */
+.box {
+    flex: 1;
+    min-width: 280px; 
+    max-width: 600px; 
+    background-color: rgba(200, 220, 240, 0.4);
+    border-radius: 10px;
+    position: relative; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    min-height: 300px; 
+    cursor: pointer; 
+    display: flex;
+    flex-direction: column;
+    transition: min-height 0.25s ease-out;
+}
+
+/* Square styles for about_me.html */
+.square {
+    width: 400px;
+    height: 400px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+/* Headings */
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.4em;
+    text-align: center;
+    border-bottom: 2px solid #e6f3ff;
+    padding-bottom: 10px;
+    font-weight: 600;
+    font-family: 'Lora', serif;
+}
+
+h3 {
+    font-size: 1.1em;
+    margin: 0;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+    padding: 0 10px;
+    font-family: 'Lora', serif;
+}
+
+/* Text content */
+.chapter-text, .essay, .about-content {
+    white-space: normal;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: #4a4a4a;
+    flex-grow: 1;
+}
+
+.tao-text-section {
+    white-space: pre-wrap; 
+    margin-bottom: 1.2em;
+    margin-left: 25px;
+    line-height: 1.7;
+    font-size: 1em;
+    color: #4a4a4a;
+    text-align: left;
+    font-family: 'Lora', serif;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1.2em;
+    text-align: justify;
+}
+
+p:first-child {
+    margin-top: 0;
+}
+
+p:last-child {
+    font-size: 0.85em;
+    color: #666;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+/* Links */
+a {
+    color: #0056b3; 
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #003d7a;
+}
+
+/* Attribution */
+.tao-attribution {
+    font-size: 0.75em;
+    color: #555;
+    text-align: right; 
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    margin-top: 20px;
+    padding-top: 10px; 
+    border-top: 1px solid #eaeaea;
+}
+
+/* ========================================
+   INTERACTIVE ELEMENTS
+   ======================================== */
+
+/* Buttons */
+.chapter-button {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(40, 60, 100, 0.4);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 2.5s ease, color 2.5s ease, border-color 2.5s ease;
+    user-select: none;
+}
+
+.chapter-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Navigation arrows */
+.nav-arrow {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: serif;
+    font-size: 1.1em;
+    color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    padding-bottom: 2px;
+    box-sizing: border-box;
+}
+
+.nav-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+/* ========================================
+   MODAL AND OVERLAY STYLES
+   ======================================== */
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Chapter box container */
+.chapter-box-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
+    display: flex;
+    background-color: transparent;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
+.chapter-box-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    transition-delay: 0s;
+}
+
+/* Info panel */
+.info-panel-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    padding: 25px 35px;
+    width: auto;
+    max-width: 420px;
+    cursor: default;
+}
+
+.info-panel-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    transition-delay: 0s;
+}
+
+/* ========================================
+   MEDIA AND IMAGE STYLES
+   ======================================== */
+
+/* Image containers */
+.artwork-container, .media-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Images */
+.artwork-image, .profile-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artwork-image.loaded, .profile-image.loaded {
+    opacity: 1;
+}
+
+.artwork-image:hover {
+    transform: scale(1.02);
+}
+
+/* Media items */
+.media-item-container img, 
+.media-item-container iframe {
+    max-width: 100%;
+    max-height: 65vh; 
+    height: auto;    
+    border-radius: 5px;
+    border: none;
+    display: block;
+    cursor: pointer;
+}
+
+/* Loading indicators */
+.loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-style: italic;
+    z-index: 1;
+}
+
+/* ========================================
+   SCROLLBAR CUSTOMIZATION
+   ======================================== */
+.column::-webkit-scrollbar,
+.text-square::-webkit-scrollbar {
+    width: 8px;
+}
+
+.column::-webkit-scrollbar-track,
+.text-square::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.column::-webkit-scrollbar-thumb,
+.text-square::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.column::-webkit-scrollbar-thumb:hover,
+.text-square::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* ========================================
+   ANIMATIONS AND TRANSITIONS
+   ======================================== */
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+.blinking {
+    animation: blink 0.5s ease-in-out;
+}
+
+@keyframes pulse-corners {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rotate-x {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-180deg); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.content-shown {
+    min-height: 1px; 
+}
+
+.media-view, .placeholder-content-view {
+    width: 100%; 
+    box-sizing: border-box; 
+    padding: 20px;
+    opacity: 0; 
+    max-height: 0; 
+    overflow: hidden;
+    transform: translateY(10px); 
+    transition: opacity 0.25s ease-out, 
+                max-height 0.3s ease-out, 
+                transform 0.25s ease-out;
+}
+
+.media-view.active-internal-view,
+.placeholder-content-view.active-internal-view {
+    opacity: 1; 
+    max-height: 4000px; 
+    transform: translateY(0);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Portrait orientation */
+@media (orientation: portrait) {
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: auto;
+    }
+
+    .wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .square {
+        width: 300px;
+        height: 300px;
+        padding: 20px;
+    }
+
+    .profile-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .chapter-button {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9em;
+    }
+
+    .nav-arrow {
+        width: 22px;
+        height: 22px;
+        font-size: 1em;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px), (max-height: 550px) {
+    .wrapper {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .box {
+        min-width: 100%;
+    }
+
+    .chapter-box-container {
+        display: block;
+        width: 95vw;
+        max-width: 95vw;
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .main-content {
+        width: 100%;
+        max-width: none;
+        padding: 20px 25px;
+        overflow-y: visible;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .side-panel {
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        border-left: none;
+        border-top: 1px solid #ddd;
+        box-sizing: border-box;
+        transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .side-panel.show {
+        max-height: 1500px;
+        width: auto;
+    }
+
+    .side-panel-content {
+        width: auto;
+        padding: 20px 25px;
+        overflow-y: visible;
+        height: auto;
+    }
+
+    .chapter-nav {
+        gap: 8px;
+    }
+}
+
+/* Medium screens */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .column:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .column:nth-child(2) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .column:nth-child(3) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+    .bottom-logo-bar {
+        padding: 6px 10px;
+        gap: 6px;
+        bottom: 12px;
+    }
+
+    .bottom-logo-bar img {
+        height: 20px;
+    }
+}
+
+/* ========================================
+   SPECIFIC COMPONENT STYLES
+   ======================================== */
+
+/* Bottom logo bar */
+.bottom-logo-bar { 
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background-color: rgba(94, 113, 255, 0.469); 
+    padding: 10px 15px; 
+    border-radius: 12px; 
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2); 
+    z-index: 1000; 
+    display: flex; 
+    gap: 12px; 
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.bottom-logo-bar a { 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: transform 0.2s ease; 
+    padding: 3px; 
+}
+
+.bottom-logo-bar a:hover { 
+    transform: scale(1.15); 
+}
+
+.bottom-logo-bar img { 
+    height: 28px; 
+    width: auto; 
+    display: block; 
+}
+
+/* Logo popup */
+.logo-popup-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-popup {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 8px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+    z-index: 1001;
+    padding: 8px;
+    flex-direction: column;
+    gap: 5px;
+    width: max-content;
+}
+
+.logo-popup.show {
+    display: flex;
+}
+
+.logo-popup a {
+    color: #333;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: sans-serif;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.logo-popup a:hover {
+    background-color: #e6f3ff;
+    color: #0056b3;
+}
+
+/* Special button styles */
+.search-bubble {
+    background-color: #ffffe0 !important;
+    color: #333 !important;
+}
+
+.fullscreen-bubble {
+    background-color: #f1f8e9 !important;
+}
+
+.fullscreen-bubble:hover {
+    background-color: #dcedc8 !important;
+}
+
+.info-bubble {
+    background-color: #e8eaf6 !important;
+}
+
+.info-bubble:hover {
+    background-color: #c5cae9 !important;
+}
+
+/* Chapter number corner */
+.chapter-number-corner {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 2.5em;
+    font-weight: 600;
+    color: rgba(94, 113, 255, 0.469);
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* Annotation hint */
+.annotation-hint {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.75em;
+    color: #777;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.annotation-hint.show {
+    opacity: 1;
+}

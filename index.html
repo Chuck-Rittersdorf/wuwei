@@ -5,49 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
     <title></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
+        /* Page-specific styles for index.html */
         body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #e6f3ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
             padding-bottom: 80px; /* Space for the bottom bar */
-        }
-
-        .wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            background-color: rgba(173, 216, 230, 0.3);
-            border-radius: 15px;
-            max-width: 1200px;
-            width: 100%;
-            align-items: flex-start;
-        }
-
-        .box {
-            flex: 1;
-            min-width: 280px; 
-            max-width: 600px; 
-            background-color: rgba(200, 220, 240, 0.4);
-            border-radius: 10px;
-            position: relative; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            overflow: hidden;
-            min-height: 300px; 
-            cursor: pointer; 
-            display: flex;
-            flex-direction: column;
-            transition: min-height 0.25s ease-out;
         }
 
         /* Add specific styling for box2 */
@@ -70,64 +32,47 @@
             }
         }
 
-        /* Add orientation-based layout */
-        @media (orientation: portrait) {
-            .wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            .box {
-                max-width: 100%;
-                width: 100%;
-            }
+        /* Add specific padding for box2's annotation content */
+        #box2 .placeholder-content-view {
+            padding-right: 40px; /* Increase right padding for annotation content */
         }
 
-        /* Keep existing mobile styles but remove the flex-direction change since it's handled by orientation */
-        @media (max-width: 768px), (max-height: 550px) {
-            .wrapper {
-                padding: 15px;
-                gap: 15px;
-            }
-            .box {
-                min-width: 100%;
-            }
+        /* Add specific margin for box2's annotation and life lesson text */
+        #box2 .tao-text-section {
+            margin-right: 80px;
         }
 
-        .box.content-shown {
-            min-height: 1px; 
-        }
-        
-        .media-item-container img, 
-        .media-item-container iframe {
-            cursor: pointer; 
-        }
         .media-title a {
             cursor: pointer; 
         }
 
-        .box-content {
-            position: relative; width: 100%; height: auto; box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.97); 
-            border-radius: 10px; color: #2c3e50;
-            opacity: 1; transform: scale(1) translateY(0); visibility: visible;
-            max-height: none; padding: 0; overflow: hidden; 
-            display: flex; flex-direction: column;
+        .media-loading, .media-error { 
+            text-align: center; 
+            padding: 20px; 
+            font-style: italic; 
+            color: #777; 
         }
 
-        .media-view, .placeholder-content-view {
-            width: 100%; box-sizing: border-box; padding: 20px;
-            opacity: 0; max-height: 0; overflow: hidden;
-            transform: translateY(10px); 
-            transition: opacity 0.25s ease-out, 
-                        max-height 0.3s ease-out, 
-                        transform 0.25s ease-out;
+        .media-title { 
+            font-size: 1.1em; 
+            margin: 0; 
+            font-weight: 600; 
+            text-align: center;
+            line-height: 1.3; 
+            padding: 0 10px;
+            font-family: 'Lora', serif;
         }
-        .media-view.active-internal-view,
-        .placeholder-content-view.active-internal-view {
-            opacity: 1; max-height: 4000px; 
-            transform: translateY(0);
+
+        .media-title a { 
+            color: #4a4a4a; 
+            text-decoration: none; 
+            transition: color 0.2s ease; 
         }
-        
+        .media-title a:hover { 
+            text-decoration: none; 
+            color: #1a1a1a; 
+        }
+
         .placeholder-content-view h2 {
             margin-top: 0;
             margin-bottom: 1em; 
@@ -138,97 +83,25 @@
             font-family: 'Lora', serif;
         }
 
-        .media-item-container { 
-            width: 100%; margin-bottom: 15px; display: flex; 
-            justify-content: center; align-items: center;
-        }
-        .media-item-container img, 
-        .media-item-container iframe {
-            max-width: 100%; max-height: 65vh; 
-            height: auto;    
-            border-radius: 5px; border: none; display: block; 
-        }
-        .media-title { 
-            font-size: 1.1em; margin: 0; font-weight: 600; text-align: center;
-            line-height: 1.3; 
-            padding: 0 10px;
-            font-family: 'Lora', serif;
-        }
-        .media-title a { color: #4a4a4a; text-decoration: none; transition: color 0.2s ease; }
-        .media-title a:hover { text-decoration: none; color: #1a1a1a; }
-        .media-loading, .media-error { 
-            text-align: center; padding: 20px; font-style: italic; color: #777; 
-        }
-
-        .tao-text-section {
-            white-space: pre-wrap; 
-            margin-bottom: 1.2em;
-            margin-left: 25px; /* Add left margin for all text sections */
-            line-height: 1.7;
-            font-size: 1em;
-            color: #4a4a4a;
-            text-align: left;
-            font-family: 'Lora', serif;
-        }
-
-        /* Add specific margin for box2's annotation and life lesson text */
-        #box2 .tao-text-section {
-            margin-right: 80px;
-        }
-
-        .tao-text-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .tao-attribution {
-            font-size: 0.75em;
-            color: #555;
-            text-align: right; 
-            margin-top: 20px; 
-            padding-top: 10px; 
-            border-top: 1px solid #eaeaea; 
-        }
-        .tao-attribution a {
-            color: #0056b3; 
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .tao-attribution a:hover {
-            text-decoration: none;
-            color: #003d7a;
-        }
-        
-        .bottom-logo-bar { 
-            position: fixed; 
-            bottom: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background-color: rgba(94, 113, 255, 0.469); 
-            padding: 10px 15px; 
-            border-radius: 12px; 
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2); 
-            z-index: 1000; 
+        .box-content {
+            position: relative; 
+            width: 100%; 
+            height: auto; 
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.97); 
+            border-radius: 10px; 
+            color: #2c3e50;
+            opacity: 1; 
+            transform: scale(1) translateY(0); 
+            visibility: visible;
+            max-height: none; 
+            padding: 0; 
+            overflow: hidden; 
             display: flex; 
-            gap: 12px; 
-            align-items: center;
-            transition: all 0.3s ease;
+            flex-direction: column;
         }
-        .bottom-logo-bar a { 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: transform 0.2s ease; 
-            padding: 3px; 
-        }
-        .bottom-logo-bar a:hover { 
-            transform: scale(1.15); 
-        }
-        .bottom-logo-bar img { 
-            height: 28px; 
-            width: auto; 
-            display: block; 
-        }
-        .bottom-logo-bar span.img-alt-text { 
+
+        .img-alt-text { 
             font-size: 10px; 
             color: #fff; 
             padding: 5px; 
@@ -238,7 +111,30 @@
             line-height: 1; 
         }
 
-        /* Add responsive styles for mobile devices */
+        .bach-logo-img {
+            filter: invert(1);
+            height: 28px; 
+            width: auto; 
+            display: block;
+        }
+
+        .popup-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            padding: 3px;
+            cursor: pointer;
+        }
+        .popup-trigger:hover {
+            transform: scale(1.15);
+        }
+
+        .bottom-logo-bar a[href="tao-study.html"]:hover img {
+            animation: spin 2s linear infinite;
+        }
+
+        /* Mobile responsive adjustments */
         @media (max-width: 768px) {
             .bottom-logo-bar {
                 padding: 8px 12px;
@@ -263,91 +159,12 @@
             }
         }
 
-        /* Add extra small screen support */
+        /* Extra small screen support */
         @media (max-width: 360px) {
-            .bottom-logo-bar {
-                padding: 6px 10px;
-                gap: 6px;
-                bottom: 12px;
-            }
-            .bottom-logo-bar img {
-                height: 20px; /* Even smaller logos for very small screens */
-            }
             .bach-logo-img {
                 height: 20px;
             }
         }
-
-        .logo-popup-container {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .popup-trigger {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease;
-            padding: 3px;
-            cursor: pointer;
-        }
-        .popup-trigger:hover {
-            transform: scale(1.15);
-        }
-        .bach-logo-img {
-            filter: invert(1);
-            height: 28px; 
-            width: auto; 
-            display: block;
-        }
-        .logo-popup {
-            display: none;
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 8px;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
-            z-index: 1001;
-            padding: 8px;
-            flex-direction: column;
-            gap: 5px;
-            width: max-content;
-        }
-        .logo-popup.show {
-            display: flex;
-        }
-        .logo-popup a {
-            color: #333;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-family: sans-serif;
-            white-space: nowrap;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .logo-popup a:hover {
-            background-color: #e6f3ff;
-            color: #0056b3;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .bottom-logo-bar a[href="tao-study.html"]:hover img {
-            animation: spin 2s linear infinite;
-        }
-
-        /* Add specific padding for box2's annotation content */
-        #box2 .placeholder-content-view {
-            padding-right: 40px; /* Increase right padding for annotation content */
-        }
-
     </style>
 </head>
 <body>
@@ -789,3 +606,4 @@
     </script>
 </body>
 </html>
+
