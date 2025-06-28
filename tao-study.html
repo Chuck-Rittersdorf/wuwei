@@ -802,9 +802,6 @@
                 const infoContainer = document.createElement('div');
                 infoContainer.className = 'info-panel-container';
 
-                // Get current year for live updating
-                const currentYear = new Date().getFullYear();
-
                 infoContainer.innerHTML = `
                     <h2>Keyboard shortcuts</h2>
                     <ul>
@@ -822,14 +819,6 @@
                         <li><span class="key">Home</span> First chapter</li>
                         <li><span class="key">End</span> Last chapter</li>
                     </ul>
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eaeaea; font-size: 0.85em; color: #666;">
-                        <p style="margin: 0 0 10px 0; text-align: center;">
-                            All Tao Te Ching translations by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: none;">Derek Lin</a>
-                        </p>
-                        <p style="margin: 0; text-align: center;">
-                            This site was created by: <a href="about_me.html" style="color: #0056b3; text-decoration: none;">Zhuō Tóng (拙童)</a>, ${currentYear} <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;"><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="height: 16px; vertical-align: middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="height: 16px; vertical-align: middle;"></a>
-                        </p>
-                    </div>
                 `;
 
                 document.body.appendChild(infoContainer);
