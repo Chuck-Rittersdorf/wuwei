@@ -6,7 +6,7 @@ const writingsData = [
         date: "2025-01-27",
         type: "poetry",
         content:    `I suppose she went to walk her phone 
-                    and I noticed she was following me.
+                    then I noticed she was following me.
                     She didn't mind me overhearing her -
                     "The park smells like sperm," she said,
                     "The chestnut trees are blossoming."
