@@ -14,7 +14,6 @@
    ======================================== */
 html {
     height: 100%;
-    overflow: hidden; /* For tao-study.html */
 }
 
 body {
@@ -24,12 +23,15 @@ body {
     padding: 20px;
     min-height: 100vh;
     box-sizing: border-box;
+}
+
+body:not(.index-page) {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* For tao-study.html */
-    position: relative; /* For tao-study.html */
-    height: 100%; /* For tao-study.html */
+    overflow: hidden;
+    position: relative;
+    height: 100%;
 }
 
 /* ========================================
@@ -367,7 +369,6 @@ a:hover {
 .media-item-container img, 
 .media-item-container iframe {
     max-width: 100%;
-    max-height: 65vh; 
     height: auto;    
     border-radius: 5px;
     border: none;
@@ -525,16 +526,6 @@ a:hover {
 
     .box {
         min-width: 100%;
-    }
-
-    .chapter-box-container {
-        display: block;
-        width: 95vw;
-        max-width: 95vw;
-        height: auto;
-        max-height: 90vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     .main-content {
@@ -743,4 +734,382 @@ a:hover {
 
 .annotation-hint.show {
     opacity: 1;
+}
+
+/* ========================================
+   INDEX.HTML PAGE SPECIFIC STYLES
+   ======================================== */
+body.index-page {
+    padding-bottom: 80px; /* Space for the bottom bar */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+}
+
+.index-page .main-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 25px;
+}
+
+/* Green background for box2 when showing annotation */
+.index-page #box2 .box-content:has(.placeholder-content-view.active-internal-view) {
+    background-color: rgba(220, 240, 220, 0.98);
+}
+
+.index-page .box-content {
+    position: relative; 
+    width: 100%; 
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.97); 
+    border-radius: 10px; 
+    color: #2c3e50;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure the image container does not clip the image or grow unnecessarily */
+.index-page .media-item-container {
+    padding: 0;
+    margin-bottom: 15px; /* Creates space between image and title */
+    overflow: visible;
+    flex-grow: 0; /* Prevent container from expanding */
+}
+
+.index-page .media-item-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Consistent padding for the content areas */
+.index-page .media-view {
+    padding: 25px; /* Consistent 25px on all sides */
+    box-sizing: border-box;
+}
+.index-page .placeholder-content-view {
+    padding: 25px;
+    box-sizing: border-box;
+    color: #777; 
+}
+
+/* Override generic h2 for this page */
+.index-page .placeholder-content-view h2 {
+    margin-bottom: 1em; 
+    text-align: left;
+    border-bottom: none;
+    padding-bottom: 0;
+    font-size: 1.3em;
+    color: #333; 
+}
+
+/* Override generic tao-text for this page */
+.index-page .tao-text-section {
+    margin-left: 0;
+    font-style: normal; 
+    color: #4a4a4a; 
+}
+
+/* Loading/Error indicators */
+.index-page .media-loading, 
+.index-page .media-error { 
+    text-align: center; 
+    padding: 20px; 
+    font-style: italic; 
+    color: #777; 
+}
+
+/* Title is always visible at the bottom */
+.index-page .media-title { 
+    padding: 0; /* Padding is now handled by the parent .media-view */
+}
+
+.index-page .media-title a { 
+    color: #4a4a4a;
+}
+.index-page .media-title a:hover { 
+    color: #1a1a1a;
+}
+
+/* Responsive adjustments */
+@media (orientation: portrait) {
+    .index-page .main-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 15px;
+    }
+}
+
+/* ========================================
+   TAO-STUDY.HTML PAGE SPECIFIC STYLES
+   ======================================== */
+.tao-study-page .chapter-box-container .main-content {
+    padding: 25px 30px;
+    cursor: pointer;
+    overflow-y: auto;
+    width: 450px;
+    max-width: 60vw;
+    flex-shrink: 0;
+    background-color: rgba(255, 255, 255, 0.98);
+    position: relative;
+}
+
+.tao-study-page .chapter-box-container .main-content h2 {
+    margin-top: 0;
+    margin-bottom: 1em;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.tao-study-page .chapter-box-container .main-content p {
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: #4a4a4a;
+}
+
+.tao-study-page .chapter-box-container .side-panel {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background-color: rgba(220, 240, 220, 0.98);
+    border-left: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.tao-study-page .chapter-box-container .side-panel.show {
+    width: 300px;
+}
+
+.tao-study-page .chapter-box-container .side-panel-content {
+    padding: 25px 30px;
+    width: 300px;
+    overflow-y: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.tao-study-page .chapter-box-container .side-panel-content p {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 0.9em;
+    color: #555;
+    margin: 0;
+    text-align: left;
+}
+
+.tao-study-page .search-bubble .random-chapter-display {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #bbb;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.tao-study-page .search-bubble input {
+    display: none;
+    width: 90%;
+    height: 90%;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    outline: none;
+    position: relative;
+    z-index: 1;
+}
+
+.tao-study-page .search-bubble input::-webkit-outer-spin-button,
+.tao-study-page .search-bubble input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tao-study-page .chapter-button.highlighted {
+    background-color: #3498db !important; /* Blue */
+    color: #fff !important;
+    border-color: #2980b9 !important;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.tao-study-page .chapter-box-container .main-content-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eaeaea;
+}
+
+.tao-study-page .chapter-box-container .tao-attribution {
+    border-top: none;
+}
+
+.tao-study-page .chapter-box-container .chapter-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.tao-study-page .fullscreen-icon {
+    width: 55%;
+    height: 55%;
+    background-color: #777; /* Softer icon color */
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    transition: transform 0.2s ease;
+}
+
+.tao-study-page .fullscreen-bubble:hover .fullscreen-icon-enter {
+    animation: pulse-corners 1.2s ease-in-out 2;
+}
+
+.tao-study-page .fullscreen-bubble:hover .fullscreen-icon-exit {
+    animation: rotate-x 0.6s linear;
+}
+
+.tao-study-page .fullscreen-icon-enter {
+    -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+    mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4'/%3e%3c/svg%3e");
+}
+
+.tao-study-page .fullscreen-icon-exit {
+    -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
+    mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M18 6L6 18M6 6l12 12'/%3e%3c/svg%3e");
+}
+
+.tao-study-page .info-bubble i {
+    font-family: 'Dancing Script', cursive;
+    font-style: normal;
+    font-size: 1.5em;
+    line-height: 1;
+    color: #333;
+}
+
+.tao-study-page .info-panel-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Lora', serif;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+.tao-study-page .info-panel-container ul {
+    list-style: none;
+    padding: 0;
+    font-family: 'Lora', serif;
+    font-size: 0.95em;
+}
+
+.tao-study-page .info-panel-container li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tao-study-page .info-panel-container .key {
+    display: inline-block;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9em;
+    color: #333;
+    margin-right: 15px;
+    min-width: 45px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Mobile responsive adjustments for tao-study page */
+@media (max-width: 950px), (max-height: 550px) {
+    .tao-study-page .chapter-box-container {
+        flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 95vw;
+        max-width: 95vw;
+        height: auto;
+        max-height: 90vh;
+    }
+
+    .tao-study-page .search-bubble input {
+        font-size: 1em;
+    }
+
+    .tao-study-page .chapter-box-container .main-content {
+        width: 100%;
+        max-width: none;
+        padding: 20px 25px;
+        overflow-y: visible;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+    
+    .tao-study-page .chapter-box-container .main-content h2 {
+        font-size: 1.1em;
+    }
+
+    .tao-study-page .chapter-box-container .main-content p,
+    .tao-study-page .chapter-box-container .side-panel-content p {
+        font-size: 0.9em;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .tao-study-page .chapter-box-container .side-panel {
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        border-left: none;
+        border-top: 1px solid #ddd;
+        box-sizing: border-box;
+        transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .tao-study-page .chapter-box-container .side-panel.show {
+        max-height: 1500px;
+        width: auto;
+    }
+
+    .tao-study-page .chapter-box-container .side-panel-content {
+        width: auto;
+        padding: 20px 25px;
+        overflow-y: visible;
+        height: auto;
+    }
+
+    .tao-study-page .chapter-box-container .chapter-nav {
+        gap: 8px;
+    }
+
+    .tao-study-page .nav-arrow {
+        width: 22px;
+        height: 22px;
+        font-size: 1em;
+    }
+
+    .tao-study-page .fullscreen-icon {
+        width: 50%;
+        height: 50%;
+    }
 }

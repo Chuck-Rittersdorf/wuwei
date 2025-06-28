@@ -6,169 +6,9 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, notranslate, noimageindex">
     <title></title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Page-specific styles for index.html */
-        body {
-            padding-bottom: 80px; /* Space for the bottom bar */
-        }
-
-        /* Add specific styling for box2 */
-        #box2 {
-            margin-right: 30px; /* Add extra right margin */
-        }
-
-        /* Apply green background to the entire content area when showing annotation */
-        #box2 .box-content {
-            background-color: rgba(255, 255, 255, 0.97); /* Default white background */
-        }
-        #box2 .box-content:has(.placeholder-content-view.active-internal-view) {
-            background-color: rgba(220, 240, 220, 0.98);
-        }
-
-        /* Adjust margin for portrait orientation */
-        @media (orientation: portrait) {
-            #box2 {
-                margin-right: 0; /* Remove extra margin in portrait mode */
-            }
-        }
-
-        /* Add specific padding for box2's annotation content */
-        #box2 .placeholder-content-view {
-            padding-right: 40px; /* Increase right padding for annotation content */
-        }
-
-        /* Add specific margin for box2's annotation and life lesson text */
-        #box2 .tao-text-section {
-            margin-right: 80px;
-        }
-
-        .media-title a {
-            cursor: pointer; 
-        }
-
-        .media-loading, .media-error { 
-            text-align: center; 
-            padding: 20px; 
-            font-style: italic; 
-            color: #777; 
-        }
-
-        .media-title { 
-            font-size: 1.1em; 
-            margin: 0; 
-            font-weight: 600; 
-            text-align: center;
-            line-height: 1.3; 
-            padding: 0 10px;
-            font-family: 'Lora', serif;
-        }
-
-        .media-title a { 
-            color: #4a4a4a; 
-            text-decoration: none; 
-            transition: color 0.2s ease; 
-        }
-        .media-title a:hover { 
-            text-decoration: none; 
-            color: #1a1a1a; 
-        }
-
-        .placeholder-content-view h2 {
-            margin-top: 0;
-            margin-bottom: 1em; 
-            margin-left: 25px; /* Match the text section margin */
-            color: #333; 
-            font-size: 1.3em;
-            font-weight: 600;
-            font-family: 'Lora', serif;
-        }
-
-        .box-content {
-            position: relative; 
-            width: 100%; 
-            height: auto; 
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.97); 
-            border-radius: 10px; 
-            color: #2c3e50;
-            opacity: 1; 
-            transform: scale(1) translateY(0); 
-            visibility: visible;
-            max-height: none; 
-            padding: 0; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column;
-        }
-
-        .img-alt-text { 
-            font-size: 10px; 
-            color: #fff; 
-            padding: 5px; 
-            display: inline-block; 
-            border: 1px solid #fff; 
-            border-radius: 3px; 
-            line-height: 1; 
-        }
-
-        .bach-logo-img {
-            filter: invert(1);
-            height: 28px; 
-            width: auto; 
-            display: block;
-        }
-
-        .popup-trigger {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease;
-            padding: 3px;
-            cursor: pointer;
-        }
-        .popup-trigger:hover {
-            transform: scale(1.15);
-        }
-
-        .bottom-logo-bar a[href="tao-study.html"]:hover img {
-            animation: spin 2s linear infinite;
-        }
-
-        /* Mobile responsive adjustments */
-        @media (max-width: 768px) {
-            .bottom-logo-bar {
-                padding: 8px 12px;
-                gap: 8px;
-                bottom: 15px;
-            }
-            .bottom-logo-bar img {
-                height: 22px; /* Smaller logos on mobile */
-            }
-            .bottom-logo-bar a {
-                padding: 2px;
-            }
-            .bottom-logo-bar a:hover {
-                transform: scale(1.1); /* Slightly reduced hover effect on mobile */
-            }
-            .bottom-logo-bar span.img-alt-text {
-                font-size: 8px;
-                padding: 3px;
-            }
-            .bach-logo-img {
-                height: 22px; /* Match other logos */
-            }
-        }
-
-        /* Extra small screen support */
-        @media (max-width: 360px) {
-            .bach-logo-img {
-                height: 20px;
-            }
-        }
-    </style>
 </head>
-<body>
-    <div class="wrapper">
+<body class="index-page">
+    <div class="main-content">
         <div class="box" id="box1" onclick="handleMediaBoxClick(event)">
             <div class="box-content"> 
                 <div class="media-view active-internal-view"> 
@@ -247,7 +87,7 @@
             const boxId = boxElement.id;
             const mediaView = boxElement.querySelector('.media-view'); 
             const mediaContainer = mediaView.querySelector('.media-item-container');
-            const titleLink = mediaView.querySelector('.media-title a');
+            const titleLink = boxElement.querySelector('.media-title a');
 
             if (!mediaContainer || !titleLink ) {
                 mediaContainer.innerHTML = `<div class="media-error">Page Error: Display elements not found.</div>`;
@@ -284,7 +124,7 @@
         function displayAPODContent(boxElement, data) {
             const mediaView = boxElement.querySelector('.media-view');     
             const mediaContainer = mediaView.querySelector('.media-item-container');
-            const titleLink = mediaView.querySelector('.media-title a');
+            const titleLink = boxElement.querySelector('.media-title a');
 
             mediaContainer.innerHTML = ''; 
             const updateHeights = () => {
@@ -332,7 +172,7 @@
             const boxId = boxElement.id;
             const mediaView = boxElement.querySelector('.media-view');
             const mediaContainer = mediaView.querySelector('.media-item-container');
-            const titleLink = mediaView.querySelector('.media-title a');
+            const titleLink = boxElement.querySelector('.media-title a');
 
             if (!mediaContainer || !titleLink) {
                 mediaContainer.innerHTML = `<div class="media-error">Page Error: Display elements not found.</div>`;
@@ -405,7 +245,7 @@
         function displayWikimediaPOTDContent(boxElement, pageData, globalUsageArray) {
             const mediaView = boxElement.querySelector('.media-view');
             const mediaContainer = mediaView.querySelector('.media-item-container');
-            const titleLink = mediaView.querySelector('.media-title a');
+            const titleLink = boxElement.querySelector('.media-title a');
             
             if (!pageData.imageinfo || pageData.imageinfo.length === 0) {
                  mediaContainer.innerHTML = `<div class="media-error">Wikimedia POTD image data missing.</div>`;
