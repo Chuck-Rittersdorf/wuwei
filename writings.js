@@ -7,7 +7,7 @@ const writingsData = [
         type: "poetry",
         content:    `I suppose she went to walk her phone 
                     then I noticed she was following me.
-                    She didn't mind me overhearing her -
+                    She didn't mind me overhearing her —
                     "The park smells like sperm," she said,
                     "The chestnut trees are blossoming."
 
@@ -64,8 +64,8 @@ out-group boundaries
 as an argument
 for early human migration success.
 
-I feel my finger bones tingle,
-as if a large cat is about to jump on me.
+As I feel my finger bones tingle,
+as if a large cat is about to jump on me,
 I see a snail on the garden path.
 Even if it makes it to the other side,
 my neighbour smashes them with stones
