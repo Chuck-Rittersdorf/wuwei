@@ -169,7 +169,7 @@ p:last-child {
 
 /* Links */
 a {
-    color: #0056b3; 
+    color: #eb36cd; 
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -681,6 +681,27 @@ a:hover {
 .logo-popup a:hover {
     background-color: #e6f3ff;
     color: #0056b3;
+}
+
+/* Animations for logos in the bottom bar (index.html) */
+
+/* Add hover effect to the Bach logo trigger to match other logos */
+#bach-popup-trigger {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#bach-popup-trigger:hover {
+    transform: scale(1.15);
+}
+
+/* Add rotation animation to the Yin-Yang logo on hover */
+#yinyang-logo > img {
+    transition: transform 2s linear;
+}
+
+#yinyang-logo:hover > img {
+    transform: rotate(360deg);
 }
 
 /* Special button styles */
