@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +8,31 @@
     <title></title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="index-page">
     <div class="main-content">
         <div class="box" id="box1" onclick="handleMediaBoxClick(event)">
-            <div class="box-content"> 
-                <div class="media-view active-internal-view"> 
+            <div class="box-content">
+                <div class="media-view active-internal-view">
                     <div class="media-item-container">
                         <div class="media-loading">Loading APOD...</div>
                     </div>
                     <h3 class="media-title"><a href="#" target="_blank" rel="noopener noreferrer">APOD Title</a></h3>
                 </div>
-                <div class="placeholder-content-view"> 
+                <div class="placeholder-content-view">
                     <h2 id="box1-tao-chapter-title">Tao Te Ching</h2>
                     <div id="box1-tao-text" class="tao-text-section"></div>
                     <div class="tao-attribution">
-                        Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek Lin</a>
+                        Translation by <a href="https://dereklin.com" target="_blank" rel="noopener noreferrer">Derek
+                            Lin</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="box" id="box2" onclick="handleMediaBoxClick(event)"> 
-            <div class="box-content"> 
-                <div class="media-view active-internal-view"> 
+        <div class="box" id="box2" onclick="handleMediaBoxClick(event)">
+            <div class="box-content">
+                <div class="media-view active-internal-view">
                     <div class="media-item-container">
                         <div class="media-loading">Loading Wikimedia POTD...</div>
                     </div>
@@ -37,7 +40,7 @@
                         <a href="#" target="_blank" rel="noopener noreferrer">Wikimedia Picture Title</a>
                     </h3>
                 </div>
-                <div class="placeholder-content-view"> 
+                <div class="placeholder-content-view">
                     <div id="box2-tao-annotation" class="tao-text-section"></div>
                     <div id="box2-tao-lifelesson" class="tao-text-section"></div>
                 </div>
@@ -46,87 +49,195 @@
     </div>
 
     <div class="bottom-logo-bar">
-        <a href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://tasks.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://docs.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg" alt="Google Docs Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://keep.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Google_Keep_2020_Logo.svg" alt="Google Keep Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg" alt="Google Gemini Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Google Maps Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
-        <a href="https://npo.nl/start/live" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Npologo.svg" alt="NPO Start Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://mail.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
+                alt="Google Calendar Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://tasks.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Tasks_2021.svg" alt="Google Tasks Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://docs.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg"
+                alt="Google Docs Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://keep.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Google_Keep_2020_Logo.svg"
+                alt="Google Keep Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google-gemini-icon.svg"
+                alt="Google Gemini Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg"
+                alt="Google Maps Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                alt="YouTube Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="https://npo.nl/start/live" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/5/59/Npologo.svg" alt="NPO Start Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
         <div class="logo-popup-container">
             <div class="popup-trigger" id="bach-popup-trigger">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Bachsiegel.svg" alt="JS Bach Logo" class="bach-logo-img" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Bachsiegel.svg" alt="JS Bach Logo"
+                    class="bach-logo-img"
+                    onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'">
             </div>
             <div class="logo-popup" id="bach-popup">
-                <a href="https://musicwebinternational.com/tag/bachjs/" target="_blank" rel="noopener noreferrer">MusicWeb Int'l</a>
-                <a href="https://www.prestomusic.com/classical/composers/94/browse?date_range=Last%2030%20Days&size=120&view=small&sort=date&page=1" target="_blank" rel="noopener noreferrer">Presto Music</a>
+                <a href="https://musicwebinternational.com/tag/bachjs/" target="_blank"
+                    rel="noopener noreferrer">MusicWeb Int'l</a>
+                <a href="https://www.prestomusic.com/classical/composers/94/browse?date_range=Last%2030%20Days&size=120&view=small&sort=date&page=1"
+                    target="_blank" rel="noopener noreferrer">Presto Music</a>
             </div>
         </div>
-        <a href="tao-study.html" id="yinyang-logo" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Yin_and_Yang_symbol.svg" alt="Yin Yang Logo" onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
+        <a href="tao-study.html" id="yinyang-logo" target="_blank" rel="noopener noreferrer"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Yin_and_Yang_symbol.svg" alt="Yin Yang Logo"
+                onerror="this.outerHTML = '<span class=\'img-alt-text\'>' + this.alt + '</span>'"></a>
     </div>
 
-    <script src="tao-data.js"></script> 
+    <script src="tao-data.js"></script>
     <script>
         const nasaApiKey = 'NyyGoLiGKX7pg76t9ehi4L8n0MHQuHw8xV6QHLNm';
-        let randomTaoChapterData = null; 
+        let randomTaoChapterData = null;
 
         function activateView(viewElement, boxElement) {
             requestAnimationFrame(() => {
                 const currentScrollHeight = viewElement.scrollHeight;
                 viewElement.style.maxHeight = currentScrollHeight + 'px';
-                
+
                 if (boxElement && !boxElement.classList.contains('content-shown')) {
                     boxElement.classList.add('content-shown');
                 }
             });
         }
-        
+
+        async function fetchWithTimeout(url, timeoutMs = 10000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timed out');
+                }
+                throw error;
+            }
+        }
+
+        function getDateString(daysAgo = 0) {
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
         async function fetchAPOD(boxElement) {
             const boxId = boxElement.id;
-            const mediaView = boxElement.querySelector('.media-view'); 
+            const mediaView = boxElement.querySelector('.media-view');
             const mediaContainer = mediaView.querySelector('.media-item-container');
             const titleLink = boxElement.querySelector('.media-title a');
 
-            if (!mediaContainer || !titleLink ) {
+            if (!mediaContainer || !titleLink) {
                 mediaContainer.innerHTML = `<div class="media-error">Page Error: Display elements not found.</div>`;
-                activateView(mediaView, boxElement); 
+                activateView(mediaView, boxElement);
                 return;
             }
-            
+
             mediaContainer.innerHTML = '<div class="media-loading">Loading APOD...</div>';
             titleLink.textContent = 'Loading APOD title...';
             titleLink.href = '#';
             if (mediaView.classList.contains('active-internal-view')) {
-                 activateView(mediaView, boxElement);
+                activateView(mediaView, boxElement);
             }
 
-            let url = `https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}`;
+            const maxRetries = 3;
+            const maxDaysBack = 7;
+            let lastError = null;
 
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.msg || `HTTP error! status: ${response.status}`);
+            // Try fetching with retries and fallback to previous days
+            for (let daysAgo = 0; daysAgo <= maxDaysBack; daysAgo++) {
+                const dateParam = daysAgo > 0 ? `&date=${getDateString(daysAgo)}` : '';
+                const url = `https://api.nasa.gov/planetary/apod?api_key=${nasaApiKey}${dateParam}`;
+
+                for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                    try {
+                        // Update loading message for retries/fallbacks
+                        if (attempt > 1 || daysAgo > 0) {
+                            const dayLabel = daysAgo === 0 ? "today's" : daysAgo === 1 ? "yesterday's" : `${daysAgo} days ago`;
+                            mediaContainer.innerHTML = `<div class="media-loading">Loading ${dayLabel} APOD (attempt ${attempt}/${maxRetries})...</div>`;
+                        }
+
+                        const response = await fetchWithTimeout(url, 10000);
+
+                        if (!response.ok) {
+                            // Try to get error message from response
+                            let errorMsg = `HTTP ${response.status}`;
+                            try {
+                                const errorData = await response.json();
+                                errorMsg = errorData.msg || errorData.error?.message || errorMsg;
+                            } catch (e) {
+                                // Ignore JSON parse errors for error response
+                            }
+
+                            // Rate limit - wait and retry
+                            if (response.status === 429) {
+                                const waitTime = Math.pow(2, attempt) * 1000;
+                                await new Promise(resolve => setTimeout(resolve, waitTime));
+                                throw new Error(`Rate limited, retrying...`);
+                            }
+
+                            throw new Error(errorMsg);
+                        }
+
+                        const data = await response.json();
+
+                        // Validate response has required fields
+                        if (!data.url && !data.hdurl) {
+                            throw new Error('Invalid APOD data: missing image URL');
+                        }
+
+                        displayAPODContent(boxElement, data);
+                        return; // Success! Exit the function
+
+                    } catch (error) {
+                        lastError = error;
+                        console.warn(`APOD fetch attempt ${attempt}/${maxRetries} for ${daysAgo} days ago failed:`, error.message);
+
+                        // Wait before retrying (exponential backoff)
+                        if (attempt < maxRetries) {
+                            await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 500));
+                        }
+                    }
                 }
-                const data = await response.json();
-                displayAPODContent(boxElement, data);
-            } catch (error) {
-                console.error("Error fetching APOD for " + boxId + ":", error);
-                mediaContainer.innerHTML = `<div class="media-error">Failed to load APOD: ${error.message}</div>`;
-                if (mediaView.classList.contains('active-internal-view')) {
-                    activateView(mediaView, boxElement); 
-                }
+
+                // All retries for this day failed, try previous day
+                console.warn(`All retries failed for ${daysAgo} days ago, trying earlier date...`);
+            }
+
+            // All attempts failed
+            console.error("Error fetching APOD for " + boxId + ": All attempts failed. Last error:", lastError);
+            mediaContainer.innerHTML = `<div class="media-error">Failed to load APOD after multiple attempts.<br><small>${lastError?.message || 'Unknown error'}</small></div>`;
+            if (mediaView.classList.contains('active-internal-view')) {
+                activateView(mediaView, boxElement);
             }
         }
 
         function displayAPODContent(boxElement, data) {
-            const mediaView = boxElement.querySelector('.media-view');     
+            const mediaView = boxElement.querySelector('.media-view');
             const mediaContainer = mediaView.querySelector('.media-item-container');
             const titleLink = boxElement.querySelector('.media-title a');
 
-            mediaContainer.innerHTML = ''; 
+            mediaContainer.innerHTML = '';
             const updateHeights = () => {
                 if (mediaView.classList.contains('active-internal-view')) {
                     activateView(mediaView, boxElement);
@@ -137,10 +248,10 @@
                 const img = document.createElement('img');
                 img.src = data.url;
                 img.alt = data.title;
-                img.onload = updateHeights; 
-                img.onerror = () => { 
+                img.onload = updateHeights;
+                img.onerror = () => {
                     mediaContainer.innerHTML = `<div class="media-error">APOD Image failed to load.</div>`;
-                    updateHeights(); 
+                    updateHeights();
                 };
                 mediaContainer.appendChild(img);
             } else if (data.media_type === 'video') {
@@ -148,12 +259,12 @@
                 iframe.src = data.url;
                 iframe.title = data.title;
                 iframe.allowFullscreen = true;
-                iframe.onload = updateHeights; 
+                iframe.onload = updateHeights;
                 mediaContainer.appendChild(iframe);
-                setTimeout(updateHeights, 100); 
+                setTimeout(updateHeights, 100);
             } else {
                 mediaContainer.textContent = 'Unsupported APOD media type: ' + data.media_type;
-                updateHeights(); 
+                updateHeights();
             }
 
             titleLink.textContent = data.title || "Untitled APOD";
@@ -162,10 +273,10 @@
                 const apodPageDate = dateParts[0].substring(2) + dateParts[1] + dateParts[2];
                 titleLink.href = `https://apod.nasa.gov/apod/ap${apodPageDate}.html`;
             } else {
-                titleLink.href = data.hdurl || data.url || '#'; 
+                titleLink.href = data.hdurl || data.url || '#';
             }
-            
-            if(data.media_type !== 'image'){ updateHeights(); }
+
+            if (data.media_type !== 'image') { updateHeights(); }
         }
 
         async function fetchWikimediaPOTD(boxElement) {
@@ -214,11 +325,11 @@
                 const response2 = await fetch(step2Url);
                 if (!response2.ok) throw new Error(`Wikimedia API (step 2 - imageinfo) error! status: ${response2.status}`);
                 const data2 = await response2.json();
-                
+
                 if (!data2.query || !data2.query.pages || data2.query.pages.length === 0 || !data2.query.pages[0].imageinfo) {
                     throw new Error('Could not retrieve image details for Wikimedia POTD.');
                 }
-                imageInfoData = data2.query.pages[0]; 
+                imageInfoData = data2.query.pages[0];
 
                 const step3Url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&prop=globalusage&titles=${encodeURIComponent(fileName)}&guprop=url|wiki&gulimit=100&gunamespace=0&origin=*`;
                 const response3 = await fetch(step3Url);
@@ -246,11 +357,11 @@
             const mediaView = boxElement.querySelector('.media-view');
             const mediaContainer = mediaView.querySelector('.media-item-container');
             const titleLink = boxElement.querySelector('.media-title a');
-            
+
             if (!pageData.imageinfo || pageData.imageinfo.length === 0) {
-                 mediaContainer.innerHTML = `<div class="media-error">Wikimedia POTD image data missing.</div>`;
-                 activateView(mediaView, boxElement);
-                 return;
+                mediaContainer.innerHTML = `<div class="media-error">Wikimedia POTD image data missing.</div>`;
+                activateView(mediaView, boxElement);
+                return;
             }
             const imageInfo = pageData.imageinfo[0];
 
@@ -263,45 +374,45 @@
 
             const img = document.createElement('img');
             img.src = imageInfo.url;
-            img.alt = pageData.title.replace(/^File:/, '').replace(/\.\w+$/, ''); 
+            img.alt = pageData.title.replace(/^File:/, '').replace(/\.\w+$/, '');
             img.onload = updateHeights;
             img.onerror = () => {
                 mediaContainer.innerHTML = `<div class="media-error">Wikimedia Image failed to load.</div>`;
                 updateHeights();
             };
             mediaContainer.appendChild(img);
-            
+
             let displayTitle = "";
             if (imageInfo.extmetadata && imageInfo.extmetadata.ImageDescription && imageInfo.extmetadata.ImageDescription.value) {
                 let rawDescription = imageInfo.extmetadata.ImageDescription.value;
-                if (typeof rawDescription === 'object' && rawDescription.en) { 
-                     rawDescription = rawDescription.en;
-                } else if (typeof rawDescription !== 'string') { 
-                    if(typeof rawDescription === 'object' && rawDescription !== null && '*' in rawDescription) {
+                if (typeof rawDescription === 'object' && rawDescription.en) {
+                    rawDescription = rawDescription.en;
+                } else if (typeof rawDescription !== 'string') {
+                    if (typeof rawDescription === 'object' && rawDescription !== null && '*' in rawDescription) {
                         rawDescription = rawDescription['*'];
                     } else {
-                        rawDescription = ''; 
+                        rawDescription = '';
                     }
                 }
                 const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = rawDescription; 
+                tempDiv.innerHTML = rawDescription;
                 displayTitle = (tempDiv.textContent || tempDiv.innerText || "").trim();
             }
-            
+
             if (!displayTitle && imageInfo.extmetadata && imageInfo.extmetadata.ObjectName && imageInfo.extmetadata.ObjectName.value) {
                 displayTitle = imageInfo.extmetadata.ObjectName.value.trim();
             }
 
-            if (!displayTitle) { 
+            if (!displayTitle) {
                 displayTitle = pageData.title.replace(/^File:/, '').replace(/\.\w+$/, '').replace(/_/g, ' ').trim();
             }
-             if (!displayTitle) { 
+            if (!displayTitle) {
                 displayTitle = "Wikimedia Picture of the Day";
             }
             titleLink.textContent = displayTitle;
 
-            let finalLink = imageInfo.descriptionurl; 
-            let linkSource = "Commons Description URL (default)"; 
+            let finalLink = imageInfo.descriptionurl;
+            let linkSource = "Commons Description URL (default)";
 
             // console.log(`[${pageData.title}] Global Usage Data:`, globalUsageArray);
 
@@ -343,20 +454,20 @@
                     finalLink = otherLangWikiArticle; linkSource = "Other Lang Wikipedia Article (ns=0)";
                 }
             }
-            
+
             // console.log(`[${pageData.title}] Selected link: ${finalLink} (Source: ${linkSource})`);
             titleLink.href = finalLink;
 
-            updateHeights(); 
+            updateHeights();
         }
 
         function handleMediaBoxClick(event) {
-            const box = event.currentTarget; 
+            const box = event.currentTarget;
             const mediaView = box.querySelector('.media-view');
             const placeholderView = box.querySelector('.placeholder-content-view');
 
             if (event.target.closest('.media-title a')) {
-                return; 
+                return;
             }
 
             const isPlaceholderActive = placeholderView.classList.contains('active-internal-view');
@@ -364,24 +475,24 @@
             const clickedOnPlaceholder = isPlaceholderActive && placeholderView.contains(event.target);
 
             if (clickedOnPlaceholder || (!isPlaceholderActive && clickedOnMedia)) {
-                box.classList.add('content-shown'); 
+                box.classList.add('content-shown');
 
-                if (isPlaceholderActive) { 
+                if (isPlaceholderActive) {
                     placeholderView.classList.remove('active-internal-view');
-                    placeholderView.style.maxHeight = '0px'; 
-                    
+                    placeholderView.style.maxHeight = '0px';
+
                     mediaView.classList.add('active-internal-view');
                     activateView(mediaView, box);
-                } else { 
+                } else {
                     mediaView.classList.remove('active-internal-view');
-                    mediaView.style.maxHeight = '0px'; 
+                    mediaView.style.maxHeight = '0px';
 
                     if (randomTaoChapterData) {
                         if (box.id === 'box1') {
                             const titleEl = placeholderView.querySelector('#box1-tao-chapter-title');
                             const textEl = placeholderView.querySelector('#box1-tao-text');
                             if (titleEl) titleEl.textContent = `Tao Te Ching ${randomTaoChapterData.chapter}`;
-                            if (textEl) textEl.textContent = randomTaoChapterData.text; 
+                            if (textEl) textEl.textContent = randomTaoChapterData.text;
                         } else if (box.id === 'box2') {
                             const annotationEl = placeholderView.querySelector('#box2-tao-annotation');
                             const lifeLessonEl = placeholderView.querySelector('#box2-tao-lifelesson');
@@ -389,15 +500,15 @@
                             if (lifeLessonEl) lifeLessonEl.textContent = randomTaoChapterData.lifeLesson;
                         }
                     } else {
-                         placeholderView.innerHTML = '<h2>Error</h2><p>Tao Te Ching data not loaded.</p>';
+                        placeholderView.innerHTML = '<h2>Error</h2><p>Tao Te Ching data not loaded.</p>';
                     }
 
                     placeholderView.classList.add('active-internal-view');
-                    activateView(placeholderView, box); 
+                    activateView(placeholderView, box);
                 }
             }
         }
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof taoTeChingData !== 'undefined' && taoTeChingData.length > 0) {
                 const randomIndex = Math.floor(Math.random() * taoTeChingData.length);
@@ -409,15 +520,15 @@
 
             const box1 = document.getElementById('box1');
             const box1MediaView = box1.querySelector('.media-view');
-            box1.classList.add('content-shown'); 
+            box1.classList.add('content-shown');
             box1MediaView.classList.add('active-internal-view');
-            fetchAPOD(box1); 
+            fetchAPOD(box1);
 
             const box2 = document.getElementById('box2');
             const box2MediaView = box2.querySelector('.media-view');
             box2.classList.add('content-shown');
             box2MediaView.classList.add('active-internal-view');
-            fetchWikimediaPOTD(box2); 
+            fetchWikimediaPOTD(box2);
 
             const bachPopupTrigger = document.getElementById('bach-popup-trigger');
             const bachPopup = document.getElementById('bach-popup');
@@ -445,5 +556,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
+
 <body class="tao-study-page">
     <script src="tao-data.js"></script>
     <script>
@@ -34,11 +36,81 @@
             let highlightedButton = null;
             let hasShownAnnotationHint = false;
 
+            // Audio setup for collision sounds
+            let audioContext = null;
+            // Pentatonic scale frequencies from C2 to C5 (C, D, E, G, A pattern)
+            const pentatonicFrequencies = [
+                // C2 octave
+                65.41, 73.42, 82.41, 98.00, 110.00,
+                // C3 octave
+                130.81, 146.83, 164.81, 196.00, 220.00,
+                // C4 octave
+                261.63, 293.66, 329.63, 392.00, 440.00,
+                // C5
+                523.25
+            ];
+
+            function initAudioContext() {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            }
+
+            // Timbre configurations for varied sounds
+            const timbres = [
+                { name: 'bell', type: 'sine', harmonics: [1, 2.4, 5.95], decay: 0.6 },
+                { name: 'softPad', type: 'triangle', harmonics: [1], decay: 0.8 },
+                { name: 'pluck', type: 'triangle', harmonics: [1, 2], decay: 0.2 },
+                { name: 'glass', type: 'sine', harmonics: [1, 3, 5], decay: 0.4 }
+            ];
+
+            function playCollisionTone() {
+                if (!audioContext) return;
+
+                const frequency = pentatonicFrequencies[Math.floor(Math.random() * pentatonicFrequencies.length)];
+                const timbre = timbres[Math.floor(Math.random() * timbres.length)];
+                const now = audioContext.currentTime;
+
+                // Create master gain for this sound
+                const masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0.05, now);
+
+                timbre.harmonics.forEach((harmonic, index) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+
+                    osc.type = timbre.type;
+                    osc.frequency.setValueAtTime(frequency * harmonic, now);
+
+                    // Slight detune for warmth
+                    osc.detune.setValueAtTime((Math.random() - 0.5) * 8, now);
+
+                    // Volume decreases for higher harmonics
+                    const harmonicVolume = 1 / (index + 1);
+                    gain.gain.setValueAtTime(harmonicVolume, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + timbre.decay);
+
+                    osc.start(now);
+                    osc.stop(now + timbre.decay);
+                });
+            }
+
+            // Initialize audio on first user interaction
+            document.addEventListener('click', () => initAudioContext(), { once: true });
+            document.addEventListener('keydown', () => initAudioContext(), { once: true });
+
             function setButtonAppearance(buttonObject, isActive = false) {
                 const whiteColor = '#f5f5f5';
                 const blackColor = '#222';
                 const defaultBorderColor = 'rgba(40, 60, 100, 0.4)';
-                
+
                 if (isActive) {
                     buttonObject.element.style.backgroundColor = '#c0392b';
                     buttonObject.element.style.color = '#fff';
@@ -89,9 +161,9 @@
                     }
                     attempts++;
                 } while (overlapping && attempts < maxAttempts);
-                
+
                 container.appendChild(button);
-                
+
                 const buttonObject = {
                     element: button,
                     x: x,
@@ -105,7 +177,7 @@
                     isFullScreen: false,
                     isInfo: false
                 };
-                
+
                 buttons.push(buttonObject);
                 setButtonAppearance(buttonObject); // Set initial color
 
@@ -142,7 +214,7 @@
             const randomNumberDisplay = document.createElement('span');
             randomNumberDisplay.className = 'random-chapter-display';
             searchButtonElement.appendChild(randomNumberDisplay);
-            
+
             (() => {
                 let searchTimeout;
                 let x, y, overlapping;
@@ -216,7 +288,7 @@
                                 highlightedButton = targetButton;
                                 targetButton.classList.add('highlighted', 'blinking');
                                 targetButton.addEventListener('animationend', () => {
-                                    if(targetButton.classList.contains('blinking')) {
+                                    if (targetButton.classList.contains('blinking')) {
                                         targetButton.classList.remove('blinking');
                                     }
                                 }, { once: true });
@@ -393,14 +465,14 @@
 
                 buttons.forEach(b => {
                     b.radius = buttonRadius;
-                    
+
                     b.x = b.x * (newWidth / currentWidth);
                     b.y = b.y * (newHeight / currentHeight);
-                    
+
                     b.x = Math.max(b.radius, Math.min(newWidth - b.radius, b.x));
                     b.y = Math.max(b.radius, Math.min(newHeight - b.radius, b.y));
                 });
-                
+
                 currentWidth = newWidth;
                 currentHeight = newHeight;
             }
@@ -466,7 +538,10 @@
                             b1.y -= overlap * ny;
                             b2.x += overlap * nx;
                             b2.y += overlap * ny;
-                            
+
+                            // Play collision sound
+                            playCollisionTone();
+
                             const b1IsSearch = b1.isSearch && !b1.isFullScreen && !b1.isInfo;
                             const b2IsSearch = b2.isSearch && !b2.isFullScreen && !b2.isInfo;
 
@@ -512,7 +587,7 @@
                                 b2.vx = tx * dpTan2 + nx * m2;
                                 b2.vy = ty * dpTan2 + ny * m2;
                             }
-                            
+
                             if (!b1.isHovered && b1 !== activeButtonObject && !b1.isSearch && !b1.isFullScreen && !b1.isInfo) {
                                 b1.isWhite = !b1.isWhite;
                                 setButtonAppearance(b1);
@@ -523,19 +598,19 @@
                             }
                         }
                     }
-                    
+
                     b1.element.style.left = `${b1.x - b1.radius}px`;
                     b1.element.style.top = `${b1.y - b1.radius}px`;
                 });
-                
+
                 requestAnimationFrame(animate);
             }
-            
+
             animate();
 
             function showInfoBox() {
                 if (document.querySelector('.info-panel-container.show')) {
-                    return; 
+                    return;
                 }
 
                 if (!document.querySelector('.chapter-box-container.show')) {
@@ -607,23 +682,23 @@
                     const mainContent = existingBox.querySelector('.main-content');
                     const sidePanel = existingBox.querySelector('.side-panel');
                     const sidePanelContent = existingBox.querySelector('.side-panel-content');
-                    
+
                     existingBox.dataset.chapter = chapterData.chapter;
                     mainContent.querySelector('h2').textContent = `Tao Te Ching ${chapterData.chapter}`;
                     mainContent.querySelector('p').textContent = chapterData.text;
-                    
+
                     // Add special link for Chapter 1
                     let annotationContent = chapterData.annotation;
                     if (chapterData.chapter === 1) {
                         annotationContent += '\n\n<a href="tao-te-ching-01.html" target="_blank" style="color: #0056b3; text-decoration: none; font-size: 0.75em; font-family: \'Quicksand\', sans-serif; font-weight: 600;">Selected artwork for this chapter</a>';
                     }
                     sidePanelContent.querySelector('p').innerHTML = annotationContent;
-                    
+
                     // Update nav arrow visibility
                     const currentChapter = parseInt(chapterData.chapter, 10);
                     existingBox.querySelector('#prev-chapter-arrow').style.display = currentChapter <= 1 ? 'none' : 'flex';
                     existingBox.querySelector('#next-chapter-arrow').style.display = currentChapter >= 81 ? 'none' : 'flex';
-                    
+
                     return;
                 }
 
@@ -712,7 +787,7 @@
                     const touchEndY = e.changedTouches[0].screenY;
                     const swipeX = touchEndX - touchStartX;
                     const swipeY = touchEndY - touchStartY;
-                    
+
                     if (Math.abs(swipeX) > minSwipeDistance && Math.abs(swipeX) > Math.abs(swipeY)) {
                         e.stopPropagation();
                         if (swipeX > 0) { // Right swipe for previous chapter
@@ -758,7 +833,7 @@
                 if (!hasShownAnnotationHint) {
                     setTimeout(() => {
                         const hintText = boxContainer.querySelector('.annotation-hint');
-                        
+
                         if (hintText) {
                             hintText.classList.add('show');
 
@@ -777,11 +852,11 @@
                     infoBox.classList.remove('show');
                     infoBox.addEventListener('transitionend', () => {
                         if (!infoBox.classList.contains('show')) {
-                           infoBox.remove();
+                            infoBox.remove();
                         }
                         if (!document.querySelector('.chapter-box-container.show')) {
-                             isAnimationPaused = false;
-                             isFadingOut = false;
+                            isAnimationPaused = false;
+                            isFadingOut = false;
                         }
                     }, { once: true });
                 }
@@ -789,7 +864,7 @@
 
             function closeChapterBox() {
                 const chapterBox = document.querySelector('.chapter-box-container.show');
-                if(chapterBox) {
+                if (chapterBox) {
                     if (activeButtonObject) {
                         setButtonAppearance(activeButtonObject, false);
                         activeButtonObject = null;
@@ -797,7 +872,7 @@
                     chapterBox.classList.remove('show');
                     chapterBox.addEventListener('transitionend', () => {
                         if (!chapterBox.classList.contains('show')) {
-                           chapterBox.remove();
+                            chapterBox.remove();
                         }
                         if (!document.querySelector('.info-panel-container.show')) {
                             isAnimationPaused = false;
@@ -857,10 +932,10 @@
                     }
                     return;
                 }
-                
+
                 // Handle escape key to close chapter or info box
                 if (event.key === 'Escape') {
-                     if (infoBox) {
+                    if (infoBox) {
                         event.preventDefault();
                         closeInfoBox();
                     }
@@ -960,7 +1035,7 @@
                 function updateFullscreenButton() {
                     const icon = fullscreenBtn.querySelector('.fullscreen-icon');
                     if (!icon) return;
-                    
+
                     if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
                         icon.classList.remove('fullscreen-icon-enter');
                         icon.classList.add('fullscreen-icon-exit');
@@ -978,4 +1053,5 @@
         });
     </script>
 </body>
+
 </html>
