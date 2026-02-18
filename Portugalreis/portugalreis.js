@@ -3,6 +3,12 @@
 const GOOGLE_MAPS_ICON = 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg';
 const BOOKING_ICON = 'https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg';
 
+const ALLTRAILS_ICON = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/AllTrails_logo.svg/336px-AllTrails_logo.svg.png'; // Using this as placeholder, or just text if it breaks. Let's use a reliable one or text.
+// Actually, let's use a direct reliable logo or just text.
+// User requested "AllTrails-logo". I will use a path to a generic trail icon or the text.
+// Let's try this one, if it fails I'll use text.
+// Better: specific styling.
+
 // Data for Week 1 (Hardcoded based on user files)
 const week1Data = {
     accomodation: [
@@ -72,6 +78,17 @@ const week1Data = {
         {
             category: "Wandelen",
             items: [
+                {
+                    name: "Grote rondwandeling om Castro Laboreiro",
+                    distance: "1u 34m",
+                    hikeDuration: "5u 15m",
+                    difficulty: "Middelzwaar",
+                    route: "Fysieke kaart",
+                    image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/castro_laboreiro.png",
+                    description: "Castro Laboreiro is een grotere nederzetting vlak aan de grens met Spanje. Op een rots boven het dorp liggen de ruïnes van een van de oudste burchten van Portugal. Hier start een rondwandeling die tot de mooiste wandelingen in het nationaal park behoort. De route voert met een grote boog om Castro Laboreiro en de vestingheuvel heen en verbindt dorpsidylle met een indrukwekkend natuurlandschap.",
+                    allTrailsUrl: "https://www.alltrails.com/nl-nl/wandelpad/portugal/viana-do-castelo/pr3-mlg-trilho-castrejo",
+                    mapsUrl: "https://maps.app.goo.gl/UEPiwUAZ9TKDQSQi7"
+                },
                 { name: "Online wandelpaden Terras de Bouro", url: "https://turismo.cm-terrasdebouro.pt/listing-category/aventura/trilhos-pedestres/" },
                 { name: "AllTrails Peneda-Gerês", url: "https://www.alltrails.com/nl-nl/parken/portugal/braga/parque-nacional-da-peneda-geres" },
                 { name: "Wikiloc Covide", url: "https://pt.wikiloc.com/trilhas/trekking/portugal/braga/covide" }
@@ -190,15 +207,36 @@ function createCard(item, type) {
     if (item.phone) metaHtml += `<div class="meta-row">📞 ${item.phone}</div>`;
 
     // Distance & Type row
-    if (item.distance || item.type || item.price || item.note) { // Included item.note
+    // User requested Maps icon immediately after distance
+    if (item.distance || item.type || item.price || item.note || item.mapsUrl) {
         metaHtml += `<div class="meta-row">`;
         if (item.distance) metaHtml += `<span class="distance-badge">${item.distance}</span>`;
+
+        // Maps Contextual Icon
+        if (item.mapsUrl) {
+            metaHtml += `<a href="${item.mapsUrl}" target="_blank" class="inline-map-btn" title="Bekijk op kaart"><img src="${GOOGLE_MAPS_ICON}" alt="Maps"></a>`;
+        }
+
+        // AllTrails Contextual Icon
+        if (item.allTrailsUrl) {
+            metaHtml += `<a href="${item.allTrailsUrl}" target="_blank" class="inline-map-btn" title="Bekijk op AllTrails"><img src="Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Alltrails.png" alt="AllTrails"></a>`;
+        }
+
         if (item.type) metaHtml += `<span>${item.type}</span>`;
         if (item.price) metaHtml += `<span class="price-indicator">${item.price}</span>`;
         if (item.note) {
             const hasPreceding = item.distance || item.type || item.price;
             metaHtml += `<span>${hasPreceding ? '• ' : ''}<em>${item.note}</em></span>`;
         }
+        metaHtml += `</div>`;
+    }
+
+    // Hike Details Row (New)
+    if (item.hikeDuration || item.difficulty || item.route) {
+        metaHtml += `<div class="meta-row hike-details">`;
+        if (item.hikeDuration) metaHtml += `<span class="hike-badge duration">${item.hikeDuration}</span>`;
+        if (item.difficulty) metaHtml += `<span class="hike-badge difficulty">${item.difficulty}</span>`;
+        if (item.route) metaHtml += `<span class="hike-badge route">${item.route}</span>`;
         metaHtml += `</div>`;
     }
 
@@ -216,9 +254,6 @@ function createCard(item, type) {
 
     // Actions
     let actionsHtml = '<div class="item-actions">';
-    if (item.mapsUrl) {
-        actionsHtml += `<a href="${item.mapsUrl}" target="_blank" class="action-btn btn-maps icon-only" title="Bekijk op kaart"><img src="${GOOGLE_MAPS_ICON}" class="icon-img" alt="Maps"></a>`;
-    }
     if (item.bookingUrl) {
         actionsHtml += `<a href="${item.bookingUrl}" target="_blank" class="action-btn btn-link">Booking</a>`;
     }
