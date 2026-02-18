@@ -60,12 +60,13 @@ const week1Data = {
         {
             category: "Zwemmen",
             items: [
-                { name: "Praia fluvial de Alqueirão", note: "Vrij groot, populair/druk, verhuur mogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
-                { name: "Praia Fluvial da Barca", note: "Breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
-                { name: "Praia Fluvial da Albufeira do Ermal", note: "Breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
-                { name: "Praia Fluvial Do Alqueidão", note: "Breed strand", mapsUrl: "https://maps.app.goo.gl/DgdmjbWGkXVUFVvt7" },
-                { name: "Praia Fluvial do Bôc", note: "Dichtsbijzijnd, aan de rivier", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
-                { name: "Praia Fluvial do Bôco", distance: "24 min", note: "Wat breder, met bar", mapsUrl: "https://maps.app.goo.gl/hYFh7Auw9uJtDCneA" }
+                { name: "Praia fluvial de Alqueirão", note: "Stuwmeer, populair/druk, verhuur mogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
+                { name: "Praia Fluvial da Barca", note: "Stuwmeer, breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
+                { name: "Ribeira Fluvial do Gerês", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
+                { name: "Praia Fluvial da Albufeira do Ermal", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
+                { name: "Praia Fluvial Do Alqueidão", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/DgdmjbWGkXVUFVvt7" },
+                { name: "Praia Fluvial do Bôc", note: "Aan de rivier, dichtsbijzijnd", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
+                { name: "Praia Fluvial do Bôco", distance: "24 min", note: "Aan de rivier, wat breder, met bar", mapsUrl: "https://maps.app.goo.gl/hYFh7Auw9uJtDCneA" }
             ]
         },
         {
@@ -189,12 +190,15 @@ function createCard(item, type) {
     if (item.phone) metaHtml += `<div class="meta-row">📞 ${item.phone}</div>`;
 
     // Distance & Type row
-    if (item.distance || item.type || item.price) {
+    if (item.distance || item.type || item.price || item.note) { // Included item.note
         metaHtml += `<div class="meta-row">`;
         if (item.distance) metaHtml += `<span class="distance-badge">${item.distance}</span>`;
         if (item.type) metaHtml += `<span>${item.type}</span>`;
         if (item.price) metaHtml += `<span class="price-indicator">${item.price}</span>`;
-        if (item.note) metaHtml += `<span>• ${item.note}</span>`;
+        if (item.note) {
+            const hasPreceding = item.distance || item.type || item.price;
+            metaHtml += `<span>${hasPreceding ? '• ' : ''}<em>${item.note}</em></span>`;
+        }
         metaHtml += `</div>`;
     }
 
