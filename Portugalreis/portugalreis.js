@@ -30,6 +30,7 @@ const week1Data = {
         {
             category: "Pastelaria",
             items: [
+                { name: "Bicas - Pastelaria Universal / Friande", distance: "8 min", type: "Cafetaria / Pastelaria", mapsUrl: "https://maps.app.goo.gl/uNExWhjji1s4LH328" },
                 { name: "Pastelaria São Sebastião / Amares", distance: "23 min", type: "Bakkerij", mapsUrl: "https://maps.app.goo.gl/dfd71rkumBPXr8sV6" },
                 { name: "Confeitaria Santo Antonio / Braga", distance: "45 min", type: "Bakkerij", mapsUrl: "https://maps.app.goo.gl/ufdKsAVZYYqhbSCD8" }
             ]
@@ -60,12 +61,11 @@ const week1Data = {
         {
             category: "Zwemmen",
             items: [
-                { name: "Praia fluvial de Alqueirão", note: "Stuwmeer, populair/druk, verhuurmogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
-                { name: "Praia Fluvial da Barca", note: "Stuwmeer, breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
-                { name: "Ribeira Fluvial do Gerês", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
-                { name: "Praia Fluvial da Albufeira do Ermal", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
-                { name: "Praia Fluvial Do Alqueidão", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/DgdmjbWGkXVUFVvt7" },
-                { name: "Praia Fluvial do Bôc", note: "Aan de rivier, dichtsbijzijnd", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
+                { name: "Praia fluvial de Alqueirão", distance: "13 min", note: "Stuwmeer, populair/druk, verhuurmogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
+                { name: "Praia Fluvial da Barca", distance: "14 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial da Barca.png", note: "Stuwmeer, breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
+                { name: "Ribeira Fluvial do Gerês", distance: "17 min", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
+                { name: "Praia Fluvial da Albufeira do Ermal", distance: "32 min", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
+                { name: "Praia Fluvial do Bôc", distance: "7 min", note: "Aan de rivier, dichtsbijzijnd", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
                 { name: "Praia Fluvial do Bôco", distance: "24 min", note: "Aan de rivier, wat breder, met bar", mapsUrl: "https://maps.app.goo.gl/hYFh7Auw9uJtDCneA" }
             ]
         },
@@ -208,6 +208,12 @@ function createCard(item, type) {
         descHtml = `<div class="item-description">${item.description}</div>`;
     }
 
+    // Image (Mini-plaatje)
+    let imageHtml = '';
+    if (item.image) {
+        imageHtml = `<div class="item-image"><img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'"></div>`;
+    }
+
     // Actions
     let actionsHtml = '<div class="item-actions">';
     if (item.mapsUrl) {
@@ -226,6 +232,7 @@ function createCard(item, type) {
             <div class="item-name">${item.name}</div>
         </div>
         <div class="item-content">
+            ${imageHtml}
             <div class="item-meta">${metaHtml}</div>
             ${descHtml}
             ${actionsHtml}
