@@ -1,0 +1,610 @@
+/* Global Styles */
+:root {
+    /* Playful Adventure Theme - Vibrant & High Contrast */
+    --primary-color: #008B8B;
+    /* Deep Teal / Cyan - Adventure */
+    --primary-light: #E0FFFF;
+
+    --secondary-color: #FF8C00;
+    /* Dark Orange - Energy */
+    --secondary-light: #FFF5E6;
+
+    --accent-yellow: #FFD700;
+    /* Sunny Yellow - Playful */
+    --accent-pink: #FF1493;
+    /* Deep Pink - Pop */
+
+    --background-color: #F8F9FA;
+    /* Crisp Off-White */
+    --card-bg: #FFFFFF;
+
+    --text-color: #212529;
+    /* Dark Grey */
+    --light-text: #666;
+
+    /* Solid Shadows for Pop-Art Feel */
+    --shadow-solid: 4px 4px 0px rgba(0, 0, 0, 0.15);
+    --shadow-hover: 6px 6px 0px rgba(0, 0, 0, 0.2);
+
+    --border-width: 2px;
+    --border-color: #212529;
+    --border-radius: 12px;
+
+    --font-heading: 'Avenir Next', 'Segoe UI', sans-serif;
+    --font-body: 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding-bottom: 60px;
+    background-image: radial-gradient(#dee2e6 1px, transparent 1px);
+    background-size: 20px 20px;
+    /* Subtle grid/dot pattern */
+}
+
+.app-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+}
+
+.main-header h1 {
+    font-weight: 800;
+    color: var(--text-color);
+    /* Black text */
+    text-transform: uppercase;
+    font-size: 3.5rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+
+    /* Playful Sticker Look */
+    text-shadow:
+        4px 4px 0px var(--accent-yellow),
+        -2px -2px 0px white;
+    /* White outline effect */
+
+    display: inline-block;
+    background: white;
+    padding: 10px 30px;
+    border: 3px solid var(--border-color);
+    box-shadow: 6px 6px 0px var(--accent-pink);
+    transform: rotate(-2deg);
+    /* Playful tilt */
+}
+
+/* Tabs Navigation */
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    gap: 15px;
+}
+
+.tab-btn {
+    border: 3px solid var(--border-color);
+    background: white;
+    padding: 10px 20px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 30px;
+    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    /* Bouncy */
+    white-space: nowrap;
+    box-shadow: 4px 4px 0px var(--primary-color);
+}
+
+.tab-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 4px 4px 0px var(--border-color);
+    transform: translate(2px, 2px);
+    /* Clicked down effect */
+}
+
+/* Specific colors for different tabs if we wanted, but unified is cleaner for now */
+
+
+/* Content Area - Main Tabs */
+.content-container {
+    min-height: 400px;
+}
+
+.tab-content {
+    display: none;
+    animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Sub-Tabs (Week 1) */
+.sub-tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 30px;
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 30px;
+    padding: 5px;
+    display: inline-flex;
+    /* Shrink to fit */
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.sub-tab-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 25px;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--light-text);
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.2s;
+}
+
+.sub-tab-btn.active {
+    background-color: var(--accent-yellow);
+    color: var(--text-color);
+    box-shadow: 2px 2px 0px var(--border-color);
+    border: 2px solid var(--border-color);
+}
+
+.sub-tab-content {
+    display: none;
+    animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.sub-tab-content.active {
+    display: block;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Sections & Cards */
+.content-section {
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+
+/* Highlight effect behind title */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: -5px;
+    width: 105%;
+    height: 12px;
+    background-color: var(--accent-yellow);
+    z-index: -1;
+    transform: rotate(-1deg);
+}
+
+/* Items Grid */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.item-card {
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    transition: transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-card:hover {
+    transform: translate(-3px, -3px);
+}
+
+/* Category Colors for Card Shadows */
+.item-card.accomodation {
+    box-shadow: 6px 6px 0px var(--primary-color);
+}
+
+.item-card.restaurant {
+    box-shadow: 6px 6px 0px var(--secondary-color);
+}
+
+.item-card.activity {
+    box-shadow: 6px 6px 0px var(--accent-yellow);
+}
+
+.item-card.shop {
+    box-shadow: 6px 6px 0px var(--accent-pink);
+}
+
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed #ddd;
+    padding-bottom: 10px;
+}
+
+.item-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-color);
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.item-meta {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.distance-badge {
+    background-color: var(--text-color);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.price-indicator {
+    background-color: var(--secondary-light);
+    color: var(--secondary-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 800;
+}
+
+.item-description {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    color: #444;
+    white-space: pre-wrap;
+}
+
+/* Actions logic */
+.item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    /* Smaller font */
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    /* Reduced padding */
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.action-btn.icon-only {
+    padding: 8px;
+    border-radius: 50%;
+    /* Circle for icon-only */
+    width: 36px;
+    height: 36px;
+}
+
+.btn-maps {
+    background-color: #E0F7FA;
+    /* Very Light Blue */
+    color: var(--text-color);
+    /* Dark text */
+    box-shadow: 2px 2px 0px var(--border-color);
+    /* Smaller shadow */
+}
+
+.btn-maps:hover {
+    background-color: #B2EBF2;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--border-color);
+}
+
+.btn-link {
+    background-color: white;
+    color: var(--text-color);
+    box-shadow: 2px 2px 0px #ddd;
+}
+
+.btn-link:hover {
+    background-color: #f8f9fa;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px #ccc;
+}
+
+
+/* Timeline Styles - Compact List Route */
+.timeline-date {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    text-align: center;
+    background: var(--accent-yellow);
+    display: inline-block;
+    padding: 8px 25px;
+    border: 3px solid var(--border-color);
+    border-radius: 50px;
+    box-shadow: 4px 4px 0px var(--border-color);
+    text-transform: uppercase;
+    transform: rotate(-1deg);
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    /* Removed padding-left since no line */
+}
+
+/* Vertical Line REMOVED */
+.timeline::before {
+    display: none;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 20px;
+    /* More compact spacing */
+    position: relative;
+    align-items: flex-start;
+    /* Align to top */
+}
+
+.timeline-time {
+    width: 70px;
+    /* Reduced width */
+    padding-right: 15px;
+    text-align: right;
+    font-weight: 800;
+    color: var(--text-color);
+    flex-shrink: 0;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    padding-top: 15px;
+    /* Align with content text */
+}
+
+.time-note {
+    display: block;
+    /* Force new line */
+    font-size: 0.7rem;
+    color: #666;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.timeline-content {
+    background: white;
+    padding: 15px 20px;
+    /* Compact padding */
+    border-radius: var(--border-radius);
+    border: 3px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--primary-color);
+    flex-grow: 1;
+    position: relative;
+}
+
+/* Dot on line REMOVED */
+.timeline-content::before {
+    display: none;
+}
+
+.timeline-activity {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.small-note {
+    text-transform: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #555;
+    margin-left: 5px;
+}
+
+.timeline-detail {
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 5px;
+    background: var(--background-color);
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px dashed #ccc;
+}
+
+.timeline-image {
+    margin-top: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.timeline-image img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--light-text);
+    font-style: italic;
+    background: white;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+    border: 2px dashed var(--border-color);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+/* Footer & Home Link */
+.main-footer {
+    text-align: center;
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 4px dotted var(--border-color);
+}
+
+.home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 15px 30px;
+    background: var(--accent-yellow);
+    border-radius: 50px;
+    border: 3px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--border-color);
+    transition: all 0.2s;
+}
+
+.home-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--border-color);
+    background: #FFEC8B;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 2.2rem;
+        box-shadow: 4px 4px 0px var(--accent-pink);
+    }
+
+    .tabs-container {
+        gap: 10px;
+    }
+
+    .tab-btn {
+        flex: 1 1 auto;
+        min-width: 100px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        box-shadow: 3px 3px 0px var(--primary-color);
+    }
+
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Timeline Mobile */
+    .timeline::before {
+        display: none;
+    }
+
+    .timeline-time {
+        width: 100%;
+        /* Full width for time on mobile? Or keep side by side? Let's try side by side but tighter */
+        width: auto;
+        padding-right: 15px;
+        text-align: left;
+        margin-bottom: 0px;
+        /* Side by side on mobile too if possible, or stack */
+        padding-left: 0;
+        font-size: 1rem;
+        padding-top: 0;
+        /* Align top */
+        margin-bottom: 5px;
+        /* Stack time above content on small screens */
+    }
+
+    /* Let's actually stack on mobile for space */
+    .timeline-item {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .timeline-content {
+        margin-left: 0;
+    }
+
+    .timeline-content::before {
+        display: none;
+    }
+}
