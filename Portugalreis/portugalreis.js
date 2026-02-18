@@ -60,7 +60,7 @@ const week1Data = {
         {
             category: "Zwemmen",
             items: [
-                { name: "Praia fluvial de Alqueirão", note: "Stuwmeer, populair/druk, verhuur mogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
+                { name: "Praia fluvial de Alqueirão", note: "Stuwmeer, populair/druk, verhuurmogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
                 { name: "Praia Fluvial da Barca", note: "Stuwmeer, breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
                 { name: "Ribeira Fluvial do Gerês", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
                 { name: "Praia Fluvial da Albufeira do Ermal", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
