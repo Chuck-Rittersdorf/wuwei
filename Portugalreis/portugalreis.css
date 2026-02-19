@@ -123,6 +123,11 @@ body {
     transform: scale(1.8) scaleX(-1);
 }
 
+/* Flip the return plane vertically */
+.terugreis-btn .icon-scale {
+    transform: scale(1.5) scaleY(-1);
+}
+
 .tab-btn {
     border: 3px solid var(--border-color);
     background: white;
