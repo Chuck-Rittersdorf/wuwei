@@ -97,6 +97,32 @@ body {
     gap: 15px;
 }
 
+/* Icon tab buttons (plane, car) — same behavior as other tab buttons */
+.icon-tab-btn {
+    font-size: 1.4rem;
+    padding: 4px 12px !important;
+    line-height: 1;
+    background: var(--accent-yellow);
+    box-shadow: 4px 4px 0px var(--border-color);
+    border-width: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+/* Scale up icon emoji — font-size unreliable for emoji in flex buttons */
+.icon-scale {
+    display: inline-block;
+    transform: scale(1.8);
+    line-height: 1;
+}
+
+/* Mirror the car so its nose points right */
+.transfer-btn .icon-scale {
+    transform: scale(1.8) scaleX(-1);
+}
+
 .tab-btn {
     border: 3px solid var(--border-color);
     background: white;
@@ -121,11 +147,10 @@ body {
 }
 
 .tab-btn.active {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #FFFDE7;
+    color: var(--text-color);
     box-shadow: 4px 4px 0px var(--border-color);
     transform: translate(2px, 2px);
-    /* Clicked down effect */
 }
 
 /* Specific colors for different tabs if we wanted, but unified is cleaner for now */
@@ -653,19 +678,32 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .main-header h1 {
-        font-size: 2.2rem;
+        font-size: clamp(1.1rem, 5vw, 2.2rem);
         box-shadow: 4px 4px 0px var(--accent-pink);
+        white-space: nowrap;
     }
 
     .tabs-container {
-        gap: 10px;
+        gap: 6px;
+        flex-wrap: nowrap;
+        /* Force single row */
+        justify-content: center;
     }
 
     .tab-btn {
-        flex: 0 0 auto;
-        font-size: 0.8rem;
-        padding: 8px 12px;
+        flex: 0 1 auto;
+        /* Allow shrinking */
+        font-size: 0.7rem;
+        padding: 7px 10px;
         box-shadow: 3px 3px 0px var(--primary-color);
+        white-space: nowrap;
+    }
+
+    .transfer-btn {
+        flex: 0 0 auto;
+        /* Don't shrink the arrow */
+        font-size: 1.1rem;
+        padding: 7px 10px !important;
     }
 
     .items-grid {
