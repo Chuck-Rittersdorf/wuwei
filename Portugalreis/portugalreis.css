@@ -677,8 +677,13 @@ body {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+    .main-header {
+        padding: 15px 0;
+        margin-bottom: 15px;
+    }
+
     .main-header h1 {
-        font-size: clamp(1.1rem, 5vw, 2.2rem);
+        font-size: clamp(1.3rem, 6vw, 2.5rem);
         box-shadow: 4px 4px 0px var(--accent-pink);
         white-space: nowrap;
     }
@@ -692,9 +697,8 @@ body {
 
     .tab-btn {
         flex: 0 1 auto;
-        /* Allow shrinking */
-        font-size: 0.7rem;
-        padding: 7px 10px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
         box-shadow: 3px 3px 0px var(--primary-color);
         white-space: nowrap;
     }
