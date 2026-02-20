@@ -67,12 +67,12 @@ const week1Data = {
         {
             category: "Zwemmen",
             items: [
-                { name: "Praia fluvial de Alqueirão", distance: "13 min", note: "Stuwmeer, populair/druk, verhuurmogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
+                { name: "Praia fluvial de Alqueirão", distance: "13 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia do Alqueirao.jpg", note: "Stuwmeer, populair/druk, verhuurmogelijkheden", mapsUrl: "https://maps.app.goo.gl/d2s3Z6akchRZXibJA" },
                 { name: "Praia Fluvial da Barca", distance: "14 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial da Barca.png", note: "Stuwmeer, breed strand, eenvoudiger en rustiger", mapsUrl: "https://maps.app.goo.gl/D6EXSVi8kPSkd56D6" },
-                { name: "Ribeira Fluvial do Gerês", distance: "17 min", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
-                { name: "Praia Fluvial da Albufeira do Ermal", distance: "32 min", note: "Stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
-                { name: "Praia Fluvial do Bôc", distance: "7 min", note: "Aan de rivier, dichtsbijzijnd", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
-                { name: "Praia Fluvial do Bôco", distance: "24 min", note: "Aan de rivier, wat breder, met bar", mapsUrl: "https://maps.app.goo.gl/hYFh7Auw9uJtDCneA" }
+                { name: "Praia Fluvial Ribeira Gerês", distance: "17 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial Ribeira Gerês.png", note: "Kleiner strand, meer natuur, rustiger", mapsUrl: "https://maps.app.goo.gl/7wJqZjYdvKcZEkBD8" },
+                { name: "Praia Fluvial da Albufeira do Ermal", distance: "32 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial da Albufeira do Ermal.png", note: "Ander stuwmeer, breed strand", mapsUrl: "https://maps.app.goo.gl/vSkNztdjTUcyzFGZ7" },
+                { name: "Praia Fluvial do Bôc", distance: "7 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial do Bôco.png", note: "Aan de rivier, dichtsbijzijnd", mapsUrl: "https://maps.app.goo.gl/bUC6HMYRAn6ACz4t5" },
+                { name: "Praia Fluvial de Verim", distance: "24 min", image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Praia Fluvial de Verim.png", note: "Aan de rivier, wat breder, met bar", mapsUrl: "https://maps.app.goo.gl/Hfb6LBNXVtSqihWMA" }
             ]
         },
         {
@@ -86,6 +86,7 @@ const week1Data = {
                     route: "Fysieke kaart",
                     image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/castro_laboreiro.png",
                     description: "Castro Laboreiro is een grotere nederzetting vlak aan de grens met Spanje. Op een rots boven het dorp liggen de ruïnes van een van de oudste burchten van Portugal. Hier start een rondwandeling die tot de mooiste wandelingen in het nationaal park behoort. De route voert met een grote boog om Castro Laboreiro en de vestingheuvel heen en verbindt dorpsidylle met een indrukwekkend natuurlandschap.",
+                    routeUrl: "https://drive.google.com/file/d/1caeRx9iwkhW7iC3DoWxusgCx8r5BAchI/view?usp=drive_link",
                     allTrailsUrl: "https://www.alltrails.com/nl-nl/wandelpad/portugal/viana-do-castelo/pr3-mlg-trilho-castrejo",
                     mapsUrl: "https://maps.app.goo.gl/UEPiwUAZ9TKDQSQi7"
                 },
@@ -147,6 +148,17 @@ function renderWeek1() {
         accGrid.appendChild(createCard(item, 'accomodation'));
     });
 
+    // Helper to parse "1u 30m" or "15 min" into total minutes for sorting
+    function parseTimeToMinutes(timeStr) {
+        if (!timeStr) return Infinity; // Items without distance go to the bottom
+        let mins = 0;
+        const uurMatch = timeStr.match(/(\d+)\s*(?:u|uur|h)/i);
+        const minMatch = timeStr.match(/(\d+)\s*m/i);
+        if (uurMatch) mins += parseInt(uurMatch[1]) * 60;
+        if (minMatch) mins += parseInt(minMatch[1]);
+        return mins;
+    }
+
     // Other Facilities Sections
     week1Data.facilities.forEach(cat => {
         const section = document.createElement('div');
@@ -154,7 +166,10 @@ function renderWeek1() {
         section.innerHTML = `<h2 class="section-title">${cat.category}</h2><div class="items-grid"></div>`;
         const grid = section.querySelector('.items-grid');
 
-        cat.items.forEach(item => {
+        // Sort items by distance
+        const sortedItems = [...cat.items].sort((a, b) => parseTimeToMinutes(a.distance) - parseTimeToMinutes(b.distance));
+
+        sortedItems.forEach(item => {
             // Determine type... logic from before
             let type = 'shop';
             if (['Restaurants', 'Eenvoudig en goedkoop eten'].includes(cat.category)) type = 'restaurant';
@@ -172,7 +187,10 @@ function renderWeek1() {
         section.innerHTML = `<h2 class="section-title">${cat.category}</h2><div class="items-grid"></div>`;
         const grid = section.querySelector('.items-grid');
 
-        cat.items.forEach(item => {
+        // Sort items by distance
+        const sortedItems = [...cat.items].sort((a, b) => parseTimeToMinutes(a.distance) - parseTimeToMinutes(b.distance));
+
+        sortedItems.forEach(item => {
             grid.appendChild(createCard(item, 'activity'));
         });
         activitiesContainer.appendChild(section);
@@ -208,18 +226,23 @@ function createCard(item, type) {
 
     // Distance & Type row
     // User requested Maps icon immediately after distance
-    if (item.distance || item.type || item.price || item.note || item.mapsUrl) {
+    if (item.distance || item.type || item.price || item.note || item.mapsUrl || item.allTrailsUrl || item.routeUrl) {
         metaHtml += `<div class="meta-row">`;
         if (item.distance) metaHtml += `<span class="distance-badge">${item.distance}</span>`;
 
         // Maps Contextual Icon
         if (item.mapsUrl) {
-            metaHtml += `<a href="${item.mapsUrl}" target="_blank" class="inline-map-btn" title="Bekijk op kaart"><img src="${GOOGLE_MAPS_ICON}" alt="Maps"></a>`;
+            metaHtml += `<a href="${item.mapsUrl}" target="_blank" class="inline-map-btn" title="open in Google maps"><img src="${GOOGLE_MAPS_ICON}" alt="Maps"></a>`;
         }
 
         // AllTrails Contextual Icon
         if (item.allTrailsUrl) {
-            metaHtml += `<a href="${item.allTrailsUrl}" target="_blank" class="inline-map-btn" title="Bekijk op AllTrails"><img src="Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Alltrails.png" alt="AllTrails"></a>`;
+            metaHtml += `<a href="${item.allTrailsUrl}" target="_blank" class="inline-map-btn" title="open in AllTrails"><img src="Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Alltrails.png" alt="AllTrails"></a>`;
+        }
+
+        // Route Description Contextual Icon
+        if (item.routeUrl) {
+            metaHtml += `<a href="${item.routeUrl}" target="_blank" class="inline-map-btn" title="open routebeschrijving" style="text-decoration: none; font-size: 14px; line-height: 1;">🗺️</a>`;
         }
 
         if (item.type) metaHtml += `<span>${item.type}</span>`;
