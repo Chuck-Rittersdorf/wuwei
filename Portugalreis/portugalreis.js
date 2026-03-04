@@ -91,13 +91,14 @@ const week1Data = {
                     mapsUrl: "https://maps.app.goo.gl/UEPiwUAZ9TKDQSQi7"
                 },
                 {
-                    name: "Op de heuvel van Calcedónia",
+                    name: "Naar de heuvel van Calcedónia",
                     distance: "24 min",
                     image: "Data week 1 - Refúgio das Laranjeiras/Afbeeldingen activiteiten/Op de heuvel van Calcedónia.webp",
                     hikeDuration: "2u 45m",
                     difficulty: "Zwaar",
                     route: "Fysieke kaart",
                     description: "De heuvel van Calcedónia was in de ijzertijd een fort. Overblijfselen hiervan zijn door archeologen blootgelegd. Deze rondwandeling leidt vanuit Covide omhoog naar deze heuvel, die tegenwoordig bezaaid is met fantasierijke granietblokken en rotsen. Dit buitengewone rotslandschap is voornamelijk ontstaan door wolzakverwering. Sommige delen zijn pittig: Goede wandelschoenen zijn een must. Ook is er overdag weinig schaduw.",
+                    routeUrl: "https://drive.google.com/file/d/1MwiaDVsee6C-WzUe4S1MZrc1lCRMYqN7/view?usp=sharing",
                     allTrailsUrl: "https://www.alltrails.com/nl-nl/wandelpad/portugal/braga/pr1-trilho-da-cidada-da-calcedonia",
                     mapsUrl: "https://maps.app.goo.gl/FtfNPvvRGWmLoL6E6"
                 },
