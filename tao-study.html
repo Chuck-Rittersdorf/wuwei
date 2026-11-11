@@ -40,6 +40,10 @@
             let audioContext = null;
             let masterBus = null;
             let lastSoundTime = 0;
+            let pendingCollisionTimer = null;
+            let pendingCancelled = false;
+            const SIMULTANEOUS_WINDOW_MS = 150; // Collisions within this window cancel each other out
+            const MIN_NOTE_INTERVAL = 0.75; // Minimum seconds between played tones
             const activeNotes = [];
 
             // Pentatonic scale from C2 to C5 with MIDI numbers and pitch classes for harmonic matching
@@ -74,7 +78,7 @@
                 [4, 7, 9, 2]  // Em7no5 / Dadd4 (E, G, A, D) - floating modal
             ];
 
-            // Purely harmonic timbres (only octave/fifth partials so overtones never clash)
+            // Purely harmonic timbres with long, meditative decay times
             const timbres = [
                 {
                     name: 'singingBowl',
@@ -84,8 +88,8 @@
                         { ratio: 2, amp: 0.25 },
                         { ratio: 3, amp: 0.07 }
                     ],
-                    attack: 0.035,
-                    decay: 1.5,
+                    attack: 0.05,
+                    decay: 4.2,
                     filterFreq: 2000
                 },
                 {
@@ -96,8 +100,8 @@
                         { ratio: 2, amp: 0.2 },
                         { ratio: 4, amp: 0.05 }
                     ],
-                    attack: 0.008,
-                    decay: 0.5,
+                    attack: 0.015,
+                    decay: 2.4,
                     filterFreq: 1800
                 },
                 {
@@ -107,10 +111,10 @@
                         { ratio: 1, amp: 0.85 },
                         { ratio: 2, amp: 0.25 }
                     ],
-                    attack: 0.012,
-                    decay: 0.85,
+                    attack: 0.02,
+                    decay: 3.2,
                     filterFreq: 2400,
-                    filterEndFreq: 800
+                    filterEndFreq: 700
                 },
                 {
                     name: 'celesta',
@@ -120,8 +124,8 @@
                         { ratio: 2, amp: 0.35 },
                         { ratio: 4, amp: 0.08 }
                     ],
-                    attack: 0.015,
-                    decay: 1.0,
+                    attack: 0.025,
+                    decay: 3.6,
                     filterFreq: 3000
                 }
             ];
@@ -143,17 +147,17 @@
 
                     // Subtle warm echo to blend notes into a cohesive space
                     const delay = audioContext.createDelay();
-                    delay.delayTime.setValueAtTime(0.28, audioContext.currentTime);
+                    delay.delayTime.setValueAtTime(0.35, audioContext.currentTime);
 
                     const delayFilter = audioContext.createBiquadFilter();
                     delayFilter.type = 'lowpass';
                     delayFilter.frequency.setValueAtTime(1200, audioContext.currentTime);
 
                     const delayFeedback = audioContext.createGain();
-                    delayFeedback.gain.setValueAtTime(0.22, audioContext.currentTime);
+                    delayFeedback.gain.setValueAtTime(0.32, audioContext.currentTime);
 
                     const wetGain = audioContext.createGain();
-                    wetGain.gain.setValueAtTime(0.18, audioContext.currentTime);
+                    wetGain.gain.setValueAtTime(0.22, audioContext.currentTime);
 
                     compressor.connect(masterGain);
                     compressor.connect(delay);
@@ -179,8 +183,8 @@
                     }
                 }
 
-                // Slowly cycle through consonant chord voicings every 8 seconds
-                const currentChord = harmonicChords[Math.floor(now / 8) % harmonicChords.length];
+                // Slowly cycle through consonant chord voicings every 10 seconds
+                const currentChord = harmonicChords[Math.floor(now / 10) % harmonicChords.length];
                 const lowNoteActive = activeNotes.some(n => n.midi < 48);
                 const lastNote = activeNotes.length > 0 ? activeNotes[activeNotes.length - 1] : null;
 
@@ -250,12 +254,11 @@
                 return chosen;
             }
 
-            function playCollisionTone() {
-                if (!audioContext || !masterBus) return;
+            function triggerHarmonicTone() {
+                if (!audioContext || !masterBus || isAnimationPaused || document.hidden) return;
 
                 const now = audioContext.currentTime;
-                // Gentle rate limit (55ms) so simultaneous collisions form soft arpeggios instead of clicks
-                if (now - lastSoundTime < 0.055) return;
+                if (now - lastSoundTime < MIN_NOTE_INTERVAL) return;
                 lastSoundTime = now;
 
                 const note = selectHarmonicNote(now);
@@ -265,7 +268,7 @@
                 activeNotes.push({
                     midi: note.midi,
                     pc: note.pc,
-                    endTime: now + duration * 0.65
+                    endTime: now + duration * 0.75
                 });
 
                 // Per-note low-pass filter and gain envelope
@@ -278,7 +281,7 @@
 
                 const noteGain = audioContext.createGain();
                 // Slightly lower amplitude for high frequencies (equal-loudness balance)
-                const baseVolume = note.midi < 48 ? 0.07 : (note.midi > 64 ? 0.045 : 0.055);
+                const baseVolume = note.midi < 48 ? 0.075 : (note.midi > 64 ? 0.045 : 0.058);
                 noteGain.gain.setValueAtTime(0.0001, now);
                 noteGain.gain.linearRampToValueAtTime(baseVolume, now + timbre.attack);
                 noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
@@ -298,8 +301,37 @@
                     partialGain.connect(noteFilter);
 
                     osc.start(now);
-                    osc.stop(now + duration + 0.02);
+                    osc.stop(now + duration + 0.05);
                 });
+            }
+
+            function playCollisionTone() {
+                if (!audioContext || !masterBus) return;
+
+                // If another collision is already pending within the simultaneous window,
+                // both collisions cancel each other out.
+                if (pendingCollisionTimer !== null) {
+                    pendingCancelled = true;
+                    clearTimeout(pendingCollisionTimer);
+                    pendingCollisionTimer = setTimeout(() => {
+                        pendingCollisionTimer = null;
+                        pendingCancelled = false;
+                    }, SIMULTANEOUS_WINDOW_MS);
+                    return;
+                }
+
+                if (audioContext.currentTime - lastSoundTime < MIN_NOTE_INTERVAL) return;
+
+                pendingCancelled = false;
+                pendingCollisionTimer = setTimeout(() => {
+                    const wasCancelled = pendingCancelled;
+                    pendingCollisionTimer = null;
+                    pendingCancelled = false;
+
+                    if (!wasCancelled) {
+                        triggerHarmonicTone();
+                    }
+                }, SIMULTANEOUS_WINDOW_MS);
             }
 
             // Initialize audio on first user interaction
