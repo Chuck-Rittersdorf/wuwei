@@ -36,31 +36,27 @@
             let highlightedButton = null;
             let hasShownAnnotationHint = false;
 
-            // Audio setup for harmonic collision sounds
+            // Audio setup for minimal music collision composition
             let audioContext = null;
             let masterBus = null;
-            let lastSoundTime = 0;
-            let pendingCollisionTimer = null;
-            let pendingCancelled = false;
-            const SIMULTANEOUS_WINDOW_MS = 150; // Collisions within this window cancel each other out
-            const MIN_NOTE_INTERVAL = 0.75; // Minimum seconds between played tones
+            let nextAllowedSoundTime = 0;
             const activeNotes = [];
 
-            // Pentatonic scale from C2 to C5 with MIDI numbers and pitch classes for harmonic matching
+            // Pentatonic scale from C2 to C5 with MIDI numbers and pitch classes
             const pentatonicNotes = [
-                // C2 octave
+                // C2 octave (deep pedal tones)
                 { name: 'C2', midi: 36, pc: 0, freq: 65.41 },
                 { name: 'D2', midi: 38, pc: 2, freq: 73.42 },
                 { name: 'E2', midi: 40, pc: 4, freq: 82.41 },
                 { name: 'G2', midi: 43, pc: 7, freq: 98.00 },
                 { name: 'A2', midi: 45, pc: 9, freq: 110.00 },
-                // C3 octave
+                // C3 octave (warm lower-mid ostinato register)
                 { name: 'C3', midi: 48, pc: 0, freq: 130.81 },
                 { name: 'D3', midi: 50, pc: 2, freq: 146.83 },
                 { name: 'E3', midi: 52, pc: 4, freq: 164.81 },
                 { name: 'G3', midi: 55, pc: 7, freq: 196.00 },
                 { name: 'A3', midi: 57, pc: 9, freq: 220.00 },
-                // C4 octave
+                // C4 octave (clear melodic register)
                 { name: 'C4', midi: 60, pc: 0, freq: 261.63 },
                 { name: 'D4', midi: 62, pc: 2, freq: 293.66 },
                 { name: 'E4', midi: 64, pc: 4, freq: 329.63 },
@@ -70,100 +66,173 @@
                 { name: 'C5', midi: 72, pc: 0, freq: 523.25 }
             ];
 
-            // Consonant harmonic subsets (chords within C pentatonic) that gently rotate over time
-            const harmonicChords = [
-                [0, 4, 7, 9], // C6 (C, E, G, A) - warm major/relative minor
-                [9, 0, 4, 7], // Am7 (A, C, E, G) - serene minor
-                [0, 2, 7, 9], // Csus2 / Gsus4 (C, D, G, A) - open fifths & fourths
-                [4, 7, 9, 2]  // Em7no5 / Dadd4 (E, G, A, D) - floating modal
+            // Harmonic fields (chords & root pedals) inspired by minimal music (Reich / Ten Holt / Eno)
+            const harmonicFields = [
+                { name: 'Cmaj6', pcs: [0, 4, 7, 9], bassMidi: 36 }, // C2 pedal + C, E, G, A
+                { name: 'Am7',   pcs: [9, 0, 4, 7], bassMidi: 45 }, // A2 pedal + A, C, E, G
+                { name: 'Csus2', pcs: [0, 2, 7, 9], bassMidi: 36 }, // C2 pedal + C, D, G, A
+                { name: 'Gsus4', pcs: [7, 9, 0, 2], bassMidi: 43 }  // G2 pedal + G, A, C, D
             ];
 
-            // Purely harmonic timbres with long, meditative decay times
+            // Minimal music rhythmic cells (multipliers of basePulse ~0.46s, ending with a breathing rest)
+            const rhythmPatterns = [
+                [1, 1, 1, 2, 3.5],       // 4-note motif + long resonant pause
+                [1, 1.5, 1, 1.5, 3.5],   // Gently syncopated Reich-like cell + breathing space
+                [1, 1, 2, 1, 4.0],       // Canto Ostinato-style figure + wide sustain space
+                [1.5, 1.5, 2, 4.0]       // Slow, floating Eno/Pärt phrase
+            ];
+
+            // Long-sustaining, purely harmonic timbres
             const timbres = [
+                {
+                    name: 'vibraphone',
+                    type: 'sine',
+                    partials: [
+                        { ratio: 1, amp: 1.0, decayMult: 1.0 },
+                        { ratio: 2, amp: 0.22, decayMult: 0.6 },
+                        { ratio: 4, amp: 0.06, decayMult: 0.3 }
+                    ],
+                    attack: 0.018,
+                    decay: 3.8,
+                    filterFreq: 2200,
+                    filterEndFreq: 900
+                },
+                {
+                    name: 'feltPiano',
+                    type: 'triangle',
+                    partials: [
+                        { ratio: 1, amp: 0.9, decayMult: 1.0 },
+                        { ratio: 2, amp: 0.25, decayMult: 0.55 },
+                        { ratio: 3, amp: 0.06, decayMult: 0.35 }
+                    ],
+                    attack: 0.014,
+                    decay: 3.5,
+                    filterFreq: 1800,
+                    filterEndFreq: 650
+                },
                 {
                     name: 'singingBowl',
                     type: 'sine',
                     partials: [
-                        { ratio: 1, amp: 1.0 },
-                        { ratio: 2, amp: 0.25 },
-                        { ratio: 3, amp: 0.07 }
+                        { ratio: 1, amp: 1.0, decayMult: 1.0 },
+                        { ratio: 2, amp: 0.28, decayMult: 0.85 },
+                        { ratio: 3, amp: 0.08, decayMult: 0.65 }
                     ],
-                    attack: 0.05,
-                    decay: 4.2,
+                    attack: 0.08,
+                    decay: 5.5,
                     filterFreq: 2000
                 },
                 {
-                    name: 'marimba',
-                    type: 'sine',
-                    partials: [
-                        { ratio: 1, amp: 1.0 },
-                        { ratio: 2, amp: 0.2 },
-                        { ratio: 4, amp: 0.05 }
-                    ],
-                    attack: 0.015,
-                    decay: 2.4,
-                    filterFreq: 1800
-                },
-                {
-                    name: 'harp',
+                    name: 'warmPad',
                     type: 'triangle',
                     partials: [
-                        { ratio: 1, amp: 0.85 },
-                        { ratio: 2, amp: 0.25 }
+                        { ratio: 1, amp: 0.85, decayMult: 1.0 },
+                        { ratio: 2, amp: 0.3, decayMult: 0.9 }
                     ],
-                    attack: 0.02,
-                    decay: 3.2,
-                    filterFreq: 2400,
-                    filterEndFreq: 700
-                },
-                {
-                    name: 'celesta',
-                    type: 'sine',
-                    partials: [
-                        { ratio: 1, amp: 1.0 },
-                        { ratio: 2, amp: 0.35 },
-                        { ratio: 4, amp: 0.08 }
-                    ],
-                    attack: 0.025,
-                    decay: 3.6,
-                    filterFreq: 3000
+                    attack: 0.24,
+                    decay: 5.0,
+                    filterFreq: 1400,
+                    filterEndFreq: 750
                 }
             ];
+
+            // State for the minimal music generative composition
+            const composerState = {
+                fieldIndex: 0,
+                rhythmIndex: 0,
+                motif: [],
+                stepIndex: 0,
+                cycleCount: 0,
+                primaryTimbreIndex: 0,
+                secondaryTimbreIndex: 2,
+                basePulse: 0.46 // ~0.46s per rhythmic unit
+            };
+
+            function buildConsonantMotif(field, length) {
+                const candidates = pentatonicNotes.filter(
+                    n => n.midi >= 48 && n.midi <= 72 && field.pcs.includes(n.pc)
+                );
+                const newMotif = [];
+                let prevNote = null;
+
+                for (let i = 0; i < length; i++) {
+                    // Pick notes that form smooth intervals (3rds, 4ths, 5ths, 6ths, octaves) with the previous note
+                    let pool = candidates.filter(n => {
+                        if (!prevNote) return true;
+                        const diff = Math.abs(n.midi - prevNote.midi);
+                        return diff >= 3 && diff <= 12;
+                    });
+                    if (pool.length === 0) pool = candidates;
+
+                    const picked = pool[Math.floor(Math.random() * pool.length)];
+                    newMotif.push(picked);
+                    prevNote = picked;
+                }
+                return newMotif;
+            }
+
+            function mutateMotif(field) {
+                if (composerState.motif.length === 0) return;
+                const mutateIdx = Math.floor(Math.random() * composerState.motif.length);
+                const currentNote = composerState.motif[mutateIdx];
+
+                const candidates = pentatonicNotes.filter(
+                    n => n.midi >= 48 &&
+                         n.midi <= 72 &&
+                         field.pcs.includes(n.pc) &&
+                         n.midi !== currentNote.midi &&
+                         Math.abs(n.midi - currentNote.midi) >= 3 &&
+                         Math.abs(n.midi - currentNote.midi) <= 9
+                );
+
+                if (candidates.length > 0) {
+                    composerState.motif[mutateIdx] = candidates[Math.floor(Math.random() * candidates.length)];
+                }
+            }
+
+            // Initialize starting motif
+            composerState.motif = buildConsonantMotif(
+                harmonicFields[0],
+                rhythmPatterns[0].length
+            );
 
             function initAudioContext() {
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-                    // Master compressor & soft ambient delay for smooth blending
+                    // Master compressor & lush stereo delay network for minimal music ambience
                     const compressor = audioContext.createDynamicsCompressor();
-                    compressor.threshold.setValueAtTime(-20, audioContext.currentTime);
+                    compressor.threshold.setValueAtTime(-22, audioContext.currentTime);
                     compressor.knee.setValueAtTime(24, audioContext.currentTime);
-                    compressor.ratio.setValueAtTime(6, audioContext.currentTime);
-                    compressor.attack.setValueAtTime(0.005, audioContext.currentTime);
-                    compressor.release.setValueAtTime(0.25, audioContext.currentTime);
+                    compressor.ratio.setValueAtTime(5, audioContext.currentTime);
+                    compressor.attack.setValueAtTime(0.01, audioContext.currentTime);
+                    compressor.release.setValueAtTime(0.4, audioContext.currentTime);
 
                     const masterGain = audioContext.createGain();
-                    masterGain.gain.setValueAtTime(0.6, audioContext.currentTime);
+                    masterGain.gain.setValueAtTime(0.65, audioContext.currentTime);
 
-                    // Subtle warm echo to blend notes into a cohesive space
-                    const delay = audioContext.createDelay();
-                    delay.delayTime.setValueAtTime(0.35, audioContext.currentTime);
+                    // Dual polyrhythmic delay lines (0.46s and 0.69s = 2:3 ratio) for spacious sustain
+                    const delayL = audioContext.createDelay(2.0);
+                    const delayR = audioContext.createDelay(2.0);
+                    delayL.delayTime.setValueAtTime(0.46, audioContext.currentTime);
+                    delayR.delayTime.setValueAtTime(0.69, audioContext.currentTime);
 
                     const delayFilter = audioContext.createBiquadFilter();
                     delayFilter.type = 'lowpass';
-                    delayFilter.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    delayFilter.frequency.setValueAtTime(1150, audioContext.currentTime);
 
                     const delayFeedback = audioContext.createGain();
-                    delayFeedback.gain.setValueAtTime(0.32, audioContext.currentTime);
+                    delayFeedback.gain.setValueAtTime(0.36, audioContext.currentTime);
 
                     const wetGain = audioContext.createGain();
-                    wetGain.gain.setValueAtTime(0.22, audioContext.currentTime);
+                    wetGain.gain.setValueAtTime(0.28, audioContext.currentTime);
 
                     compressor.connect(masterGain);
-                    compressor.connect(delay);
-                    delay.connect(delayFilter);
+                    compressor.connect(delayL);
+                    delayL.connect(delayR);
+                    delayR.connect(delayFilter);
                     delayFilter.connect(delayFeedback);
-                    delayFeedback.connect(delay);
+                    delayFeedback.connect(delayL);
                     delayFilter.connect(wetGain);
                     wetGain.connect(masterGain);
                     masterGain.connect(audioContext.destination);
@@ -175,95 +244,10 @@
                 }
             }
 
-            function selectHarmonicNote(now) {
-                // Remove expired notes
-                for (let i = activeNotes.length - 1; i >= 0; i--) {
-                    if (activeNotes[i].endTime <= now) {
-                        activeNotes.splice(i, 1);
-                    }
-                }
-
-                // Slowly cycle through consonant chord voicings every 10 seconds
-                const currentChord = harmonicChords[Math.floor(now / 10) % harmonicChords.length];
-                const lowNoteActive = activeNotes.some(n => n.midi < 48);
-                const lastNote = activeNotes.length > 0 ? activeNotes[activeNotes.length - 1] : null;
-
-                let bestCandidates = [];
-                let maxScore = -Infinity;
-
-                for (const candidate of pentatonicNotes) {
-                    let score = 0;
-
-                    // Prefer notes belonging to the current consonant chord voicing
-                    if (currentChord.includes(candidate.pc)) {
-                        score += 3;
-                    }
-
-                    // Keep the lowest octave (C2-A2) sparse and grounded on root/fifth/sixth (C, G, A)
-                    if (candidate.midi < 48) {
-                        if (lowNoteActive) {
-                            score -= 8; // Prevent muddy low-end rumble
-                        } else if (candidate.pc === 0 || candidate.pc === 7 || candidate.pc === 9) {
-                            score += 1;
-                        } else {
-                            score -= 2; // Avoid D2/E2 mud in bass
-                        }
-                    } else if (candidate.midi >= 48 && candidate.midi <= 67) {
-                        score += 1.5; // Sweet spot in middle register (C3-G4)
-                    }
-
-                    // Evaluate harmonic consonance against all currently ringing notes
-                    for (const active of activeNotes) {
-                        const semitones = Math.abs(candidate.midi - active.midi);
-                        const intervalClass = semitones % 12;
-
-                        if (semitones === 0) {
-                            score -= 4; // Avoid hammering the exact same pitch simultaneously
-                        } else if (semitones <= 2 || intervalClass === 2 || intervalClass === 10) {
-                            // Penalize major 2nds (e.g. C+D, D+E, G+A), especially in the same octave
-                            score -= (semitones <= 2) ? 10 : 4;
-                        } else if (intervalClass === 7 || intervalClass === 5) {
-                            score += 3; // Pure 5th and 4th
-                        } else if (intervalClass === 3 || intervalClass === 4 || intervalClass === 8 || intervalClass === 9) {
-                            score += 2.5; // Consonant 3rds and 6ths
-                        } else if (intervalClass === 0) {
-                            score += 1.5; // Pure octave
-                        }
-                    }
-
-                    // Smooth melodic distance from the most recently played note
-                    if (lastNote) {
-                        const leap = Math.abs(candidate.midi - lastNote.midi);
-                        if (leap >= 3 && leap <= 12) {
-                            score += 2;
-                        }
-                    }
-
-                    if (score > maxScore - 1.5) {
-                        if (score > maxScore) {
-                            maxScore = score;
-                        }
-                        bestCandidates.push({ note: candidate, score });
-                    }
-                }
-
-                // Filter to top tier candidates and pick one randomly for natural variety
-                const topNotes = bestCandidates.filter(c => c.score >= maxScore - 1.5);
-                const chosen = topNotes[Math.floor(Math.random() * topNotes.length)].note;
-
-                return chosen;
-            }
-
-            function triggerHarmonicTone() {
-                if (!audioContext || !masterBus || isAnimationPaused || document.hidden) return;
-
-                const now = audioContext.currentTime;
-                if (now - lastSoundTime < MIN_NOTE_INTERVAL) return;
-                lastSoundTime = now;
-
-                const note = selectHarmonicNote(now);
-                const timbre = timbres[Math.floor(Math.random() * timbres.length)];
-                const duration = timbre.attack + timbre.decay;
+            function triggerVoice(note, timbre, now, volumeScale = 1.0, panPos = 0, extraDecay = 1.0) {
+                const attack = timbre.attack;
+                const decay = timbre.decay * extraDecay;
+                const duration = attack + decay;
 
                 activeNotes.push({
                     midi: note.midi,
@@ -271,67 +255,138 @@
                     endTime: now + duration * 0.75
                 });
 
-                // Per-note low-pass filter and gain envelope
                 const noteFilter = audioContext.createBiquadFilter();
                 noteFilter.type = 'lowpass';
                 noteFilter.frequency.setValueAtTime(timbre.filterFreq, now);
                 if (timbre.filterEndFreq) {
-                    noteFilter.frequency.exponentialRampToValueAtTime(timbre.filterEndFreq, now + timbre.decay);
+                    noteFilter.frequency.exponentialRampToValueAtTime(timbre.filterEndFreq, now + decay);
                 }
 
                 const noteGain = audioContext.createGain();
-                // Slightly lower amplitude for high frequencies (equal-loudness balance)
-                const baseVolume = note.midi < 48 ? 0.075 : (note.midi > 64 ? 0.045 : 0.058);
+                const baseVolume = (note.midi < 48 ? 0.065 : (note.midi > 64 ? 0.04 : 0.052)) * volumeScale;
                 noteGain.gain.setValueAtTime(0.0001, now);
-                noteGain.gain.linearRampToValueAtTime(baseVolume, now + timbre.attack);
+                noteGain.gain.linearRampToValueAtTime(baseVolume, now + attack);
                 noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
                 noteFilter.connect(noteGain);
-                noteGain.connect(masterBus);
+
+                if (typeof audioContext.createStereoPanner === 'function') {
+                    const panner = audioContext.createStereoPanner();
+                    panner.pan.setValueAtTime(Math.max(-0.55, Math.min(0.55, panPos)), now);
+                    noteGain.connect(panner);
+                    panner.connect(masterBus);
+                } else {
+                    noteGain.connect(masterBus);
+                }
 
                 timbre.partials.forEach((partial) => {
                     const osc = audioContext.createOscillator();
                     const partialGain = audioContext.createGain();
+                    const partialDuration = attack + decay * (partial.decayMult || 1.0);
 
                     osc.type = timbre.type;
                     osc.frequency.setValueAtTime(note.freq * partial.ratio, now);
+
                     partialGain.gain.setValueAtTime(partial.amp, now);
+                    partialGain.gain.exponentialRampToValueAtTime(0.001, now + partialDuration);
 
                     osc.connect(partialGain);
                     partialGain.connect(noteFilter);
 
                     osc.start(now);
-                    osc.stop(now + duration + 0.05);
+                    osc.stop(now + partialDuration + 0.05);
                 });
             }
 
-            function playCollisionTone() {
+            function playCollisionTone(b1, b2) {
                 if (!audioContext || !masterBus) return;
 
-                // If another collision is already pending within the simultaneous window,
-                // both collisions cancel each other out.
-                if (pendingCollisionTimer !== null) {
-                    pendingCancelled = true;
-                    clearTimeout(pendingCollisionTimer);
-                    pendingCollisionTimer = setTimeout(() => {
-                        pendingCollisionTimer = null;
-                        pendingCancelled = false;
-                    }, SIMULTANEOUS_WINDOW_MS);
-                    return;
+                const now = audioContext.currentTime;
+                // Gate collisions to the minimal music rhythmic pulse so only sparse, musical hits sound
+                if (now < nextAllowedSoundTime) return;
+
+                // Clean up expired active notes
+                for (let i = activeNotes.length - 1; i >= 0; i--) {
+                    if (activeNotes[i].endTime <= now) {
+                        activeNotes.splice(i, 1);
+                    }
                 }
 
-                if (audioContext.currentTime - lastSoundTime < MIN_NOTE_INTERVAL) return;
+                const currentField = harmonicFields[composerState.fieldIndex];
+                const currentRhythm = rhythmPatterns[composerState.rhythmIndex];
+                const step = composerState.stepIndex;
 
-                pendingCancelled = false;
-                pendingCollisionTimer = setTimeout(() => {
-                    const wasCancelled = pendingCancelled;
-                    pendingCollisionTimer = null;
-                    pendingCancelled = false;
+                // Schedule when the next collision will be allowed to sound
+                const stepMultiplier = currentRhythm[step];
+                nextAllowedSoundTime = now + stepMultiplier * composerState.basePulse;
 
-                    if (!wasCancelled) {
-                        triggerHarmonicTone();
+                // Subtle stereo panning derived from the collision's horizontal screen position
+                let panPos = 0;
+                if (b1 && b2 && window.innerWidth > 0) {
+                    const midX = (b1.x + b2.x) * 0.5;
+                    panPos = ((midX / window.innerWidth) - 0.5) * 0.9;
+                }
+
+                // Dynamic wave (gentle crescendo/decrescendo across the motif)
+                const phraseProgress = step / currentRhythm.length;
+                const dynamicEnvelope = 0.8 + 0.3 * Math.sin(phraseProgress * Math.PI);
+
+                // Select note from the repeating minimal motif, ensuring it stays consonant with ringing notes
+                let note = composerState.motif[step % composerState.motif.length];
+                const clashesWithActive = activeNotes.some(
+                    a => Math.abs(a.midi - note.midi) === 2
+                );
+                if (clashesWithActive) {
+                    const safeNotes = pentatonicNotes.filter(
+                        n => n.midi >= 48 &&
+                             n.midi <= 72 &&
+                             currentField.pcs.includes(n.pc) &&
+                             !activeNotes.some(a => Math.abs(a.midi - n.midi) <= 2)
+                    );
+                    if (safeNotes.length > 0) {
+                        note = safeNotes[Math.floor(Math.random() * safeNotes.length)];
                     }
-                }, SIMULTANEOUS_WINDOW_MS);
+                }
+
+                // Choose between the phrase's primary ostinato timbre or secondary long-pad/bowl timbre on long steps
+                const isLongHoldStep = step === currentRhythm.length - 1;
+                const timbre = isLongHoldStep
+                    ? timbres[composerState.secondaryTimbreIndex]
+                    : timbres[composerState.primaryTimbreIndex];
+
+                // Play the motif note
+                triggerVoice(note, timbre, now, dynamicEnvelope, panPos, isLongHoldStep ? 1.25 : 1.0);
+
+                // At the start of every 2nd motif cycle, sound a deep, long-sustaining C2-octave pedal bass note
+                if (step === 0 && composerState.cycleCount % 2 === 0) {
+                    const bassNote = pentatonicNotes.find(n => n.midi === currentField.bassMidi);
+                    if (bassNote && !activeNotes.some(a => a.midi < 48)) {
+                        triggerVoice(bassNote, timbres[2], now, 0.95, 0, 1.35); // Long singing bowl bass pedal (~7.4s)
+                    }
+                }
+
+                // Advance step in the minimal music motif
+                composerState.stepIndex++;
+                if (composerState.stepIndex >= currentRhythm.length) {
+                    composerState.stepIndex = 0;
+                    composerState.cycleCount++;
+
+                    // Gradual minimal music transformation: mutate one note in the motif after each cycle
+                    mutateMotif(currentField);
+
+                    // Every 3 cycles, gently evolve timbres, rhythm, or harmonic field
+                    if (composerState.cycleCount % 3 === 0) {
+                        composerState.primaryTimbreIndex = Math.floor(Math.random() * 2); // vibraphone or feltPiano
+                        composerState.secondaryTimbreIndex = 2 + Math.floor(Math.random() * 2); // singingBowl or warmPad
+                    }
+                    if (composerState.cycleCount % 4 === 0) {
+                        composerState.fieldIndex = (composerState.fieldIndex + 1) % harmonicFields.length;
+                        composerState.rhythmIndex = Math.floor(Math.random() * rhythmPatterns.length);
+                        const nextField = harmonicFields[composerState.fieldIndex];
+                        const nextRhythm = rhythmPatterns[composerState.rhythmIndex];
+                        composerState.motif = buildConsonantMotif(nextField, nextRhythm.length);
+                    }
+                }
             }
 
             // Initialize audio on first user interaction
@@ -772,7 +827,7 @@
                             b2.y += overlap * ny;
 
                             // Play collision sound
-                            playCollisionTone();
+                            playCollisionTone(b1, b2);
 
                             const b1IsSearch = b1.isSearch && !b1.isFullScreen && !b1.isInfo;
                             const b2IsSearch = b2.isSearch && !b2.isFullScreen && !b2.isInfo;
